@@ -61,6 +61,7 @@ def cs_applyInverters():
 
 #Modified AnkiQt applyShortcuts to work around inverter shortcuts
 #TODO: Be able to swap shortcut functions around
+#Unsure if this is possible
 def _applyShortcuts(shortcuts):
     qshortcuts = []
     for key, fn in shortcuts:
