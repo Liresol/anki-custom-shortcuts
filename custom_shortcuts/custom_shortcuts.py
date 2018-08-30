@@ -12,9 +12,21 @@ from aqt.editor import Editor
 #TODO: Make use of json
 #TODO: Refactor code to minimize interaction between mw and the AnkiQt class
 
+#Gets config.json as config
 config = mw.addonManager.getConfig(__name__)
 
 
+#There is a weird interaction with QShortcuts wherein if there are 2 (or more)
+#QShortcuts mapped to the same key and function and both are enabled,
+#the shortcut doesn't work
+
+#Part of this code exploits that by adding QShortcuts mapped to the defaults
+#and activating/deactivating them to deactivate/activate default shortcuts
+
+#There isn't an obvious way to get the original QShortcut objects, as
+#The addons executes after the setup phase (which creates QShortcut objects)
+
+#Default shortcuts
 mw.inversionSet =  [
     "Ctrl+:",
     "d",
@@ -25,10 +37,11 @@ mw.inversionSet =  [
     "y"
 ]
 
-mw.shortcuts = []
+#List of "inverter" QShortcut objects that negate the defaults
 mw.inverters = []
 
-def applyInverters():
+#Creates and inserts the inverter QShortcut objects
+def cs_applyInverters():
     qshortcuts = []
     globalShortcuts = [
         ("Ctrl+:", mw.onDebug),
@@ -46,6 +59,8 @@ def applyInverters():
         mw.inverters.append(scut)
     return qshortcuts
 
+#Modified AnkiQt applyShortcuts to work around inverter shortcuts
+#TODO: Be able to swap shortcut functions around
 def _applyShortcuts(shortcuts):
     qshortcuts = []
     for key, fn in shortcuts:
@@ -58,9 +73,8 @@ def _applyShortcuts(shortcuts):
             mw.inverters[mw.inversionSet.index(key)].setEnabled(False)
     return qshortcuts
 
-
-
-def _setupKeys():
+#Initialize custom keys
+def cs_initKeys():
     cuts = [
         config["debug"],
         config["deckbrowser"],
@@ -79,40 +93,10 @@ def _setupKeys():
         mw.onStats,
         mw.onSync
     ]
-    #prevGlobalShortcuts = list(zip(mw.keys,functions))
     globalShortcuts = list(zip(cuts,functions))
-
-    #self.applyShortcuts(prevGlobalShortcuts)
     _applyShortcuts(globalShortcuts)
     mw.keys = cuts
     mw.stateShortcuts = []
-
-"""
-mw.editorCuts = [
-"Ctrl+L",
-"Ctrl+B",
-"Ctrl+I",
-"Ctrl+U",
-"Ctrl++",
-"Ctrl+=",
-"Ctrl+R",
-"F7",
-"F8",
-"Ctrl+Shift+C",
-"Ctrl+Shift+Alt+C",
-"F3",
-"F5",
-"Ctrl+T, T",
-"Ctrl+T, E",
-"Ctrl+T, M",
-"Ctrl+M, M",
-"Ctrl+M, E",
-"Ctrl+M, C",
-"Ctrl+Shift+X",
-"Ctrl+Shift+T",
-]
-"""
-
 
 def _setupShortcuts(self):
     # if a third element is provided, enable shortcut even when no field selected
@@ -140,14 +124,6 @@ def _setupShortcuts(self):
         (config["focus tags"], self.onFocusTags, True)
     ]
     runHook("setupEditorShortcuts", cuts, self)
-    """
-    for row in prevCuts:
-    if len(row) == 2:
-    keys, fn = row
-    else:
-    keys, fn, _ = row
-    QShortcut(QKeySequence(keys), self.widget, activated=fn)
-    """
     for row in cuts:
         if len(row) == 2:
             keys, fn = row
@@ -155,14 +131,10 @@ def _setupShortcuts(self):
         else:
             keys, fn, _ = row
         scut = QShortcut(QKeySequence(keys), self.widget, activated=fn)
-        #mw.shortcuts.append(scut)
-    #prevCuts = cuts
 
 Editor.setupShortcuts = _setupShortcuts
 
-mw.setupKeys = _setupKeys
 mw.applyShortcuts = _applyShortcuts
-AnkiQt.setupKeys = _setupKeys
 
-applyInverters()
-mw.setupKeys()
+cs_applyInverters()
+cs_initKeys()
