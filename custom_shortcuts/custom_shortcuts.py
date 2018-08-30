@@ -68,7 +68,6 @@ def _applyShortcuts(shortcuts):
         if key not in mw.inversionSet:
             scut = QShortcut(QKeySequence(key), mw, activated=fn)
             scut.setAutoRepeat(False)
-            mw.shortcuts.append(scut)
             qshortcuts.append(scut)
         else:
             mw.inverters[mw.inversionSet.index(key)].setEnabled(False)
