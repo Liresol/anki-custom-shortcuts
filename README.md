@@ -1,10 +1,14 @@
 # Custom Shortcuts for Anki 2.1
 
-An Anki addon that currently supports customization of editor shortcuts and homepage shortcuts.
+An Anki add-on that currently supports customization of editor shortcuts and homepage shortcuts.
 
-Waiting to release on the addons page because right now the code is *spaghetti*
+The add-on's number is: 24411424
 
-So far, the app has undergone slight amounts of testing, but if you encounter a bug or problem, feel free to bring up a new issue here. 
+So far, the app has undergone slight amounts of testing, but if you encounter a bug or problem, feel free to bring up [a new issue here](https://github.com/Liresol/anki-custom-shortcuts/issues). 
+
+## Usage
+
+The way to change shortcuts here is to go to Tools > Add-ons > Custom Shortcuts and click Config to change each shortcut.
 
 ## Future Features
 
@@ -12,5 +16,5 @@ So far, the app has undergone slight amounts of testing, but if you encounter a 
 - Include more shortcuts
 
 ## License
-This addon is licensed under the MIT License. 
+This add-on is licensed under the MIT License. 
 

@@ -16,7 +16,7 @@
 	"foreground":"F7",
 	"change col":"F8",
 	"cloze":"Ctrl+Shift+C",
-	"cloze":"Ctrl+Shift+Alt+C",
+	"cloze alt":"Ctrl+Shift+Alt+C",
 	"add media":"F3",
 	"record sound":"F5",
 	"insert latex":"Ctrl+T, T",
