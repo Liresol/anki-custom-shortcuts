@@ -2,7 +2,7 @@
 
 An Anki add-on that currently supports customization of editor shortcuts and homepage shortcuts.
 
-The add-on's number is: 24411424
+The add-on's number is: **24411424**
 
 So far, the app has undergone slight amounts of testing, but if you encounter a bug or problem, feel free to bring up [a new issue here](https://github.com/Liresol/anki-custom-shortcuts/issues). 
 
