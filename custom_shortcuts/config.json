@@ -50,7 +50,19 @@
 	"reviewer choice 1":"1",
 	"reviewer choice 2":"2",
 	"reviewer choice 3":"3",
-	"reviewer choice 4":"4"
+	"reviewer choice 4":"4",
+	"reviewer _duplicates":{
+	},
+	"m_toolbox quit":"Ctrl+Q",
+	"m_toolbox preferences":"Ctrl+P",
+	"m_toolbox undo":"Ctrl+Alt+Z",
+	"m_toolbox see documentation":"F1",
+	"m_toolbox switch profile":"Ctrl+Shift+P",
+	"m_toolbox export":"Ctrl+E",
+	"m_toolbox import":"Ctrl+Shift+I",
+	"m_toolbox study":"/",
+	"m_toolbox create filtered deck":"F",
+	"m_toolbox addons":"Ctrl+Shift+A"
 
 }
 
