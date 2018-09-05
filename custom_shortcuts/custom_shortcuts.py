@@ -97,8 +97,61 @@ def cs_initKeys():
     mw.keys = cuts
     mw.stateShortcuts = []
 
+#Governss the shortcuts on the main toolbar
+def cs_mtShortcuts():
+    m = mw.form
+    m.actionExit.setShortcut(config["m_toolbox quit"])
+    m.actionPreferences.setShortcut(config["m_toolbox preferences"])
+    m.actionUndo.setShortcut(config["m_toolbox undo"])
+    m.actionDocumentation.setShortcut(config["m_toolbox see documentation"])
+    m.actionSwitchProfile.setShortcut(config["m_toolbox switch profile"])
+    m.actionExport.setShortcut(config["m_toolbox export"])
+    m.actionImport.setShortcut(config["m_toolbox import"])
+    m.actionStudyDeck.setShortcut(config["m_toolbox study"])
+    m.actionCreateFiltered.setShortcut(config["m_toolbox create filtered deck"])
+    m.actionAdd_ons.setShortcut(config["m_toolbox addons"])
+
+#Converts json shortcuts into functions for the reviewer
+#sToF: shortcutToFunction
+def review_sToF(self,scut):
+
+    #"reviewer" is retained for copy-pastability, may be removed later
+    sdict = {
+        "reviewer edit current": self.mw.onEditCurrent,
+        "reviewer flip card": self.onEnterKey,
+        "reviewer flip card 1": self.onEnterKey,
+        "reviewer flip card 2": self.onEnterKey,
+        "reviewer flip card 3": self.onEnterKey,
+        "reviewer options menu": self.onOptions,
+        "reviewer record voice": self.onRecordVoice,
+        "reviewer play recorded voice": self.onReplayRecorded,
+        "reviewer play recorded voice 1": self.onReplayRecorded,
+        "reviewer play recorded voice 2": self.onReplayRecorded,
+        "reviewer delete note": self.onDelete,
+        "reviewer suspend card": self.onSuspendCard,
+        "reviewer suspend note": self.onSuspend,
+        "reviewer bury card": self.onBuryCard,
+        "reviewer bury note": self.onBuryNote,
+        "reviewer mark card": self.onMark,
+        "reviewer set flag 1": lambda: self.setFlag(1),
+        "reviewer set flag 2": lambda: self.setFlag(2),
+        "reviewer set flag 3": lambda: self.setFlag(3),
+        "reviewer set flag 4": lambda: self.setFlag(4),
+        "reviewer set flag 0": lambda: self.setFlag(0),
+        "reviewer replay audio": self.replayAudio,
+        "reviewer choice 1": lambda: self._answerCard(1),
+        "reviewer choice 2": lambda: self._answerCard(2),
+        "reviewer choice 3": lambda: self._answerCard(3),
+        "reviewer choice 4": lambda: self._answerCard(4),
+    }
+    return sdict[scut]
+
+#Governs the shortcuts on the review window
 def review_shortcutKeys(self):
-    return [
+    dupes = []
+    for scut in config["reviewer _duplicates"]:
+        dupes.append((config["reviewer _duplicates"][scut],self.sToF(scut)))
+        ret = [
         (config["reviewer edit current"], self.mw.onEditCurrent),
         (config["reviewer flip card 1"], self.onEnterKey),
         (config["reviewer flip card 2"], self.onEnterKey),
@@ -124,6 +177,7 @@ def review_shortcutKeys(self):
         (config["reviewer choice 3"], lambda: self._answerCard(3)),
         (config["reviewer choice 4"], lambda: self._answerCard(4)),
     ]
+    return dupes + ret
 
 def _setupShortcuts(self):
     # if a third element is provided, enable shortcut even when no field selected
@@ -161,8 +215,10 @@ def _setupShortcuts(self):
 
 Editor.setupShortcuts = _setupShortcuts
 Reviewer._shortcutKeys = review_shortcutKeys
+Reviewer.sToF = review_sToF
 
 mw.applyShortcuts = _applyShortcuts
 
 cs_applyInverters()
 cs_initKeys()
+cs_mtShortcuts()

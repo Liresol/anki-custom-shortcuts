@@ -92,3 +92,36 @@
 
 "choice [1234]": Select 1/2/3/4 (Again/Hard/Good/Easy or Again/Good/Easy)
 
+"_duplicates": Takes functions and binds them to new shortcuts.
+
+This object takes inputs of the form "(function keyword)":"(shortcut)", separated by commas. (e.g. {"reviewer mark card":"]","reviewer flip card 1":"-"})
+
+All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. (Those who want to remove the numbers from stuff like "reviewer flip card" can do so as well)
+
+**Make sure to remap keys to empty keyspace.**
+
+##Main Toolbox Options
+**NOTE: These options are prefixed with "m_toolbox".**
+
+"m_toolbox quit": Quit Anki
+
+"m_toolbox preferences": Go to the user preferences window
+
+"m_toolbox undo": Undo the last actio
+
+"m_toolbox see documentation": Go to the Anki manual
+
+"m_toolbox switch profile": Switch user profiles
+
+"m_toolbox export": Export the user's decks
+
+"m_toolbox import": Import a deck file (.apkg, etc.)
+
+"m_toolbox study": Start studying the selected deck
+
+"m_toolbox create filtered deck": Create a filtered deck
+
+"m_toolbox addons": Go to the addons window
+
+}
+
