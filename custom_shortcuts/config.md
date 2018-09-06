@@ -16,7 +16,7 @@
 
 "stats": Enter stats screen
 
-"sync": Syncronize with AnkiWeb
+"sync": Synchronize with AnkiWeb
 
 ##Editor Options
 
@@ -107,7 +107,7 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "m_toolbox preferences": Go to the user preferences window
 
-"m_toolbox undo": Undo the last actio
+"m_toolbox undo": Undo the last action
 
 "m_toolbox see documentation": Go to the Anki manual
 
