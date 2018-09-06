@@ -97,7 +97,7 @@ def cs_initKeys():
     mw.keys = cuts
     mw.stateShortcuts = []
 
-#Governss the shortcuts on the main toolbar
+#Governs the shortcuts on the main toolbar
 def cs_mtShortcuts():
     m = mw.form
     m.actionExit.setShortcut(config["m_toolbox quit"])
@@ -151,31 +151,31 @@ def review_shortcutKeys(self):
     dupes = []
     for scut in config["reviewer _duplicates"]:
         dupes.append((config["reviewer _duplicates"][scut],self.sToF(scut)))
-        ret = [
-        (config["reviewer edit current"], self.mw.onEditCurrent),
-        (config["reviewer flip card 1"], self.onEnterKey),
-        (config["reviewer flip card 2"], self.onEnterKey),
-        (config["reviewer flip card 3"], self.onEnterKey),
-        (config["reviewer replay audio 1"], self.replayAudio),
-        (config["reviewer replay audio 2"], self.replayAudio),
-        (config["reviewer set flag 1"], lambda: self.setFlag(1)),
-        (config["reviewer set flag 2"], lambda: self.setFlag(2)),
-        (config["reviewer set flag 3"], lambda: self.setFlag(3)),
-        (config["reviewer set flag 4"], lambda: self.setFlag(4)),
-        (config["reviewer set flag 0"], lambda: self.setFlag(0)),
-        (config["reviewer mark card"], self.onMark),
-        (config["reviewer bury note"], self.onBuryNote),
-        (config["reviewer bury card"], self.onBuryCard),
-        (config["reviewer suspend note"], self.onSuspend),
-        (config["reviewer suspend card"], self.onSuspendCard),
-        (config["reviewer delete note"], self.onDelete),
-        (config["reviewer play recorded voice"], self.onReplayRecorded),
-        (config["reviewer record voice"], self.onRecordVoice),
-        (config["reviewer options menu"], self.onOptions),
-        (config["reviewer choice 1"], lambda: self._answerCard(1)),
-        (config["reviewer choice 2"], lambda: self._answerCard(2)),
-        (config["reviewer choice 3"], lambda: self._answerCard(3)),
-        (config["reviewer choice 4"], lambda: self._answerCard(4)),
+    ret = [
+    (config["reviewer edit current"], self.mw.onEditCurrent),
+    (config["reviewer flip card 1"], self.onEnterKey),
+    (config["reviewer flip card 2"], self.onEnterKey),
+    (config["reviewer flip card 3"], self.onEnterKey),
+    (config["reviewer replay audio 1"], self.replayAudio),
+    (config["reviewer replay audio 2"], self.replayAudio),
+    (config["reviewer set flag 1"], lambda: self.setFlag(1)),
+    (config["reviewer set flag 2"], lambda: self.setFlag(2)),
+    (config["reviewer set flag 3"], lambda: self.setFlag(3)),
+    (config["reviewer set flag 4"], lambda: self.setFlag(4)),
+    (config["reviewer set flag 0"], lambda: self.setFlag(0)),
+    (config["reviewer mark card"], self.onMark),
+    (config["reviewer bury note"], self.onBuryNote),
+    (config["reviewer bury card"], self.onBuryCard),
+    (config["reviewer suspend note"], self.onSuspend),
+    (config["reviewer suspend card"], self.onSuspendCard),
+    (config["reviewer delete note"], self.onDelete),
+    (config["reviewer play recorded voice"], self.onReplayRecorded),
+    (config["reviewer record voice"], self.onRecordVoice),
+    (config["reviewer options menu"], self.onOptions),
+    (config["reviewer choice 1"], lambda: self._answerCard(1)),
+    (config["reviewer choice 2"], lambda: self._answerCard(2)),
+    (config["reviewer choice 3"], lambda: self._answerCard(3)),
+    (config["reviewer choice 4"], lambda: self._answerCard(4)),
     ]
     return dupes + ret
 
