@@ -2,8 +2,8 @@
 from aqt.main import AnkiQt
 from aqt import mw
 from aqt.qt import *
-from anki.hooks import addHook
-from anki.hooks import runHook
+from anki.hooks import addHook, runHook
+from aqt.utils import showWarning
 from aqt.toolbar import Toolbar
 from aqt.editor import Editor
 from aqt.reviewer import Reviewer
@@ -13,6 +13,7 @@ from aqt.reviewer import Reviewer
 
 #Gets config.json as config
 config = mw.addonManager.getConfig(__name__)
+CS_CONFLICTSTR = "Custom Shortcut Conflicts: \n\n"
 
 
 #There is a weird interaction with QShortcuts wherein if there are 2 (or more)
@@ -117,7 +118,7 @@ def review_sToF(self,scut):
 
     #"reviewer" is retained for copy-pastability, may be removed later
     sdict = {
-        "reviewer edit current": self.mw.onEditCurrent,
+        "reviewer edit current": self.onEditCurrent,
         "reviewer flip card": self.onEnterKey,
         "reviewer flip card 1": self.onEnterKey,
         "reviewer flip card 2": self.onEnterKey,
@@ -152,7 +153,7 @@ def review_shortcutKeys(self):
     for scut in config["reviewer _duplicates"]:
         dupes.append((config["reviewer _duplicates"][scut],self.sToF(scut)))
     ret = [
-    (config["reviewer edit current"], self.mw.onEditCurrent),
+    (config["reviewer edit current"], self.onEditCurrent),
     (config["reviewer flip card 1"], self.onEnterKey),
     (config["reviewer flip card 2"], self.onEnterKey),
     (config["reviewer flip card 3"], self.onEnterKey),
@@ -213,6 +214,45 @@ def _setupShortcuts(self):
             keys, fn, _ = row
         scut = QShortcut(QKeySequence(keys), self.widget, activated=fn)
 
+#detects shortcut conflicts
+def cs_conflictDetect():
+    ext_list = {}
+    dupes = False
+    for e in config:
+        sub = e[0:(e.find(" "))]
+        val = config[e]
+        if sub in ext_list:
+            if isinstance(val,dict):
+                for key in val:
+                    ext_list[sub][key + " in _duplicates"] = val[key]
+            else:
+                ext_list[sub][e] = val
+        else:
+            ext_list[sub] = {e:val}
+    inv = {}
+    conflictStr = CS_CONFLICTSTR
+    for key in ext_list:
+        inv = {}
+        x = ext_list[key]
+        for e in x:
+            if x[e] not in inv:
+                inv[x[e]] = [e]
+            else:
+                inv[x[e]].append(e)
+        for k in inv:
+            if(len(inv[k])) == 1:
+                continue
+            if k == "<nop>":
+                continue
+            conflictStr += ", ".join(inv[k])
+            conflictStr += "\nshare '" + k + "' as a shortcut\n"
+
+    if(len(conflictStr) != len(CS_CONFLICTSTR)):
+        conflictStr += "\n\nThese shortcuts will not work.\n"
+        conflictStr += "Please change htem in the config.json."
+        showWarning(conflictStr)
+
+
 Editor.setupShortcuts = _setupShortcuts
 Reviewer._shortcutKeys = review_shortcutKeys
 Reviewer.sToF = review_sToF
@@ -222,3 +262,4 @@ mw.applyShortcuts = _applyShortcuts
 cs_applyInverters()
 cs_initKeys()
 cs_mtShortcuts()
+cs_conflictDetect()

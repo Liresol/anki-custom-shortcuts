@@ -1,4 +1,4 @@
-###To disable a shortcut, set that shortcut to `<nop>` or another invalid shortcut.
+###To disable a shortcut, set that shortcut to `<nop>`
 
 ##Home Options
 
