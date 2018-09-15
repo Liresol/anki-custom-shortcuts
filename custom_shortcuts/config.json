@@ -62,7 +62,7 @@
 	"m_toolbox import":"Ctrl+Shift+I",
 	"m_toolbox study":"/",
 	"m_toolbox create filtered deck":"F",
-	"m_toolbox addons":"Ctrl+Shift+A"
-
+	"m_toolbox addons":"Ctrl+Shift+A",
+	"Ω enable conflict warning": "y"
 }
 
