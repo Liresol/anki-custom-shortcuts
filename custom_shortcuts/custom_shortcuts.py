@@ -118,7 +118,7 @@ def review_sToF(self,scut):
 
     #"reviewer" is retained for copy-pastability, may be removed later
     sdict = {
-        "reviewer edit current": self.onEditCurrent,
+        "reviewer edit current": mw.onEditCurrent,
         "reviewer flip card": self.onEnterKey,
         "reviewer flip card 1": self.onEnterKey,
         "reviewer flip card 2": self.onEnterKey,
@@ -153,7 +153,7 @@ def review_shortcutKeys(self):
     for scut in config["reviewer _duplicates"]:
         dupes.append((config["reviewer _duplicates"][scut],self.sToF(scut)))
     ret = [
-    (config["reviewer edit current"], self.onEditCurrent),
+    (config["reviewer edit current"], mw.onEditCurrent),
     (config["reviewer flip card 1"], self.onEnterKey),
     (config["reviewer flip card 2"], self.onEnterKey),
     (config["reviewer flip card 3"], self.onEnterKey),
