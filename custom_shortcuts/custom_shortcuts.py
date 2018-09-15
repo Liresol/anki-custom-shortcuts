@@ -215,7 +215,10 @@ def _setupShortcuts(self):
         scut = QShortcut(QKeySequence(keys), self.widget, activated=fn)
 
 #detects shortcut conflicts
+#Ignores the Add-on (Ω) options
 def cs_conflictDetect():
+    if config["Ω enable conflict warning"] != "y":
+        return
     ext_list = {}
     dupes = False
     for e in config:
@@ -227,7 +230,7 @@ def cs_conflictDetect():
                     ext_list[sub][key + " in _duplicates"] = val[key]
             else:
                 ext_list[sub][e] = val
-        else:
+        elif sub != "Ω":
             ext_list[sub] = {e:val}
     inv = {}
     conflictStr = CS_CONFLICTSTR
@@ -245,11 +248,11 @@ def cs_conflictDetect():
             if k == "<nop>":
                 continue
             conflictStr += ", ".join(inv[k])
-            conflictStr += "\nshare '" + k + "' as a shortcut\n"
+            conflictStr += "\nshare '" + k + "' as a shortcut\n\n"
 
     if(len(conflictStr) != len(CS_CONFLICTSTR)):
-        conflictStr += "\n\nThese shortcuts will not work.\n"
-        conflictStr += "Please change htem in the config.json."
+        conflictStr += "\nThese shortcuts will not work.\n"
+        conflictStr += "Please change them in the config.json."
         showWarning(conflictStr)
 
 
