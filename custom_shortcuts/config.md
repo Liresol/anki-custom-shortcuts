@@ -130,6 +130,6 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 ##Add-on Preferences
 
-**These options are prefixed with "Ω".**
+**These options are prefixed with "\u03a9".**
 
-"Ω enable conflict warning": If set to "y", shows a warning window whenever two shortcuts of the same type are set to the same key.
+"\u03a9 enable conflict warning": If set to "y", shows a warning window whenever two shortcuts of the same type are set to the same key.

@@ -217,7 +217,7 @@ def _setupShortcuts(self):
 #detects shortcut conflicts
 #Ignores the Add-on (Ω) options
 def cs_conflictDetect():
-    if config["Ω enable conflict warning"] != "y":
+    if config["Ω enable conflict warning"].upper() != "Y":
         return
     ext_list = {}
     dupes = False
@@ -227,11 +227,11 @@ def cs_conflictDetect():
         if sub in ext_list:
             if isinstance(val,dict):
                 for key in val:
-                    ext_list[sub][key + " in _duplicates"] = val[key]
+                    ext_list[sub][key + " in _duplicates"] = val[key].upper()
             else:
-                ext_list[sub][e] = val
+                ext_list[sub][e] = val.upper()
         elif sub != "Ω":
-            ext_list[sub] = {e:val}
+            ext_list[sub] = {e:val.upper()}
     inv = {}
     conflictStr = CS_CONFLICTSTR
     for key in ext_list:
@@ -245,7 +245,7 @@ def cs_conflictDetect():
         for k in inv:
             if(len(inv[k])) == 1:
                 continue
-            if k == "<nop>":
+            if k == "<NOP>":
                 continue
             conflictStr += ", ".join(inv[k])
             conflictStr += "\nshare '" + k + "' as a shortcut\n\n"
