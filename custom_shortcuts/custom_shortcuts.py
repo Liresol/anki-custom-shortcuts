@@ -1,8 +1,7 @@
 #Python 3.7.0
-from aqt.main import AnkiQt
 from aqt import mw
 from aqt.qt import *
-from anki.hooks import addHook, runHook
+from anki.hooks import runHook
 from aqt.utils import showWarning
 from aqt.toolbar import Toolbar
 from aqt.editor import Editor
@@ -13,6 +12,7 @@ from aqt.reviewer import Reviewer
 
 #Gets config.json as config
 config = mw.addonManager.getConfig(__name__)
+config_scuts = {}
 CS_CONFLICTSTR = "Custom Shortcut Conflicts: \n\n"
 
 
@@ -25,6 +25,29 @@ CS_CONFLICTSTR = "Custom Shortcut Conflicts: \n\n"
 
 #There isn't an obvious way to get the original QShortcut objects, as
 #The addons executes after the setup phase (which creates QShortcut objects)
+
+def cs_traverseKeys(Rep, D):
+    ret = {}
+    for key in D:
+        if isinstance(D[key],dict):
+            ret[key] = cs_traverseKeys(Rep,D[key])
+        elif D[key] not in Rep:
+            ret[key] = D[key]
+        else:
+            ret[key] = Rep[D[key]]
+    return ret
+
+
+def cs_translateKeys():
+    global config_scuts
+    Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter, 
+                    "Qt.Key_Return":Qt.Key_Return,
+                    "Qt.Key_Escape":Qt.Key_Escape,
+                    "Qt.Key_Space":Qt.Key_Space,
+                    "Qt.Key_Tab":Qt.Key_Tab,
+                    "Qt.Key_Backspace":Qt.Key_Backspace,
+                    "Qt.Key_Delete":Qt.Key_Delete}
+    config_scuts = cs_traverseKeys(Qt_functions,config)
 
 #Default shortcuts
 mw.inversionSet =  [
@@ -76,13 +99,13 @@ def _applyShortcuts(shortcuts):
 #Initialize custom keys
 def cs_initKeys():
     cuts = [
-        config["main debug"],
-        config["main deckbrowser"],
-        config["main study"],
-        config["main add"],
-        config["main browse"],
-        config["main stats"],
-        config["main sync"]
+        config_scuts["main debug"],
+        config_scuts["main deckbrowser"],
+        config_scuts["main study"],
+        config_scuts["main add"],
+        config_scuts["main browse"],
+        config_scuts["main stats"],
+        config_scuts["main sync"]
     ]
     functions =  [
         mw.onDebug,
@@ -101,24 +124,25 @@ def cs_initKeys():
 #Governs the shortcuts on the main toolbar
 def cs_mtShortcuts():
     m = mw.form
-    m.actionExit.setShortcut(config["m_toolbox quit"])
-    m.actionPreferences.setShortcut(config["m_toolbox preferences"])
-    m.actionUndo.setShortcut(config["m_toolbox undo"])
-    m.actionDocumentation.setShortcut(config["m_toolbox see documentation"])
-    m.actionSwitchProfile.setShortcut(config["m_toolbox switch profile"])
-    m.actionExport.setShortcut(config["m_toolbox export"])
-    m.actionImport.setShortcut(config["m_toolbox import"])
-    m.actionStudyDeck.setShortcut(config["m_toolbox study"])
-    m.actionCreateFiltered.setShortcut(config["m_toolbox create filtered deck"])
-    m.actionAdd_ons.setShortcut(config["m_toolbox addons"])
+    m.actionExit.setShortcut(config_scuts["m_toolbox quit"])
+    m.actionPreferences.setShortcut(config_scuts["m_toolbox preferences"])
+    m.actionUndo.setShortcut(config_scuts["m_toolbox undo"])
+    m.actionDocumentation.setShortcut(config_scuts["m_toolbox see documentation"])
+    m.actionSwitchProfile.setShortcut(config_scuts["m_toolbox switch profile"])
+    m.actionExport.setShortcut(config_scuts["m_toolbox export"])
+    m.actionImport.setShortcut(config_scuts["m_toolbox import"])
+    m.actionStudyDeck.setShortcut(config_scuts["m_toolbox study"])
+    m.actionCreateFiltered.setShortcut(config_scuts["m_toolbox create filtered deck"])
+    m.actionAdd_ons.setShortcut(config_scuts["m_toolbox addons"])
 
 #Converts json shortcuts into functions for the reviewer
 #sToF: shortcutToFunction
 def review_sToF(self,scut):
 
     #"reviewer" is retained for copy-pastability, may be removed later
+    # "self.mw.onEditCurrent" is exactly how it was in reviewer.py, DO NOT CHANGE
     sdict = {
-        "reviewer edit current": mw.onEditCurrent,
+        "reviewer edit current": self.mw.onEditCurrent,
         "reviewer flip card": self.onEnterKey,
         "reviewer flip card 1": self.onEnterKey,
         "reviewer flip card 2": self.onEnterKey,
@@ -150,60 +174,60 @@ def review_sToF(self,scut):
 #Governs the shortcuts on the review window
 def review_shortcutKeys(self):
     dupes = []
-    for scut in config["reviewer _duplicates"]:
-        dupes.append((config["reviewer _duplicates"][scut],self.sToF(scut)))
     ret = [
-    (config["reviewer edit current"], mw.onEditCurrent),
-    (config["reviewer flip card 1"], self.onEnterKey),
-    (config["reviewer flip card 2"], self.onEnterKey),
-    (config["reviewer flip card 3"], self.onEnterKey),
-    (config["reviewer replay audio 1"], self.replayAudio),
-    (config["reviewer replay audio 2"], self.replayAudio),
-    (config["reviewer set flag 1"], lambda: self.setFlag(1)),
-    (config["reviewer set flag 2"], lambda: self.setFlag(2)),
-    (config["reviewer set flag 3"], lambda: self.setFlag(3)),
-    (config["reviewer set flag 4"], lambda: self.setFlag(4)),
-    (config["reviewer set flag 0"], lambda: self.setFlag(0)),
-    (config["reviewer mark card"], self.onMark),
-    (config["reviewer bury note"], self.onBuryNote),
-    (config["reviewer bury card"], self.onBuryCard),
-    (config["reviewer suspend note"], self.onSuspend),
-    (config["reviewer suspend card"], self.onSuspendCard),
-    (config["reviewer delete note"], self.onDelete),
-    (config["reviewer play recorded voice"], self.onReplayRecorded),
-    (config["reviewer record voice"], self.onRecordVoice),
-    (config["reviewer options menu"], self.onOptions),
-    (config["reviewer choice 1"], lambda: self._answerCard(1)),
-    (config["reviewer choice 2"], lambda: self._answerCard(2)),
-    (config["reviewer choice 3"], lambda: self._answerCard(3)),
-    (config["reviewer choice 4"], lambda: self._answerCard(4)),
+    (config_scuts["reviewer edit current"], self.mw.onEditCurrent),
+    (config_scuts["reviewer flip card 1"], self.onEnterKey),
+    (config_scuts["reviewer flip card 2"], self.onEnterKey),
+    (config_scuts["reviewer flip card 3"], self.onEnterKey),
+    (config_scuts["reviewer replay audio 1"], self.replayAudio),
+    (config_scuts["reviewer replay audio 2"], self.replayAudio),
+    (config_scuts["reviewer set flag 1"], lambda: self.setFlag(1)),
+    (config_scuts["reviewer set flag 2"], lambda: self.setFlag(2)),
+    (config_scuts["reviewer set flag 3"], lambda: self.setFlag(3)),
+    (config_scuts["reviewer set flag 4"], lambda: self.setFlag(4)),
+    (config_scuts["reviewer set flag 0"], lambda: self.setFlag(0)),
+    (config_scuts["reviewer mark card"], self.onMark),
+    (config_scuts["reviewer bury note"], self.onBuryNote),
+    (config_scuts["reviewer bury card"], self.onBuryCard),
+    (config_scuts["reviewer suspend note"], self.onSuspend),
+    (config_scuts["reviewer suspend card"], self.onSuspendCard),
+    (config_scuts["reviewer delete note"], self.onDelete),
+    (config_scuts["reviewer play recorded voice"], self.onReplayRecorded),
+    (config_scuts["reviewer record voice"], self.onRecordVoice),
+    (config_scuts["reviewer options menu"], self.onOptions),
+    (config_scuts["reviewer choice 1"], lambda: self._answerCard(1)),
+    (config_scuts["reviewer choice 2"], lambda: self._answerCard(2)),
+    (config_scuts["reviewer choice 3"], lambda: self._answerCard(3)),
+    (config_scuts["reviewer choice 4"], lambda: self._answerCard(4)),
     ]
+    for scut in config_scuts["reviewer _duplicates"]:
+        dupes.append((config_scuts["reviewer _duplicates"][scut],self.sToF(scut)))
     return dupes + ret
 
 def _setupShortcuts(self):
     # if a third element is provided, enable shortcut even when no field selected
     cuts = [
-        (config["editor card layout"], self.onCardLayout, True),
-        (config["editor bold"], self.toggleBold),
-        (config["editor italic"], self.toggleItalic),
-        (config["editor underline"], self.toggleUnderline),
-        (config["editor superscript"], self.toggleSuper),
-        (config["editor subscript"], self.toggleSub),
-        (config["editor remove format"], self.removeFormat),
-        (config["editor foreground"], self.onForeground),
-        (config["editor change col"], self.onChangeCol),
-        (config["editor cloze"], self.onCloze),
-        (config["editor cloze alt"], self.onCloze),
-        (config["editor add media"], self.onAddMedia),
-        (config["editor record sound"], self.onRecSound),
-        (config["editor insert latex"], self.insertLatex),
-        (config["editor insert latex equation"], self.insertLatexEqn),
-        (config["editor insert latex math environment"], self.insertLatexMathEnv),
-        (config["editor insert mathjax inline"], self.insertMathjaxInline),
-        (config["editor insert mathjax block"], self.insertMathjaxBlock),
-        (config["editor insert mathjax chemistry"], self.insertMathjaxChemistry),
-        (config["editor html edit"], self.onHtmlEdit),
-        (config["editor focus tags"], self.onFocusTags, True)
+        (config_scuts["editor card layout"], self.onCardLayout, True),
+        (config_scuts["editor bold"], self.toggleBold),
+        (config_scuts["editor italic"], self.toggleItalic),
+        (config_scuts["editor underline"], self.toggleUnderline),
+        (config_scuts["editor superscript"], self.toggleSuper),
+        (config_scuts["editor subscript"], self.toggleSub),
+        (config_scuts["editor remove format"], self.removeFormat),
+        (config_scuts["editor foreground"], self.onForeground),
+        (config_scuts["editor change col"], self.onChangeCol),
+        (config_scuts["editor cloze"], self.onCloze),
+        (config_scuts["editor cloze alt"], self.onCloze),
+        (config_scuts["editor add media"], self.onAddMedia),
+        (config_scuts["editor record sound"], self.onRecSound),
+        (config_scuts["editor insert latex"], self.insertLatex),
+        (config_scuts["editor insert latex equation"], self.insertLatexEqn),
+        (config_scuts["editor insert latex math environment"], self.insertLatexMathEnv),
+        (config_scuts["editor insert mathjax inline"], self.insertMathjaxInline),
+        (config_scuts["editor insert mathjax block"], self.insertMathjaxBlock),
+        (config_scuts["editor insert mathjax chemistry"], self.insertMathjaxChemistry),
+        (config_scuts["editor html edit"], self.onHtmlEdit),
+        (config_scuts["editor focus tags"], self.onFocusTags, True)
     ]
     runHook("setupEditorShortcuts", cuts, self)
     for row in cuts:
@@ -255,6 +279,10 @@ def cs_conflictDetect():
         conflictStr += "Please change them in the config.json."
         showWarning(conflictStr)
 
+
+
+#Functions that execute on startup
+cs_translateKeys()
 
 Editor.setupShortcuts = _setupShortcuts
 Reviewer._shortcutKeys = review_shortcutKeys
