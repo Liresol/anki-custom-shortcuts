@@ -45,6 +45,14 @@
 
 "underline": Toggle underline
 
+"_extras": Special shortcuts with functionality not originally in Anki.
+
+**In the future, these shortcuts may be removed and put into a new add-on, as they are not part of Anki's default functionality.**
+
+Within "editor \_extras":
+
+"paste custom text": Pastes a custom piece of html text into a field (defined in "\u03a9 custom paste text")
+
 ##Main Toolbox Options
 
 **These options are prefixed with "m_toolbox".**
@@ -133,3 +141,6 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 **These options are prefixed with "\u03a9".**
 
 "\u03a9 enable conflict warning": If set to "y", shows a warning window whenever two shortcuts of the same type are set to the same key.
+
+"\u03a9 custom paste text": Controls which text will be pasted by "custom paste" in "editor \_extras"	
+e.g. `"\u03a9 custom paste text": "<span style=\"font-size: 20px; color:#3399ff\">◆◆◆◆◆</span>"`

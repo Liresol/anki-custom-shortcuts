@@ -4,8 +4,11 @@ from aqt.qt import *
 from anki.hooks import runHook
 from aqt.utils import showWarning
 from aqt.toolbar import Toolbar
-from aqt.editor import Editor
+from aqt.editor import Editor,EditorWebView
 from aqt.reviewer import Reviewer
+from anki.utils import json
+from bs4 import BeautifulSoup
+import warnings
 
 
 #TODO: Change the toolbar & editor toolbar to reflect changed keys
@@ -175,30 +178,30 @@ def review_sToF(self,scut):
 def review_shortcutKeys(self):
     dupes = []
     ret = [
-    (config_scuts["reviewer edit current"], self.mw.onEditCurrent),
-    (config_scuts["reviewer flip card 1"], self.onEnterKey),
-    (config_scuts["reviewer flip card 2"], self.onEnterKey),
-    (config_scuts["reviewer flip card 3"], self.onEnterKey),
-    (config_scuts["reviewer replay audio 1"], self.replayAudio),
-    (config_scuts["reviewer replay audio 2"], self.replayAudio),
-    (config_scuts["reviewer set flag 1"], lambda: self.setFlag(1)),
-    (config_scuts["reviewer set flag 2"], lambda: self.setFlag(2)),
-    (config_scuts["reviewer set flag 3"], lambda: self.setFlag(3)),
-    (config_scuts["reviewer set flag 4"], lambda: self.setFlag(4)),
-    (config_scuts["reviewer set flag 0"], lambda: self.setFlag(0)),
-    (config_scuts["reviewer mark card"], self.onMark),
-    (config_scuts["reviewer bury note"], self.onBuryNote),
-    (config_scuts["reviewer bury card"], self.onBuryCard),
-    (config_scuts["reviewer suspend note"], self.onSuspend),
-    (config_scuts["reviewer suspend card"], self.onSuspendCard),
-    (config_scuts["reviewer delete note"], self.onDelete),
-    (config_scuts["reviewer play recorded voice"], self.onReplayRecorded),
-    (config_scuts["reviewer record voice"], self.onRecordVoice),
-    (config_scuts["reviewer options menu"], self.onOptions),
-    (config_scuts["reviewer choice 1"], lambda: self._answerCard(1)),
-    (config_scuts["reviewer choice 2"], lambda: self._answerCard(2)),
-    (config_scuts["reviewer choice 3"], lambda: self._answerCard(3)),
-    (config_scuts["reviewer choice 4"], lambda: self._answerCard(4)),
+        (config_scuts["reviewer edit current"], self.mw.onEditCurrent),
+        (config_scuts["reviewer flip card 1"], self.onEnterKey),
+        (config_scuts["reviewer flip card 2"], self.onEnterKey),
+        (config_scuts["reviewer flip card 3"], self.onEnterKey),
+        (config_scuts["reviewer replay audio 1"], self.replayAudio),
+        (config_scuts["reviewer replay audio 2"], self.replayAudio),
+        (config_scuts["reviewer set flag 1"], lambda: self.setFlag(1)),
+        (config_scuts["reviewer set flag 2"], lambda: self.setFlag(2)),
+        (config_scuts["reviewer set flag 3"], lambda: self.setFlag(3)),
+        (config_scuts["reviewer set flag 4"], lambda: self.setFlag(4)),
+        (config_scuts["reviewer set flag 0"], lambda: self.setFlag(0)),
+        (config_scuts["reviewer mark card"], self.onMark),
+        (config_scuts["reviewer bury note"], self.onBuryNote),
+        (config_scuts["reviewer bury card"], self.onBuryCard),
+        (config_scuts["reviewer suspend note"], self.onSuspend),
+        (config_scuts["reviewer suspend card"], self.onSuspendCard),
+        (config_scuts["reviewer delete note"], self.onDelete),
+        (config_scuts["reviewer play recorded voice"], self.onReplayRecorded),
+        (config_scuts["reviewer record voice"], self.onRecordVoice),
+        (config_scuts["reviewer options menu"], self.onOptions),
+        (config_scuts["reviewer choice 1"], lambda: self._answerCard(1)),
+        (config_scuts["reviewer choice 2"], lambda: self._answerCard(2)),
+        (config_scuts["reviewer choice 3"], lambda: self._answerCard(3)),
+        (config_scuts["reviewer choice 4"], lambda: self._answerCard(4)),
     ]
     for scut in config_scuts["reviewer _duplicates"]:
         dupes.append((config_scuts["reviewer _duplicates"][scut],self.sToF(scut)))
@@ -227,7 +230,8 @@ def _setupShortcuts(self):
         (config_scuts["editor insert mathjax block"], self.insertMathjaxBlock),
         (config_scuts["editor insert mathjax chemistry"], self.insertMathjaxChemistry),
         (config_scuts["editor html edit"], self.onHtmlEdit),
-        (config_scuts["editor focus tags"], self.onFocusTags, True)
+        (config_scuts["editor focus tags"], self.onFocusTags, True),
+        (config_scuts["editor _extras"]["paste custom text"], self.customPaste)
     ]
     runHook("setupEditorShortcuts", cuts, self)
     for row in cuts:
@@ -237,6 +241,7 @@ def _setupShortcuts(self):
         else:
             keys, fn, _ = row
         scut = QShortcut(QKeySequence(keys), self.widget, activated=fn)
+
 
 #detects shortcut conflicts
 #Ignores the Add-on (Ω) options
@@ -251,7 +256,7 @@ def cs_conflictDetect():
         if sub in ext_list:
             if isinstance(val,dict):
                 for key in val:
-                    ext_list[sub][key + " in _duplicates"] = val[key].upper()
+                    ext_list[sub][key + " in " + e] = val[key].upper()
             else:
                 ext_list[sub][e] = val.upper()
         elif sub != "Ω":
@@ -279,12 +284,26 @@ def cs_conflictDetect():
         conflictStr += "Please change them in the config.json."
         showWarning(conflictStr)
 
+def cs_editor_custom_paste(self):
+    field = self.currentField
+    self.saveNow(lambda: self._customPaste(field))
+
+def cs_uEditor_custom_paste(self,field):
+    html = config["Ω custom paste text"]
+    with warnings.catch_warnings() as w:
+        warnings.simplefilter('ignore', UserWarning)
+        html = str(BeautifulSoup(html, "html.parser"))
+    self.note.fields[field] += html
+    self.loadNote(focusTo=field)
 
 
 #Functions that execute on startup
 cs_translateKeys()
 
 Editor.setupShortcuts = _setupShortcuts
+Editor.customPaste = cs_editor_custom_paste
+Editor._customPaste = cs_uEditor_custom_paste
+#EditorWebView.customPaste = cs_custom_paste
 Reviewer._shortcutKeys = review_shortcutKeys
 Reviewer.sToF = review_sToF
 
