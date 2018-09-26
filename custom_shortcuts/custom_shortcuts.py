@@ -207,6 +207,7 @@ def review_shortcutKeys(self):
         dupes.append((config_scuts["reviewer _duplicates"][scut],self.sToF(scut)))
     return dupes + ret
 
+#The function to setup shortcuts on the Editor
 def _setupShortcuts(self):
     # if a third element is provided, enable shortcut even when no field selected
     cuts = [
@@ -284,10 +285,12 @@ def cs_conflictDetect():
         conflictStr += "Please change them in the config.json."
         showWarning(conflictStr)
 
+#Mimics the style of other Anki functions, analogue of customPaste
 def cs_editor_custom_paste(self):
     field = self.currentField
     self.saveNow(lambda: self._customPaste(field))
 
+#Mimics the style of other anki functions, analogue of _customPaste
 def cs_uEditor_custom_paste(self,field):
     html = config["Ω custom paste text"]
     with warnings.catch_warnings() as w:
@@ -303,7 +306,6 @@ cs_translateKeys()
 Editor.setupShortcuts = _setupShortcuts
 Editor.customPaste = cs_editor_custom_paste
 Editor._customPaste = cs_uEditor_custom_paste
-#EditorWebView.customPaste = cs_custom_paste
 Reviewer._shortcutKeys = review_shortcutKeys
 Reviewer.sToF = review_sToF
 
