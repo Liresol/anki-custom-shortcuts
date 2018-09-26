@@ -27,6 +27,9 @@
 	"editor insert mathjax chemistry":"Ctrl+M, C",
 	"editor html edit":"Ctrl+Shift+X",
 	"editor focus tags":"Ctrl+Shift+T",
+	"editor _extras": {
+		"paste custom text":"<nop>"
+	},
 	"reviewer edit current":"e",
 	"reviewer flip card 1":" ",
 	"reviewer flip card 2":"Qt.Key_Return",
@@ -63,6 +66,7 @@
 	"m_toolbox study":"/",
 	"m_toolbox create filtered deck":"F",
 	"m_toolbox addons":"Ctrl+Shift+A",
-	"Ω enable conflict warning": "y"
+	"Ω enable conflict warning": "y",
+	"Ω custom paste text": ""
 }
 
