@@ -51,7 +51,7 @@
 
 Within "editor \_extras":
 
-"paste custom text": Pastes a custom piece of html text into a field (defined in "\u03a9 custom paste text"), is not reversed by undo
+"paste custom text": Pastes a custom piece of html text into a card field (defined in "\u03a9 custom paste text"), is not reversed by undo
 
 ##Main Toolbox Options
 

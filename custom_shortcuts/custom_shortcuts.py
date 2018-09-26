@@ -292,7 +292,7 @@ def cs_editor_custom_paste(self):
 
 #Mimics the style of other anki functions, analogue of _customPaste
 def cs_uEditor_custom_paste(self,field):
-    html = config["Ω custom paste text"]
+    html = config_scuts["Ω custom paste text"]
     with warnings.catch_warnings() as w:
         warnings.simplefilter('ignore', UserWarning)
         html = str(BeautifulSoup(html, "html.parser"))
