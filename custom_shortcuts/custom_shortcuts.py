@@ -287,18 +287,15 @@ def cs_conflictDetect():
 
 #Mimics the style of other Anki functions, analogue of customPaste
 def cs_editor_custom_paste(self):
-    field = self.currentField
-    self.saveNow(lambda: self._customPaste(field))
+    self._customPaste()
 
-#Mimics the style of other anki functions, analogue of _customPaste
-def cs_uEditor_custom_paste(self,field):
+
+def cs_uEditor_custom_paste(self):
     html = config_scuts["Ω custom paste text"]
     with warnings.catch_warnings() as w:
         warnings.simplefilter('ignore', UserWarning)
         html = str(BeautifulSoup(html, "html.parser"))
-    self.note.fields[field] += html
-    self.loadNote(focusTo=field)
-
+    self.doPaste(html,True,True)
 
 #Functions that execute on startup
 cs_translateKeys()
@@ -306,6 +303,7 @@ cs_translateKeys()
 Editor.setupShortcuts = _setupShortcuts
 Editor.customPaste = cs_editor_custom_paste
 Editor._customPaste = cs_uEditor_custom_paste
+#Editor._customPaste = cs_alternate_paste
 Reviewer._shortcutKeys = review_shortcutKeys
 Reviewer.sToF = review_sToF
 
