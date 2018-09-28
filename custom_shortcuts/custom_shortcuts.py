@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 import warnings
 
 
-#TODO: Change the toolbar & editor toolbar to reflect changed keys
+#TODO: Change the main page highlight & editor toolbar to reflect changed keys
 
 #Gets config.json as config
 config = mw.addonManager.getConfig(__name__)
@@ -286,19 +286,19 @@ def cs_conflictDetect():
         showWarning(conflictStr)
 
 #Mimics the style of other Anki functions, analogue of customPaste
+#Note that the saveNow function used earler takes the cursor to the end of the line,
+#as it is meant to save work before entering a new window
 def cs_editor_custom_paste(self):
-    field = self.currentField
-    self.saveNow(lambda: self._customPaste(field))
+    self._customPaste()
 
-#Mimics the style of other anki functions, analogue of _customPaste
-def cs_uEditor_custom_paste(self,field):
+
+#Mimics the style of other Anki functions, analogue of _customPaste
+def cs_uEditor_custom_paste(self):
     html = config_scuts["Ω custom paste text"]
     with warnings.catch_warnings() as w:
         warnings.simplefilter('ignore', UserWarning)
         html = str(BeautifulSoup(html, "html.parser"))
-    self.note.fields[field] += html
-    self.loadNote(focusTo=field)
-
+    self.doPaste(html,True,True)
 
 #Functions that execute on startup
 cs_translateKeys()
