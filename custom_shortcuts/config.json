@@ -67,6 +67,7 @@
 	"m_toolbox create filtered deck":"F",
 	"m_toolbox addons":"Ctrl+Shift+A",
 	"Ω enable conflict warning": "y",
-	"Ω custom paste text": ""
+	"Ω custom paste text": "",
+	"Ω custom paste end style": "n"
 }
 

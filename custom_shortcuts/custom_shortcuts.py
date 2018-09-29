@@ -15,8 +15,8 @@ import warnings
 
 #Gets config.json as config
 config = mw.addonManager.getConfig(__name__)
-config_scuts = {}
 CS_CONFLICTSTR = "Custom Shortcut Conflicts: \n\n"
+#config_scuts initialized after cs_traverseKeys
 
 
 #There is a weird interaction with QShortcuts wherein if there are 2 (or more)
@@ -40,17 +40,7 @@ def cs_traverseKeys(Rep, D):
             ret[key] = Rep[D[key]]
     return ret
 
-
-def cs_translateKeys():
-    global config_scuts
-    Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter, 
-                    "Qt.Key_Return":Qt.Key_Return,
-                    "Qt.Key_Escape":Qt.Key_Escape,
-                    "Qt.Key_Space":Qt.Key_Space,
-                    "Qt.Key_Tab":Qt.Key_Tab,
-                    "Qt.Key_Backspace":Qt.Key_Backspace,
-                    "Qt.Key_Delete":Qt.Key_Delete}
-    config_scuts = cs_traverseKeys(Qt_functions,config)
+config_scuts = cs_traverseKeys(Qt_functions,config)
 
 #Default shortcuts
 mw.inversionSet =  [
@@ -86,8 +76,8 @@ def cs_applyInverters():
     return qshortcuts
 
 #Modified AnkiQt applyShortcuts to work around inverter shortcuts
-#TODO: Be able to swap shortcut functions around
-#Unsure if this is possible
+#Anki's main shortcuts are unlikely to be modifiable based on the 
+#Current way that Anki and its addons are programmed
 def _applyShortcuts(shortcuts):
     qshortcuts = []
     for key, fn in shortcuts:
@@ -291,10 +281,11 @@ def cs_conflictDetect():
 def cs_editor_custom_paste(self):
     self._customPaste()
 
-
 #Mimics the style of other Anki functions, analogue of _customPaste
 def cs_uEditor_custom_paste(self):
     html = config_scuts["Ω custom paste text"]
+    if config_scuts["Ω custom paste end style"].upper() == "Y":
+        html += "</span>\u200b"
     with warnings.catch_warnings() as w:
         warnings.simplefilter('ignore', UserWarning)
         html = str(BeautifulSoup(html, "html.parser"))

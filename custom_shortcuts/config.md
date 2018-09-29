@@ -136,6 +136,10 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 **These options are for changing a few settings on the add-on itself.**
 
+"\u03a9 custom paste end style": For the exceptionally lazy (like me). If set to "y", inserts a `</span>` and a zero-width space at the end of the custom text to stop the custom style from bleeding into new text.
+
+Otherwise, the custom paste will behave exactly like regular paste.
+
 "\u03a9 custom paste text": Controls what html will be pasted by "custom paste" in "editor \_extras"	
 e.g. `"\u03a9 custom paste text": "<span style=\"font-size: 20px; color:#3399ff\">◆</span>"`
 
