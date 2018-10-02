@@ -10,13 +10,17 @@ from anki.utils import json
 from bs4 import BeautifulSoup
 import warnings
 
-
-#TODO: Change the main page highlight & editor toolbar to reflect changed keys
-
 #Gets config.json as config
 config = mw.addonManager.getConfig(__name__)
 CS_CONFLICTSTR = "Custom Shortcut Conflicts: \n\n"
 #config_scuts initialized after cs_traverseKeys
+Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter, 
+                    "Qt.Key_Return":Qt.Key_Return,
+                    "Qt.Key_Escape":Qt.Key_Escape,
+                    "Qt.Key_Space":Qt.Key_Space,
+                    "Qt.Key_Tab":Qt.Key_Tab,
+                    "Qt.Key_Backspace":Qt.Key_Backspace,
+                    "Qt.Key_Delete":Qt.Key_Delete}
 
 
 #There is a weird interaction with QShortcuts wherein if there are 2 (or more)
