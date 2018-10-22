@@ -266,16 +266,12 @@ def cs_browser_setupShortcuts(self):
     f.actionAdd.setShortcut(config_scuts["window_browser add note"])
     f.actionChange_Deck.setShortcut(config_scuts["window_browser change deck"])
     f.actionClear_Flag.setShortcut(config_scuts["window_browser clear flags"])
-    f.actionRed_Flag.setShortcut(config_scuts["window_browser red flag"])
-    f.actionPurple_Flag.setShortcut(config_scuts["window_browser purple flag"])
-    f.actionGreen_Flag.setShortcut(config_scuts["window_browser green flag"])
-    f.actionBlue_Flag.setShortcut(config_scuts["window_browser blue flag"])
+    f.actionRed_Flag.setShortcut(config_scuts["window_browser flag_red"])
+    f.actionPurple_Flag.setShortcut(config_scuts["window_browser flag_purple"])
+    f.actionGreen_Flag.setShortcut(config_scuts["window_browser flag_green"])
+    f.actionBlue_Flag.setShortcut(config_scuts["window_browser flag_blue"])
     f.actionSidebar.setShortcut(config_scuts["window_browser goto sidebar"])
     f.actionToggle_Mark.setShortcut(config_scuts["window_browser toggle mark"])
-
-
-    #m.actionExit.setShortcut(config_scuts["m_toolbox quit"])
-    pass
 
 #detects shortcut conflicts
 #Ignores the Add-on (Ω) options
@@ -336,7 +332,6 @@ def cs_uEditor_custom_paste(self):
     self.doPaste(html,True,True)
 
 #Functions that execute on startup
-
 Editor.setupShortcuts = editor_setupShortcuts
 Editor.customPaste = cs_editor_custom_paste
 Editor._customPaste = cs_uEditor_custom_paste
