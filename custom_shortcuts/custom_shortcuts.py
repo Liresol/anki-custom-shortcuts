@@ -1,7 +1,7 @@
 #Python 3.7.0
 from aqt import mw
 from aqt.qt import *
-from anki.hooks import runHook
+from anki.hooks import runHook,addHook
 from aqt.utils import showWarning
 from aqt.toolbar import Toolbar
 from aqt.editor import Editor,EditorWebView
@@ -15,12 +15,12 @@ config = mw.addonManager.getConfig(__name__)
 CS_CONFLICTSTR = "Custom Shortcut Conflicts: \n\n"
 #config_scuts initialized after cs_traverseKeys
 Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter, 
-                    "Qt.Key_Return":Qt.Key_Return,
-                    "Qt.Key_Escape":Qt.Key_Escape,
-                    "Qt.Key_Space":Qt.Key_Space,
-                    "Qt.Key_Tab":Qt.Key_Tab,
-                    "Qt.Key_Backspace":Qt.Key_Backspace,
-                    "Qt.Key_Delete":Qt.Key_Delete}
+                "Qt.Key_Return":Qt.Key_Return,
+                "Qt.Key_Escape":Qt.Key_Escape,
+                "Qt.Key_Space":Qt.Key_Space,
+                "Qt.Key_Tab":Qt.Key_Tab,
+                "Qt.Key_Backspace":Qt.Key_Backspace,
+                "Qt.Key_Delete":Qt.Key_Delete}
 
 
 #There is a weird interaction with QShortcuts wherein if there are 2 (or more)
@@ -82,7 +82,7 @@ def cs_applyInverters():
 #Modified AnkiQt applyShortcuts to work around inverter shortcuts
 #Anki's main shortcuts are unlikely to be modifiable based on the 
 #Current way that Anki and its addons are programmed
-def _applyShortcuts(shortcuts):
+def cs_applyShortcuts(shortcuts):
     qshortcuts = []
     for key, fn in shortcuts:
         if key not in mw.inversionSet:
@@ -114,7 +114,7 @@ def cs_initKeys():
         mw.onSync
     ]
     globalShortcuts = list(zip(cuts,functions))
-    _applyShortcuts(globalShortcuts)
+    cs_applyShortcuts(globalShortcuts)
     mw.keys = cuts
     mw.stateShortcuts = []
 
@@ -202,7 +202,7 @@ def review_shortcutKeys(self):
     return dupes + ret
 
 #The function to setup shortcuts on the Editor
-def _setupShortcuts(self):
+def editor_setupShortcuts(self):
     # if a third element is provided, enable shortcut even when no field selected
     cuts = [
         (config_scuts["editor card layout"], self.onCardLayout, True),
@@ -237,6 +237,45 @@ def _setupShortcuts(self):
             keys, fn, _ = row
         scut = QShortcut(QKeySequence(keys), self.widget, activated=fn)
 
+#IMPLEMENTS Browser shortcuts
+def cs_browser_setupShortcuts(self):
+    f = self.form
+    f.previewButton.setShortcut(config_scuts["window_browser preview"])
+    f.actionReschedule.setShortcut(config_scuts["window_browser reschedule"])
+    f.actionSelectAll.setShortcut(config_scuts["window_browser select all"])
+    f.actionUndo.setShortcut(config_scuts["window_browser undo"])
+    f.actionInvertSelection.setShortcut(config_scuts["window_browser invert selection"])
+    f.actionFind.setShortcut(config_scuts["window_browser find"])
+    f.actionNote.setShortcut(config_scuts["window_browser goto note"])
+    f.actionNextCard.setShortcut(config_scuts["window_browser goto next note"])
+    f.actionPreviousCard.setShortcut(config_scuts["window_browser goto previous note"])
+    f.actionChangeModel.setShortcut(config_scuts["window_browser change note type"])
+    f.actionGuide.setShortcut(config_scuts["window_browser guide"])
+    f.actionFindReplace.setShortcut(config_scuts["window_browser find and replace"])
+    f.actionTags.setShortcut(config_scuts["window_browser filter"])
+    f.actionCardList.setShortcut(config_scuts["window_browser goto card list"])
+    f.actionReposition.setShortcut(config_scuts["window_browser reposition"])
+    f.actionFirstCard.setShortcut(config_scuts["window_browser first card"])
+    f.actionLastCard.setShortcut(config_scuts["window_browser last card"])
+    f.actionClose.setShortcut(config_scuts["window_browser close"])
+    f.action_Info.setShortcut(config_scuts["window_browser info"])
+    f.actionAdd_Tags.setShortcut(config_scuts["window_browser add tag"])
+    f.actionRemove_Tags.setShortcut(config_scuts["window_browser remove tag"])
+    f.actionToggle_Suspend.setShortcut(config_scuts["window_browser suspend"])
+    f.actionDelete.setShortcut(config_scuts["window_browser delete"])
+    f.actionAdd.setShortcut(config_scuts["window_browser add note"])
+    f.actionChange_Deck.setShortcut(config_scuts["window_browser change deck"])
+    f.actionClear_Flag.setShortcut(config_scuts["window_browser clear flags"])
+    f.actionRed_Flag.setShortcut(config_scuts["window_browser red flag"])
+    f.actionPurple_Flag.setShortcut(config_scuts["window_browser purple flag"])
+    f.actionGreen_Flag.setShortcut(config_scuts["window_browser green flag"])
+    f.actionBlue_Flag.setShortcut(config_scuts["window_browser blue flag"])
+    f.actionSidebar.setShortcut(config_scuts["window_browser goto sidebar"])
+    f.actionToggle_Mark.setShortcut(config_scuts["window_browser toggle mark"])
+
+
+    #m.actionExit.setShortcut(config_scuts["m_toolbox quit"])
+    pass
 
 #detects shortcut conflicts
 #Ignores the Add-on (Ω) options
@@ -279,6 +318,7 @@ def cs_conflictDetect():
         conflictStr += "Please change them in the config.json."
         showWarning(conflictStr)
 
+
 #Mimics the style of other Anki functions, analogue of customPaste
 #Note that the saveNow function used earler takes the cursor to the end of the line,
 #as it is meant to save work before entering a new window
@@ -296,17 +336,19 @@ def cs_uEditor_custom_paste(self):
     self.doPaste(html,True,True)
 
 #Functions that execute on startup
-cs_translateKeys()
 
-Editor.setupShortcuts = _setupShortcuts
+Editor.setupShortcuts = editor_setupShortcuts
 Editor.customPaste = cs_editor_custom_paste
 Editor._customPaste = cs_uEditor_custom_paste
 Reviewer._shortcutKeys = review_shortcutKeys
 Reviewer.sToF = review_sToF
 
-mw.applyShortcuts = _applyShortcuts
+mw.applyShortcuts = cs_applyShortcuts
 
 cs_applyInverters()
 cs_initKeys()
 cs_mtShortcuts()
 cs_conflictDetect()
+
+#Hooks to setup shortcuts at the right time
+addHook('browser.setupMenus', cs_browser_setupShortcuts)
