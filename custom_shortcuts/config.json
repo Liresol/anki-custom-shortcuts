@@ -98,6 +98,10 @@
 	"window_browser flag_blue":"Ctrl+4",
 	"window_browser goto sidebar":"Ctrl+Shift+R",
 	"window_browser toggle mark":"Ctrl+K",
+	"window_browser clear unused tags":"<nop>",
+	"window_browser find duplicates":"<nop>",
+	"window_browser select notes":"<nop>",
+	"window_browser manage note types":"<nop>",
 	"Ω enable conflict warning": "y",
 	"Ω custom paste text": "",
 	"Ω custom paste end style": "n"

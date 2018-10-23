@@ -20,7 +20,10 @@ Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter,
                 "Qt.Key_Space":Qt.Key_Space,
                 "Qt.Key_Tab":Qt.Key_Tab,
                 "Qt.Key_Backspace":Qt.Key_Backspace,
-                "Qt.Key_Delete":Qt.Key_Delete}
+                "Qt.Key_Delete":Qt.Key_Delete,
+                "<nop>":""
+
+                }
 
 
 #There is a weird interaction with QShortcuts wherein if there are 2 (or more)
@@ -265,13 +268,20 @@ def cs_browser_setupShortcuts(self):
     f.actionDelete.setShortcut(config_scuts["window_browser delete"])
     f.actionAdd.setShortcut(config_scuts["window_browser add note"])
     f.actionChange_Deck.setShortcut(config_scuts["window_browser change deck"])
-    f.actionClear_Flag.setShortcut(config_scuts["window_browser clear flags"])
+    f.actionClear_Flag.setShortcut(config_scuts["window_browser flags_clear"])
     f.actionRed_Flag.setShortcut(config_scuts["window_browser flag_red"])
     f.actionPurple_Flag.setShortcut(config_scuts["window_browser flag_purple"])
     f.actionGreen_Flag.setShortcut(config_scuts["window_browser flag_green"])
     f.actionBlue_Flag.setShortcut(config_scuts["window_browser flag_blue"])
     f.actionSidebar.setShortcut(config_scuts["window_browser goto sidebar"])
     f.actionToggle_Mark.setShortcut(config_scuts["window_browser toggle mark"])
+    f.actionClear_Unused_Tags.setShortcut(config_scuts["window_browser clear unused tags"])
+    f.actionFindDuplicates.setShortcut(config_scuts["window_browser find duplicates"])
+    f.actionSelectNotes.setShortcut(config_scuts["window_browser select notes"])
+    f.actionManage_Note_Types.setShortcut(config_scuts["window_browser manage note types"])
+    
+
+
 
 #detects shortcut conflicts
 #Ignores the Add-on (Ω) options
@@ -305,6 +315,8 @@ def cs_conflictDetect():
             if(len(inv[k])) == 1:
                 continue
             if k == "<NOP>":
+                continue
+            if len(k) == 0:
                 continue
             conflictStr += ", ".join(inv[k])
             conflictStr += "\nshare '" + k + "' as a shortcut\n\n"

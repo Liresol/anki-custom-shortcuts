@@ -144,6 +144,8 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "window_browser clear flags": Removes all flags from a card
 
+"window_browser clear unused tags": *Not in vanilla Anki*, Removes all unused tags
+
 "window_browser close": Closes the browser
 
 "window_browser delete": Deletes the selected card
@@ -151,6 +153,8 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 "window_browser filter": Adds filters to a search
 
 "window_browser find": Finds a pattern
+
+"window_browser find duplicates": *Not in vanilla Anki*, Finds cards with the same fields
 
 "window_browser find and replace": Finds a pattern and replaces it with another pattern
 
@@ -182,6 +186,8 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "window_browser last card": Goes to the last card on the list
 
+"window_browser manage note types": *Not in vanilla Anki*, Goes to the note type management window
+
 "window_browser preview": Emulates what the card will look like during review
 
 "window_browser remove tag": Removes tags from a card
@@ -189,6 +195,8 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 "window_browser reposition": Repositions a *new* card in the review schedule
 
 "window_browser select all": Selects all cards
+
+"window_browser select notes": *Not in vanilla Anki*, Selects only the current notes
 
 "window_browser suspend": Suspends the selected cards
 
