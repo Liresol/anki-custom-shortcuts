@@ -1,7 +1,7 @@
 #Python 3.7.0
 from aqt import mw
 from aqt.qt import *
-from anki.hooks import runHook
+from anki.hooks import runHook,addHook
 from aqt.utils import showWarning
 from aqt.toolbar import Toolbar
 from aqt.editor import Editor,EditorWebView
@@ -10,13 +10,20 @@ from anki.utils import json
 from bs4 import BeautifulSoup
 import warnings
 
-
-#TODO: Change the main page highlight & editor toolbar to reflect changed keys
-
 #Gets config.json as config
 config = mw.addonManager.getConfig(__name__)
-config_scuts = {}
 CS_CONFLICTSTR = "Custom Shortcut Conflicts: \n\n"
+#config_scuts initialized after cs_traverseKeys
+Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter, 
+                "Qt.Key_Return":Qt.Key_Return,
+                "Qt.Key_Escape":Qt.Key_Escape,
+                "Qt.Key_Space":Qt.Key_Space,
+                "Qt.Key_Tab":Qt.Key_Tab,
+                "Qt.Key_Backspace":Qt.Key_Backspace,
+                "Qt.Key_Delete":Qt.Key_Delete,
+                "<nop>":""
+
+                }
 
 
 #There is a weird interaction with QShortcuts wherein if there are 2 (or more)
@@ -40,17 +47,7 @@ def cs_traverseKeys(Rep, D):
             ret[key] = Rep[D[key]]
     return ret
 
-
-def cs_translateKeys():
-    global config_scuts
-    Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter, 
-                    "Qt.Key_Return":Qt.Key_Return,
-                    "Qt.Key_Escape":Qt.Key_Escape,
-                    "Qt.Key_Space":Qt.Key_Space,
-                    "Qt.Key_Tab":Qt.Key_Tab,
-                    "Qt.Key_Backspace":Qt.Key_Backspace,
-                    "Qt.Key_Delete":Qt.Key_Delete}
-    config_scuts = cs_traverseKeys(Qt_functions,config)
+config_scuts = cs_traverseKeys(Qt_functions,config)
 
 #Default shortcuts
 mw.inversionSet =  [
@@ -86,9 +83,9 @@ def cs_applyInverters():
     return qshortcuts
 
 #Modified AnkiQt applyShortcuts to work around inverter shortcuts
-#TODO: Be able to swap shortcut functions around
-#Unsure if this is possible
-def _applyShortcuts(shortcuts):
+#Anki's main shortcuts are unlikely to be modifiable based on the 
+#Current way that Anki and its addons are programmed
+def cs_main_setupShortcuts(shortcuts):
     qshortcuts = []
     for key, fn in shortcuts:
         if key not in mw.inversionSet:
@@ -120,12 +117,12 @@ def cs_initKeys():
         mw.onSync
     ]
     globalShortcuts = list(zip(cuts,functions))
-    _applyShortcuts(globalShortcuts)
+    cs_main_setupShortcuts(globalShortcuts)
     mw.keys = cuts
     mw.stateShortcuts = []
 
 #Governs the shortcuts on the main toolbar
-def cs_mtShortcuts():
+def cs_mt_setupShortcuts():
     m = mw.form
     m.actionExit.setShortcut(config_scuts["m_toolbox quit"])
     m.actionPreferences.setShortcut(config_scuts["m_toolbox preferences"])
@@ -175,7 +172,7 @@ def review_sToF(self,scut):
     return sdict[scut]
 
 #Governs the shortcuts on the review window
-def review_shortcutKeys(self):
+def cs_review_setupShortcuts(self):
     dupes = []
     ret = [
         (config_scuts["reviewer edit current"], self.mw.onEditCurrent),
@@ -208,7 +205,7 @@ def review_shortcutKeys(self):
     return dupes + ret
 
 #The function to setup shortcuts on the Editor
-def _setupShortcuts(self):
+def cs_editor_setupShortcuts(self):
     # if a third element is provided, enable shortcut even when no field selected
     cuts = [
         (config_scuts["editor card layout"], self.onCardLayout, True),
@@ -242,6 +239,48 @@ def _setupShortcuts(self):
         else:
             keys, fn, _ = row
         scut = QShortcut(QKeySequence(keys), self.widget, activated=fn)
+
+#IMPLEMENTS Browser shortcuts
+def cs_browser_setupShortcuts(self):
+    f = self.form
+    f.previewButton.setShortcut(config_scuts["window_browser preview"])
+    f.actionReschedule.setShortcut(config_scuts["window_browser reschedule"])
+    f.actionSelectAll.setShortcut(config_scuts["window_browser select all"])
+    f.actionUndo.setShortcut(config_scuts["window_browser undo"])
+    f.actionInvertSelection.setShortcut(config_scuts["window_browser invert selection"])
+    f.actionFind.setShortcut(config_scuts["window_browser find"])
+    f.actionNote.setShortcut(config_scuts["window_browser goto note"])
+    f.actionNextCard.setShortcut(config_scuts["window_browser goto next note"])
+    f.actionPreviousCard.setShortcut(config_scuts["window_browser goto previous note"])
+    f.actionChangeModel.setShortcut(config_scuts["window_browser change note type"])
+    f.actionGuide.setShortcut(config_scuts["window_browser guide"])
+    f.actionFindReplace.setShortcut(config_scuts["window_browser find and replace"])
+    f.actionTags.setShortcut(config_scuts["window_browser filter"])
+    f.actionCardList.setShortcut(config_scuts["window_browser goto card list"])
+    f.actionReposition.setShortcut(config_scuts["window_browser reposition"])
+    f.actionFirstCard.setShortcut(config_scuts["window_browser first card"])
+    f.actionLastCard.setShortcut(config_scuts["window_browser last card"])
+    f.actionClose.setShortcut(config_scuts["window_browser close"])
+    f.action_Info.setShortcut(config_scuts["window_browser info"])
+    f.actionAdd_Tags.setShortcut(config_scuts["window_browser add tag"])
+    f.actionRemove_Tags.setShortcut(config_scuts["window_browser remove tag"])
+    f.actionToggle_Suspend.setShortcut(config_scuts["window_browser suspend"])
+    f.actionDelete.setShortcut(config_scuts["window_browser delete"])
+    f.actionAdd.setShortcut(config_scuts["window_browser add note"])
+    f.actionChange_Deck.setShortcut(config_scuts["window_browser change deck"])
+    f.actionClear_Flag.setShortcut(config_scuts["window_browser flags_clear"])
+    f.actionRed_Flag.setShortcut(config_scuts["window_browser flag_red"])
+    f.actionPurple_Flag.setShortcut(config_scuts["window_browser flag_purple"])
+    f.actionGreen_Flag.setShortcut(config_scuts["window_browser flag_green"])
+    f.actionBlue_Flag.setShortcut(config_scuts["window_browser flag_blue"])
+    f.actionSidebar.setShortcut(config_scuts["window_browser goto sidebar"])
+    f.actionToggle_Mark.setShortcut(config_scuts["window_browser toggle mark"])
+    f.actionClear_Unused_Tags.setShortcut(config_scuts["window_browser clear unused tags"])
+    f.actionFindDuplicates.setShortcut(config_scuts["window_browser find duplicates"])
+    f.actionSelectNotes.setShortcut(config_scuts["window_browser select notes"])
+    f.actionManage_Note_Types.setShortcut(config_scuts["window_browser manage note types"])
+    
+
 
 
 #detects shortcut conflicts
@@ -277,6 +316,8 @@ def cs_conflictDetect():
                 continue
             if k == "<NOP>":
                 continue
+            if not k:
+                continue
             conflictStr += ", ".join(inv[k])
             conflictStr += "\nshare '" + k + "' as a shortcut\n\n"
 
@@ -285,33 +326,36 @@ def cs_conflictDetect():
         conflictStr += "Please change them in the config.json."
         showWarning(conflictStr)
 
+
 #Mimics the style of other Anki functions, analogue of customPaste
 #Note that the saveNow function used earler takes the cursor to the end of the line,
 #as it is meant to save work before entering a new window
 def cs_editor_custom_paste(self):
     self._customPaste()
 
-
 #Mimics the style of other Anki functions, analogue of _customPaste
 def cs_uEditor_custom_paste(self):
     html = config_scuts["Ω custom paste text"]
+    if config_scuts["Ω custom paste end style"].upper() == "Y":
+        html += "</span>\u200b"
     with warnings.catch_warnings() as w:
         warnings.simplefilter('ignore', UserWarning)
         html = str(BeautifulSoup(html, "html.parser"))
     self.doPaste(html,True,True)
 
 #Functions that execute on startup
-cs_translateKeys()
-
-Editor.setupShortcuts = _setupShortcuts
+Editor.setupShortcuts = cs_editor_setupShortcuts
 Editor.customPaste = cs_editor_custom_paste
 Editor._customPaste = cs_uEditor_custom_paste
-Reviewer._shortcutKeys = review_shortcutKeys
+Reviewer._shortcutKeys = cs_review_setupShortcuts
 Reviewer.sToF = review_sToF
 
-mw.applyShortcuts = _applyShortcuts
+mw.applyShortcuts = cs_main_setupShortcuts
 
 cs_applyInverters()
 cs_initKeys()
-cs_mtShortcuts()
+cs_mt_setupShortcuts()
 cs_conflictDetect()
+
+#Hooks to setup shortcuts at the right time
+addHook('browser.setupMenus', cs_browser_setupShortcuts)

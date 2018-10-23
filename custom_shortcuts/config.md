@@ -132,9 +132,85 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 **Make sure to remap keys to empty keyspace.**
 
+##Browser Window Options
+
+"window_browser add card": Adds a new card (goes to the add window)
+
+"window_browser add tag": Adds a tag to the selected card
+
+"window_browser change deck": Changes the deck of the selected card
+
+"window_browser change note type": Changes the note type of the selected card
+
+"window_browser clear flags": Removes all flags from a card
+
+"window_browser clear unused tags": *Not in vanilla Anki*, Removes all unused tags
+
+"window_browser close": Closes the browser
+
+"window_browser delete": Deletes the selected card
+
+"window_browser filter": Adds filters to a search
+
+"window_browser find": Finds a pattern
+
+"window_browser find duplicates": *Not in vanilla Anki*, Finds cards with the same fields
+
+"window_browser find and replace": Finds a pattern and replaces it with another pattern
+
+"window_browser first card": Selects only the first card in the list
+
+"window_browser flag_blue": Toggles the blue flag
+
+"window_browser flag_green": Toggles the green flag
+
+"window_browser flag_purple": Toggles the purple flag
+
+"window_browser flag_red": Toggles the red flag
+
+"window_browser goto card list": Switches focus to the card list
+
+"window_browser goto next note": Selects the note after the selected note in the list
+
+"window_browser goto note": Switches focus to the note fields
+
+"window_browser goto previous note": Selects the note before the selected note
+
+"window_browser goto sidebar": Goes to the sidebar of decks/note types
+
+"window_browser guide": Opens the browser guide in the default browser
+
+"window_browser info": Shows info of the selected card
+
+"window_browser invert selection": Inverts the selection of cards
+
+"window_browser last card": Goes to the last card on the list
+
+"window_browser manage note types": *Not in vanilla Anki*, Goes to the note type management window
+
+"window_browser preview": Emulates what the card will look like during review
+
+"window_browser remove tag": Removes tags from a card
+
+"window_browser reposition": Repositions a *new* card in the review schedule
+
+"window_browser select all": Selects all cards
+
+"window_browser select notes": *Not in vanilla Anki*, Selects only the current notes
+
+"window_browser suspend": Suspends the selected cards
+
+"window_browser toggle mark": Toggles the mark on the selected cards
+
+"window_browser undo": Undoes the latest browser action
+
 ##Add-on Preferences
 
 **These options are for changing a few settings on the add-on itself.**
+
+"\u03a9 custom paste end style": For the exceptionally lazy (like me). If set to "y", inserts a `</span>` and a zero-width space at the end of the custom text to stop the custom style from bleeding into new text.
+
+Otherwise, the custom paste will behave exactly like regular paste.
 
 "\u03a9 custom paste text": Controls what html will be pasted by "custom paste" in "editor \_extras"	
 e.g. `"\u03a9 custom paste text": "<span style=\"font-size: 20px; color:#3399ff\">◆</span>"`
