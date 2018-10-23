@@ -85,7 +85,7 @@ def cs_applyInverters():
 #Modified AnkiQt applyShortcuts to work around inverter shortcuts
 #Anki's main shortcuts are unlikely to be modifiable based on the 
 #Current way that Anki and its addons are programmed
-def cs_applyShortcuts(shortcuts):
+def cs_main_setupShortcuts(shortcuts):
     qshortcuts = []
     for key, fn in shortcuts:
         if key not in mw.inversionSet:
@@ -117,12 +117,12 @@ def cs_initKeys():
         mw.onSync
     ]
     globalShortcuts = list(zip(cuts,functions))
-    cs_applyShortcuts(globalShortcuts)
+    cs_main_setupShortcuts(globalShortcuts)
     mw.keys = cuts
     mw.stateShortcuts = []
 
 #Governs the shortcuts on the main toolbar
-def cs_mtShortcuts():
+def cs_mt_setupShortcuts():
     m = mw.form
     m.actionExit.setShortcut(config_scuts["m_toolbox quit"])
     m.actionPreferences.setShortcut(config_scuts["m_toolbox preferences"])
@@ -172,7 +172,7 @@ def review_sToF(self,scut):
     return sdict[scut]
 
 #Governs the shortcuts on the review window
-def review_shortcutKeys(self):
+def cs_review_setupShortcuts(self):
     dupes = []
     ret = [
         (config_scuts["reviewer edit current"], self.mw.onEditCurrent),
@@ -205,7 +205,7 @@ def review_shortcutKeys(self):
     return dupes + ret
 
 #The function to setup shortcuts on the Editor
-def editor_setupShortcuts(self):
+def cs_editor_setupShortcuts(self):
     # if a third element is provided, enable shortcut even when no field selected
     cuts = [
         (config_scuts["editor card layout"], self.onCardLayout, True),
@@ -316,7 +316,7 @@ def cs_conflictDetect():
                 continue
             if k == "<NOP>":
                 continue
-            if len(k) == 0:
+            if not k:
                 continue
             conflictStr += ", ".join(inv[k])
             conflictStr += "\nshare '" + k + "' as a shortcut\n\n"
@@ -344,17 +344,17 @@ def cs_uEditor_custom_paste(self):
     self.doPaste(html,True,True)
 
 #Functions that execute on startup
-Editor.setupShortcuts = editor_setupShortcuts
+Editor.setupShortcuts = cs_editor_setupShortcuts
 Editor.customPaste = cs_editor_custom_paste
 Editor._customPaste = cs_uEditor_custom_paste
-Reviewer._shortcutKeys = review_shortcutKeys
+Reviewer._shortcutKeys = cs_review_setupShortcuts
 Reviewer.sToF = review_sToF
 
-mw.applyShortcuts = cs_applyShortcuts
+mw.applyShortcuts = cs_main_setupShortcuts
 
 cs_applyInverters()
 cs_initKeys()
-cs_mtShortcuts()
+cs_mt_setupShortcuts()
 cs_conflictDetect()
 
 #Hooks to setup shortcuts at the right time
