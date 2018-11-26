@@ -22,9 +22,7 @@ Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter,
                 "Qt.Key_Backspace":Qt.Key_Backspace,
                 "Qt.Key_Delete":Qt.Key_Delete,
                 "<nop>":""
-
                 }
-
 
 #There is a weird interaction with QShortcuts wherein if there are 2 (or more)
 #QShortcuts mapped to the same key and function and both are enabled,
@@ -124,16 +122,30 @@ def cs_initKeys():
 #Governs the shortcuts on the main toolbar
 def cs_mt_setupShortcuts():
     m = mw.form
-    m.actionExit.setShortcut(config_scuts["m_toolbox quit"])
-    m.actionPreferences.setShortcut(config_scuts["m_toolbox preferences"])
-    m.actionUndo.setShortcut(config_scuts["m_toolbox undo"])
-    m.actionDocumentation.setShortcut(config_scuts["m_toolbox see documentation"])
-    m.actionSwitchProfile.setShortcut(config_scuts["m_toolbox switch profile"])
-    m.actionExport.setShortcut(config_scuts["m_toolbox export"])
-    m.actionImport.setShortcut(config_scuts["m_toolbox import"])
-    m.actionStudyDeck.setShortcut(config_scuts["m_toolbox study"])
-    m.actionCreateFiltered.setShortcut(config_scuts["m_toolbox create filtered deck"])
-    m.actionAdd_ons.setShortcut(config_scuts["m_toolbox addons"])
+    scuts_list = {
+        "m_toolbox quit": [config_scuts["m_toolbox quit"]],
+        "m_toolbox preferences": [config_scuts["m_toolbox preferences"]],
+        "m_toolbox undo": [config_scuts["m_toolbox undo"]],
+        "m_toolbox see documentation": [config_scuts["m_toolbox see documentation"]],
+        "m_toolbox switch profile": [config_scuts["m_toolbox switch profile"]],
+        "m_toolbox export": [config_scuts["m_toolbox export"]],
+        "m_toolbox import": [config_scuts["m_toolbox import"]],
+        "m_toolbox study": [config_scuts["m_toolbox study"]],
+        "m_toolbox create filtered deck": [config_scuts["m_toolbox create filtered deck"]],
+        "m_toolbox addons": [config_scuts["m_toolbox addons"]]
+    }
+    for act,key in config_scuts["m_toolbox _duplicates"].items():
+        scuts_list[act].append(key)
+    m.actionExit.setShortcuts(scuts_list["m_toolbox quit"])
+    m.actionPreferences.setShortcuts(scuts_list["m_toolbox preferences"])
+    m.actionUndo.setShortcuts(scuts_list["m_toolbox undo"])
+    m.actionDocumentation.setShortcuts(scuts_list["m_toolbox see documentation"])
+    m.actionSwitchProfile.setShortcuts(scuts_list["m_toolbox switch profile"])
+    m.actionExport.setShortcuts(scuts_list["m_toolbox export"])
+    m.actionImport.setShortcuts(scuts_list["m_toolbox import"])
+    m.actionStudyDeck.setShortcuts(scuts_list["m_toolbox study"])
+    m.actionCreateFiltered.setShortcuts(scuts_list["m_toolbox create filtered deck"])
+    m.actionAdd_ons.setShortcuts(scuts_list["m_toolbox addons"])
 
 #Converts json shortcuts into functions for the reviewer
 #sToF: shortcutToFunction
@@ -303,6 +315,7 @@ def cs_conflictDetect():
             ext_list[sub] = {e:val.upper()}
     inv = {}
     conflictStr = CS_CONFLICTSTR
+    conflict = False
     for key in ext_list:
         inv = {}
         x = ext_list[key]
@@ -318,10 +331,10 @@ def cs_conflictDetect():
                 continue
             if not k:
                 continue
+            conflict = True
             conflictStr += ", ".join(inv[k])
             conflictStr += "\nshare '" + k + "' as a shortcut\n\n"
-
-    if(len(conflictStr) != len(CS_CONFLICTSTR)):
+    if conflict:
         conflictStr += "\nThese shortcuts will not work.\n"
         conflictStr += "Please change them in the config.json."
         showWarning(conflictStr)

@@ -66,6 +66,8 @@
 	"m_toolbox study":"/",
 	"m_toolbox create filtered deck":"F",
 	"m_toolbox addons":"Ctrl+Shift+A",
+	"m_toolbox _duplicates":{
+	},
 	"window_browser preview": "Ctrl+Shift+P",
 	"window_browser reschedule":"Ctrl+Alt+R",
 	"window_browser select all":"Ctrl+Alt+A",
