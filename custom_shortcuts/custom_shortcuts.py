@@ -122,6 +122,7 @@ def cs_initKeys():
 #Governs the shortcuts on the main toolbar
 def cs_mt_setupShortcuts():
     m = mw.form
+    #Goes through and includes anything on the duplicates list
     scuts_list = {
         "m_toolbox quit": [config_scuts["m_toolbox quit"]],
         "m_toolbox preferences": [config_scuts["m_toolbox preferences"]],
@@ -217,6 +218,8 @@ def cs_review_setupShortcuts(self):
     return dupes + ret
 
 #The function to setup shortcuts on the Editor
+#Something funky is going on with the default MathJax and LaTeX shortcuts
+#It does not affect the function (as I currently know of)
 def cs_editor_setupShortcuts(self):
     # if a third element is provided, enable shortcut even when no field selected
     cuts = [

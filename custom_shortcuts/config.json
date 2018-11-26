@@ -1,11 +1,11 @@
 {
 	"main debug":"Ctrl+:",
-	"main deckbrowser":"d",
-	"main study":"s",
-	"main add":"a",
-	"main browse":"b",
-	"main stats":"t",
-	"main sync":"y",
+	"main deckbrowser":"D",
+	"main study":"S",
+	"main add":"A",
+	"main browse":"B",
+	"main stats":"T",
+	"main sync":"Y",
 	"editor card layout":"Ctrl+L",
 	"editor bold":"Ctrl+B",
 	"editor italic":"Ctrl+I",
@@ -30,7 +30,7 @@
 	"editor _extras": {
 		"paste custom text":"<nop>"
 	},
-	"reviewer edit current":"e",
+	"reviewer edit current":"E",
 	"reviewer flip card 1":" ",
 	"reviewer flip card 2":"Qt.Key_Return",
 	"reviewer flip card 3":"Qt.Key_Enter",

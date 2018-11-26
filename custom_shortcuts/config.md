@@ -75,6 +75,11 @@ Within "editor \_extras":
 
 "m_toolbox undo": Undo the last action
 
+"m\_toolbox \_duplicates": Takes functions and binds them to new shortcuts.
+
+This object takes inputs of the form "(function keyword)":"(shortcut)", separated by commas. (e.g. {"m\_toolbox undo":"u","m\_toolbox study":"9"})
+
+All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. 
 
 ##Home Options
 
