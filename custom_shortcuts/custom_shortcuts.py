@@ -48,77 +48,30 @@ def cs_traverseKeys(Rep, D):
 
 config_scuts = cs_traverseKeys(Qt_functions,config)
 
-#Default shortcuts
-mw.inversionSet =  [
-    "Ctrl+:",
-    "d",
-    "s",
-    "a",
-    "b",
-    "t",
-    "y"
-]
+#This is the worst code I think I've written for custom-shortcuts
+#Since QShortcuts cannot reveal their action (to the best of my knowledge),
+#This map reconstructs what each QShortcut is supposed to do from its id
+#The ids were found manually and are thus incredibly dubious
+id_main_config = {-1: "main debug",
+                  -2: "main deckbrowser",
+                  -3: "main study",
+                  -4: "main add",
+                  -5: "main browse",
+                  -6: "main stats",
+                  -7: "main sync"
+                  }
+
+#Finds all the shortcuts, figures out relevant ones from hardcoded id check,
+#and sets it to the right one
+#This function has a side effect of changing the shortcut's id
+def cs_main_setupShortcuts():
+    qshortcuts = mw.findChildren(QShortcut)
+    for scut in qshortcuts:
+        if scut.id() in id_main_config:
+            scut.setKey(config_scuts[id_main_config[scut.id()]])
 
 #List of "inverter" QShortcut objects that negate the defaults
 mw.inverters = []
-
-#Creates and inserts the inverter QShortcut objects
-def cs_applyInverters():
-    qshortcuts = []
-    globalShortcuts = [
-        ("Ctrl+:", mw.onDebug),
-        ("d", lambda: mw.moveToState("deckBrowser")),
-        ("s", mw.onStudyKey),
-        ("a", mw.onAddCard),
-        ("b", mw.onBrowse),
-        ("t", mw.onStats),
-        ("y", mw.onSync)
-    ]
-    for key, fn in globalShortcuts:
-        scut = QShortcut(QKeySequence(key), mw, activated=fn)
-        scut.setAutoRepeat(False)
-        qshortcuts.append(scut)
-        mw.inverters.append(scut)
-    return qshortcuts
-
-#Modified AnkiQt applyShortcuts to work around inverter shortcuts
-#Anki's main shortcuts are unlikely to be modifiable based on the 
-#Current way that Anki and its addons are programmed
-def cs_main_setupShortcuts(shortcuts):
-    qshortcuts = []
-    for key, fn in shortcuts:
-        if key not in mw.inversionSet:
-            scut = QShortcut(QKeySequence(key), mw, activated=fn)
-            scut.setAutoRepeat(False)
-            qshortcuts.append(scut)
-        else:
-            mw.inverters[mw.inversionSet.index(key)].setEnabled(False)
-    return qshortcuts
-
-#Initialize custom keys
-def cs_initKeys():
-    cuts = [
-        config_scuts["main debug"],
-        config_scuts["main deckbrowser"],
-        config_scuts["main study"],
-        config_scuts["main add"],
-        config_scuts["main browse"],
-        config_scuts["main stats"],
-        config_scuts["main sync"]
-    ]
-    functions =  [
-        mw.onDebug,
-        lambda: mw.moveToState("deckBrowser"),
-        mw.onStudyKey,
-        mw.onAddCard,
-        mw.onBrowse,
-        mw.onStats,
-        mw.onSync
-    ]
-    globalShortcuts = list(zip(cuts,functions))
-    cs_main_setupShortcuts(globalShortcuts)
-    mw.keys = cuts
-    mw.stateShortcuts = []
 
 #Governs the shortcuts on the main toolbar
 def cs_mt_setupShortcuts():
@@ -259,7 +212,7 @@ def cs_browser_setupShortcuts(self):
     f.actionFindDuplicates.setShortcut(config_scuts["window_browser find duplicates"])
     f.actionSelectNotes.setShortcut(config_scuts["window_browser select notes"])
     f.actionManage_Note_Types.setShortcut(config_scuts["window_browser manage note types"])
-    
+
 
 
 
@@ -318,11 +271,10 @@ Reviewer.sToF = functions.review_sToF
 Editor.setupShortcuts = cs_editor_setupShortcuts
 Reviewer._shortcutKeys = cs_review_setupShortcuts
 
-mw.applyShortcuts = cs_main_setupShortcuts
 
-cs_applyInverters()
-cs_initKeys()
+#Shortcut setup for main window & other startup functions
 cs_mt_setupShortcuts()
+cs_main_setupShortcuts()
 cs_conflictDetect()
 
 #Hooks to setup shortcuts at the right time
