@@ -9,6 +9,7 @@ from aqt.reviewer import Reviewer
 from anki.utils import json
 from bs4 import BeautifulSoup
 import warnings
+from . import cs_functions as functions
 
 #Gets config.json as config
 config = mw.addonManager.getConfig(__name__)
@@ -47,77 +48,30 @@ def cs_traverseKeys(Rep, D):
 
 config_scuts = cs_traverseKeys(Qt_functions,config)
 
-#Default shortcuts
-mw.inversionSet =  [
-    "Ctrl+:",
-    "d",
-    "s",
-    "a",
-    "b",
-    "t",
-    "y"
-]
+#This is the worst code I think I've written for custom-shortcuts
+#Since QShortcuts cannot reveal their action (to the best of my knowledge),
+#This map reconstructs what each QShortcut is supposed to do from its id
+#The ids were found manually and are thus incredibly dubious
+id_main_config = {-1: "main debug",
+                  -2: "main deckbrowser",
+                  -3: "main study",
+                  -4: "main add",
+                  -5: "main browse",
+                  -6: "main stats",
+                  -7: "main sync"
+                  }
+
+#Finds all the shortcuts, figures out relevant ones from hardcoded id check,
+#and sets it to the right one
+#This function has a side effect of changing the shortcut's id
+def cs_main_setupShortcuts():
+    qshortcuts = mw.findChildren(QShortcut)
+    for scut in qshortcuts:
+        if scut.id() in id_main_config:
+            scut.setKey(config_scuts[id_main_config[scut.id()]])
 
 #List of "inverter" QShortcut objects that negate the defaults
 mw.inverters = []
-
-#Creates and inserts the inverter QShortcut objects
-def cs_applyInverters():
-    qshortcuts = []
-    globalShortcuts = [
-        ("Ctrl+:", mw.onDebug),
-        ("d", lambda: mw.moveToState("deckBrowser")),
-        ("s", mw.onStudyKey),
-        ("a", mw.onAddCard),
-        ("b", mw.onBrowse),
-        ("t", mw.onStats),
-        ("y", mw.onSync)
-    ]
-    for key, fn in globalShortcuts:
-        scut = QShortcut(QKeySequence(key), mw, activated=fn)
-        scut.setAutoRepeat(False)
-        qshortcuts.append(scut)
-        mw.inverters.append(scut)
-    return qshortcuts
-
-#Modified AnkiQt applyShortcuts to work around inverter shortcuts
-#Anki's main shortcuts are unlikely to be modifiable based on the 
-#Current way that Anki and its addons are programmed
-def cs_main_setupShortcuts(shortcuts):
-    qshortcuts = []
-    for key, fn in shortcuts:
-        if key not in mw.inversionSet:
-            scut = QShortcut(QKeySequence(key), mw, activated=fn)
-            scut.setAutoRepeat(False)
-            qshortcuts.append(scut)
-        else:
-            mw.inverters[mw.inversionSet.index(key)].setEnabled(False)
-    return qshortcuts
-
-#Initialize custom keys
-def cs_initKeys():
-    cuts = [
-        config_scuts["main debug"],
-        config_scuts["main deckbrowser"],
-        config_scuts["main study"],
-        config_scuts["main add"],
-        config_scuts["main browse"],
-        config_scuts["main stats"],
-        config_scuts["main sync"]
-    ]
-    functions =  [
-        mw.onDebug,
-        lambda: mw.moveToState("deckBrowser"),
-        mw.onStudyKey,
-        mw.onAddCard,
-        mw.onBrowse,
-        mw.onStats,
-        mw.onSync
-    ]
-    globalShortcuts = list(zip(cuts,functions))
-    cs_main_setupShortcuts(globalShortcuts)
-    mw.keys = cuts
-    mw.stateShortcuts = []
 
 #Governs the shortcuts on the main toolbar
 def cs_mt_setupShortcuts():
@@ -147,42 +101,6 @@ def cs_mt_setupShortcuts():
     m.actionStudyDeck.setShortcuts(scuts_list["m_toolbox study"])
     m.actionCreateFiltered.setShortcuts(scuts_list["m_toolbox create filtered deck"])
     m.actionAdd_ons.setShortcuts(scuts_list["m_toolbox addons"])
-
-#Converts json shortcuts into functions for the reviewer
-#sToF: shortcutToFunction
-def review_sToF(self,scut):
-
-    #"reviewer" is retained for copy-pastability, may be removed later
-    # "self.mw.onEditCurrent" is exactly how it was in reviewer.py, DO NOT CHANGE
-    sdict = {
-        "reviewer edit current": self.mw.onEditCurrent,
-        "reviewer flip card": self.onEnterKey,
-        "reviewer flip card 1": self.onEnterKey,
-        "reviewer flip card 2": self.onEnterKey,
-        "reviewer flip card 3": self.onEnterKey,
-        "reviewer options menu": self.onOptions,
-        "reviewer record voice": self.onRecordVoice,
-        "reviewer play recorded voice": self.onReplayRecorded,
-        "reviewer play recorded voice 1": self.onReplayRecorded,
-        "reviewer play recorded voice 2": self.onReplayRecorded,
-        "reviewer delete note": self.onDelete,
-        "reviewer suspend card": self.onSuspendCard,
-        "reviewer suspend note": self.onSuspend,
-        "reviewer bury card": self.onBuryCard,
-        "reviewer bury note": self.onBuryNote,
-        "reviewer mark card": self.onMark,
-        "reviewer set flag 1": lambda: self.setFlag(1),
-        "reviewer set flag 2": lambda: self.setFlag(2),
-        "reviewer set flag 3": lambda: self.setFlag(3),
-        "reviewer set flag 4": lambda: self.setFlag(4),
-        "reviewer set flag 0": lambda: self.setFlag(0),
-        "reviewer replay audio": self.replayAudio,
-        "reviewer choice 1": lambda: self._answerCard(1),
-        "reviewer choice 2": lambda: self._answerCard(2),
-        "reviewer choice 3": lambda: self._answerCard(3),
-        "reviewer choice 4": lambda: self._answerCard(4),
-    }
-    return sdict[scut]
 
 #Governs the shortcuts on the review window
 def cs_review_setupShortcuts(self):
@@ -233,7 +151,7 @@ def cs_editor_setupShortcuts(self):
         (config_scuts["editor foreground"], self.onForeground),
         (config_scuts["editor change col"], self.onChangeCol),
         (config_scuts["editor cloze"], self.onCloze),
-        (config_scuts["editor cloze alt"], self.onCloze),
+        (config_scuts["editor cloze alt"], self.onAltCloze),
         (config_scuts["editor add media"], self.onAddMedia),
         (config_scuts["editor record sound"], self.onRecSound),
         (config_scuts["editor insert latex"], self.insertLatex),
@@ -294,7 +212,7 @@ def cs_browser_setupShortcuts(self):
     f.actionFindDuplicates.setShortcut(config_scuts["window_browser find duplicates"])
     f.actionSelectNotes.setShortcut(config_scuts["window_browser select notes"])
     f.actionManage_Note_Types.setShortcut(config_scuts["window_browser manage note types"])
-    
+
 
 
 
@@ -343,34 +261,20 @@ def cs_conflictDetect():
         showWarning(conflictStr)
 
 
-#Mimics the style of other Anki functions, analogue of customPaste
-#Note that the saveNow function used earler takes the cursor to the end of the line,
-#as it is meant to save work before entering a new window
-def cs_editor_custom_paste(self):
-    self._customPaste()
-
-#Mimics the style of other Anki functions, analogue of _customPaste
-def cs_uEditor_custom_paste(self):
-    html = config_scuts["Ω custom paste text"]
-    if config_scuts["Ω custom paste end style"].upper() == "Y":
-        html += "</span>\u200b"
-    with warnings.catch_warnings() as w:
-        warnings.simplefilter('ignore', UserWarning)
-        html = str(BeautifulSoup(html, "html.parser"))
-    self.doPaste(html,True,True)
 
 #Functions that execute on startup
+Editor.customPaste = functions.cs_editor_custom_paste
+Editor._customPaste = functions.cs_uEditor_custom_paste
+Editor.onAltCloze = functions.cs_editor_onAltCloze
+Editor._onAltCloze = functions.cs_uEditor_onAltCloze
+Reviewer.sToF = functions.review_sToF
 Editor.setupShortcuts = cs_editor_setupShortcuts
-Editor.customPaste = cs_editor_custom_paste
-Editor._customPaste = cs_uEditor_custom_paste
 Reviewer._shortcutKeys = cs_review_setupShortcuts
-Reviewer.sToF = review_sToF
 
-mw.applyShortcuts = cs_main_setupShortcuts
 
-cs_applyInverters()
-cs_initKeys()
+#Shortcut setup for main window & other startup functions
 cs_mt_setupShortcuts()
+cs_main_setupShortcuts()
 cs_conflictDetect()
 
 #Hooks to setup shortcuts at the right time
