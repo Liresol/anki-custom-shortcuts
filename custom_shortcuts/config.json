@@ -94,7 +94,7 @@
 	"window_browser add note":"Ctrl+E",
 	"window_browser change deck":"Ctrl+D",
 	"window_browser flag_red":"Ctrl+1",
-	"window_browser flag_purple":"Ctrl+2",
+	"window_browser flag_orange":"Ctrl+2",
 	"window_browser flag_green":"Ctrl+3",
 	"window_browser flag_blue":"Ctrl+4",
 	"window_browser goto sidebar":"Ctrl+Shift+R",
