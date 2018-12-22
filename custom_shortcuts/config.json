@@ -93,7 +93,6 @@
 	"window_browser delete":"Ctrl+Del",
 	"window_browser add note":"Ctrl+E",
 	"window_browser change deck":"Ctrl+D",
-	"window_browser flags_clear":"Ctrl+0",
 	"window_browser flag_red":"Ctrl+1",
 	"window_browser flag_purple":"Ctrl+2",
 	"window_browser flag_green":"Ctrl+3",

@@ -201,7 +201,6 @@ def cs_browser_setupShortcuts(self):
     f.actionDelete.setShortcut(config_scuts["window_browser delete"])
     f.actionAdd.setShortcut(config_scuts["window_browser add note"])
     f.actionChange_Deck.setShortcut(config_scuts["window_browser change deck"])
-    f.actionClear_Flag.setShortcut(config_scuts["window_browser flags_clear"])
     f.actionRed_Flag.setShortcut(config_scuts["window_browser flag_red"])
     f.actionPurple_Flag.setShortcut(config_scuts["window_browser flag_purple"])
     f.actionGreen_Flag.setShortcut(config_scuts["window_browser flag_green"])
