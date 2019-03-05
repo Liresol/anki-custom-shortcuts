@@ -22,6 +22,10 @@ Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter,
                 "Qt.Key_Tab":Qt.Key_Tab,
                 "Qt.Key_Backspace":Qt.Key_Backspace,
                 "Qt.Key_Delete":Qt.Key_Delete,
+                "Qt.Key_Left":Qt.Key_Left,
+                "Qt.Key_Down":Qt.Key_Down,
+                "Qt.Key_Right":Qt.Key_Right,
+                "Qt.Key_Up":Qt.Key_Up,
                 "<nop>":""
                 }
 
