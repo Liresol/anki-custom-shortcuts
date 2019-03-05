@@ -26,6 +26,8 @@ Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter,
                 "Qt.Key_Down":Qt.Key_Down,
                 "Qt.Key_Right":Qt.Key_Right,
                 "Qt.Key_Up":Qt.Key_Up,
+                "Qt.Key_PageUp":Qt.Key_PageUp,
+                "Qt.Key_PageDown":Qt.Key_PageDown,
                 "<nop>":""
                 }
 
