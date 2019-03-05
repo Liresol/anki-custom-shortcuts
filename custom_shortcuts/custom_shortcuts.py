@@ -74,8 +74,6 @@ def cs_main_setupShortcuts():
         if scut.id() in id_main_config:
             scut.setKey(config_scuts[id_main_config[scut.id()]])
 
-#List of "inverter" QShortcut objects that negate the defaults
-mw.inverters = []
 
 #Governs the shortcuts on the main toolbar
 def cs_mt_setupShortcuts():
@@ -266,6 +264,16 @@ def cs_conflictDetect():
         conflictStr += "Please change them in the config.json."
         showWarning(conflictStr)
 
+def cs_toolbarCenterLinks(self):
+    links = [
+            ["decks", _("Decks"), _("Shortcut key: %s") % config_scuts["main deckbrowser"]],
+            ["add", _("Add"), _("Shortcut key: %s") % config_scuts["main add"]],
+            ["browse", _("Browse"), _("Shortcut key: %s") % config_scuts["main browse"]],
+            ["stats", _("Stats"), _("Shortcut key: %s") % config_scuts["main stats"]],
+            ["sync", _("Sync"), _("Shortcut key: %s") % config_scuts["main sync"]],
+        ]
+    return self._linkHTML(links)
+
 
 
 #Functions that execute on startup
@@ -276,12 +284,16 @@ Editor._onAltCloze = functions.cs_uEditor_onAltCloze
 Reviewer.sToF = functions.review_sToF
 Editor.setupShortcuts = cs_editor_setupShortcuts
 Reviewer._shortcutKeys = cs_review_setupShortcuts
+Toolbar._centerLinks = cs_toolbarCenterLinks
 
 
 #Shortcut setup for main window & other startup functions
 cs_mt_setupShortcuts()
 cs_main_setupShortcuts()
 cs_conflictDetect()
+
+#Redraws the toolbar with the new shortcuts
+mw.toolbar.draw()
 
 #Hooks to setup shortcuts at the right time
 addHook('browser.setupMenus', cs_browser_setupShortcuts)
