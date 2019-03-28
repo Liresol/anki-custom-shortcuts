@@ -47,7 +47,7 @@ def cs_uEditor_custom_paste(self):
 def review_sToF(self,scut):
 
     #"reviewer" is retained for copy-pastability, may be removed later
-    # "self.mw.onEditCurrent" is exactly how it was in reviewer.py, DO NOT CHANGE
+    #"self.mw.onEditCurrent" is exactly how it was in reviewer.py, DO NOT CHANGE
     sdict = {
         "reviewer edit current": self.mw.onEditCurrent,
         "reviewer flip card": self.onEnterKey,

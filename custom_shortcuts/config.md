@@ -73,7 +73,7 @@ Within "editor \_extras":
 
 "m_toolbox switch profile": Switch user profiles
 
-"m_toolbox undo": Undo the last action
+"m_toolbox undo": Undo the **last main window (reviewer)** action
 
 "m\_toolbox \_duplicates": Takes functions and binds them to new shortcuts.
 
@@ -207,7 +207,7 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "window_browser toggle mark": Toggles the mark on the selected cards
 
-"window_browser undo": Undoes the latest browser action
+"window_browser undo": Undoes the latest **browser** action (**m\_toolbox undo** undoes **reviewer** actions)
 
 ##Add-on Preferences
 

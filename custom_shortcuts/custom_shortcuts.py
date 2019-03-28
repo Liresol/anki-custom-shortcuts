@@ -2,6 +2,7 @@
 from aqt import mw
 from aqt.qt import *
 from anki.hooks import runHook,addHook
+from anki.lang import _
 from aqt.utils import showWarning
 from aqt.toolbar import Toolbar
 from aqt.editor import Editor,EditorWebView
