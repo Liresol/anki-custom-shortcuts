@@ -25,23 +25,6 @@ to a cloze type first, via Edit>Change Note Type."""))
     highest = max(1, highest)
     self.web.eval("wrap('{{c%d::', '}}');" % highest)
 
-#Mimics the style of other Anki functions, analogue of customPaste
-#Note that the saveNow function used earler takes the cursor to the end of the line,
-#as it is meant to save work before entering a new window
-def cs_editor_custom_paste(self):
-    self._customPaste()
-
-#Mimics the style of other Anki functions, analogue of _customPaste
-def cs_uEditor_custom_paste(self):
-    html = config_scuts["Ω custom paste text"]
-    if config_scuts["Ω custom paste end style"].upper() == "Y":
-        html += "</span>\u200b"
-    with warnings.catch_warnings() as w:
-        warnings.simplefilter('ignore', UserWarning)
-        html = str(BeautifulSoup(html, "html.parser"))
-    self.doPaste(html,True,True)
-
-                        
 #Converts json shortcuts into functions for the reviewer
 #sToF: shortcutToFunction
 def review_sToF(self,scut):

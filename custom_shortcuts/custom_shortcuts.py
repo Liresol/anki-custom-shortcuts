@@ -1,4 +1,4 @@
-#Python 3.7.0
+#Last updated to be useful for: Anki 2.1.11
 from aqt import mw
 from aqt.qt import *
 from anki.hooks import runHook,addHook
@@ -220,8 +220,23 @@ def cs_browser_setupShortcuts(self):
     f.actionSelectNotes.setShortcut(config_scuts["window_browser select notes"])
     f.actionManage_Note_Types.setShortcut(config_scuts["window_browser manage note types"])
 
+#Mimics the style of other Anki functions, analogue of customPaste
+#Note that the saveNow function used earler takes the cursor to the end of the line,
+#as it is meant to save work before entering a new window
+def cs_editor_custom_paste(self):
+    self._customPaste()
 
+#Mimics the style of other Anki functions, analogue of _customPaste
+def cs_uEditor_custom_paste(self):
+    html = config_scuts["Ω custom paste text"]
+    if config_scuts["Ω custom paste end style"].upper() == "Y":
+        html += "</span>\u200b"
+    with warnings.catch_warnings() as w:
+        warnings.simplefilter('ignore', UserWarning)
+        html = str(BeautifulSoup(html, "html.parser"))
+    self.doPaste(html,True,True)
 
+                        
 
 #detects shortcut conflicts
 #Ignores the Add-on (Ω) options
@@ -280,11 +295,11 @@ def cs_toolbarCenterLinks(self):
 
 
 #Functions that execute on startup
-Editor.customPaste = functions.cs_editor_custom_paste
-Editor._customPaste = functions.cs_uEditor_custom_paste
 Editor.onAltCloze = functions.cs_editor_onAltCloze
 Editor._onAltCloze = functions.cs_uEditor_onAltCloze
 Reviewer.sToF = functions.review_sToF
+Editor.customPaste = cs_editor_custom_paste
+Editor._customPaste = cs_uEditor_custom_paste
 Editor.setupShortcuts = cs_editor_setupShortcuts
 Reviewer._shortcutKeys = cs_review_setupShortcuts
 Toolbar._centerLinks = cs_toolbarCenterLinks
