@@ -53,6 +53,7 @@ def cs_traverseKeys(Rep, D):
             ret[key] = Rep[D[key]]
     return ret
 
+#This contains the processed shortcuts used for the rest of the functions
 config_scuts = cs_traverseKeys(Qt_functions,config)
 
 #This is the worst code I think I've written for custom-shortcuts
@@ -164,11 +165,14 @@ def cs_editor_setupShortcuts(self):
         (config_scuts["editor insert latex math environment"], self.insertLatexMathEnv),
         (config_scuts["editor insert mathjax inline"], self.insertMathjaxInline),
         (config_scuts["editor insert mathjax block"], self.insertMathjaxBlock),
-        (config_scuts["editor insert mathjax chemistry"], self.insertMathjaxChemistry),
         (config_scuts["editor html edit"], self.onHtmlEdit),
         (config_scuts["editor focus tags"], self.onFocusTags, True),
         (config_scuts["editor _extras"]["paste custom text"], self.customPaste)
     ]
+    try:
+        cuts.append((config_scuts["editor insert mathjax chemistry"], self.insertMathjaxChemistry))
+    except AttributeError:
+        pass
     runHook("setupEditorShortcuts", cuts, self)
     for row in cuts:
         if len(row) == 2:
@@ -177,6 +181,7 @@ def cs_editor_setupShortcuts(self):
         else:
             keys, fn, _ = row
         scut = QShortcut(QKeySequence(keys), self.widget, activated=fn)
+
 
 #IMPLEMENTS Browser shortcuts
 def cs_browser_setupShortcuts(self):
