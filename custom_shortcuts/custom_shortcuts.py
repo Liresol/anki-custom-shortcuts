@@ -1,4 +1,5 @@
 #Last updated to be useful for: Anki 2.1.11
+from anki.lang import _
 from aqt import mw
 from aqt.qt import *
 from anki.hooks import runHook,addHook
