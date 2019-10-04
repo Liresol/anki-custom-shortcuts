@@ -1,6 +1,12 @@
+import re
+import anki
 from aqt.qt import *
 from aqt import mw
-import re
+
+def get_version():
+    """Return the integer subversion of Anki on which the addon is run ("2.1.11" -> 11)"""
+    return int(anki.version.split('.')[2])
+
 def cs_editor_onAltCloze(self):
     self.saveNow(self._onAltCloze, keepFocus=True)
 
