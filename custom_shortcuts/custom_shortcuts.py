@@ -293,8 +293,6 @@ def cs_toolbarCenterLinks(self):
         ]
     return self._linkHTML(links)
 
-
-
 #Functions that execute on startup
 Editor.onAltCloze = functions.cs_editor_onAltCloze
 Editor._onAltCloze = functions.cs_uEditor_onAltCloze
@@ -304,7 +302,6 @@ Editor._customPaste = cs_uEditor_custom_paste
 Editor.setupShortcuts = cs_editor_setupShortcuts
 Reviewer._shortcutKeys = cs_review_setupShortcuts
 Toolbar._centerLinks = cs_toolbarCenterLinks
-
 
 #Shortcut setup for main window & other startup functions
 cs_mt_setupShortcuts()
