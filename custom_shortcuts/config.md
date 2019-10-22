@@ -1,7 +1,7 @@
-###To disable a shortcut, set that shortcut to `<nop>`
+### To disable a shortcut, set that shortcut to `<nop>`
 
 
-##Editor Options
+## Editor Options
 
 "editor add media": Add external media
 
@@ -53,7 +53,7 @@ Within "editor \_extras":
 
 "paste custom text": Pastes a custom piece of html text into a card field (defined in "\u03a9 custom paste text")
 
-##Main Toolbox Options
+## Main Toolbox Options
 
 "m_toolbox addons": Go to the addons window
 
@@ -81,7 +81,7 @@ This object takes inputs of the form "(function keyword)":"(shortcut)", separate
 
 All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. 
 
-##Home Options
+## Home Options
 
 **NOTE: Setting these to "Ctrl+:", "d", "s", "a", "b", "t", or "y" will not work if they are not the default setting for that function.**
 
@@ -99,7 +99,7 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "main sync": Synchronize with AnkiWeb
 
-##Reviewer Options
+## Reviewer Options
 
 "reviewer bury card": Bury this card
 
@@ -137,7 +137,7 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 **Make sure to remap keys to empty keyspace.**
 
-##Browser Window Options
+## Browser Window Options
 
 "window_browser add card": Adds a new card (goes to the add window)
 
@@ -209,7 +209,7 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "window_browser undo": Undoes the latest **browser** action (**m\_toolbox undo** undoes **reviewer** actions)
 
-##Add-on Preferences
+## Add-on Preferences
 
 **These options are for changing a few settings on the add-on itself.**
 
