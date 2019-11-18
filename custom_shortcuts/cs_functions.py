@@ -1,5 +1,6 @@
 import re
 import anki
+from aqt.utils import tooltip,showInfo
 from aqt.qt import *
 from aqt import mw
 
