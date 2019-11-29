@@ -11,9 +11,9 @@
 
 "editor change col": Change text color
 
-"editor cloze":Insert Anki cloze
+"editor cloze": Insert cloze
 
-"editor cloze alt": Same as above
+"editor cloze alt": Insert cloze, but do not increment the cloze ID number
 
 "editor focus tags": Switch focus to the Tags field
 
