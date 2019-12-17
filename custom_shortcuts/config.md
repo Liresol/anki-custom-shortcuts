@@ -1,5 +1,7 @@
 ### To disable a shortcut, set that shortcut to `<nop>`
 
+### For macOS users, `Ctrl` is `⌘`, `Alt` is `⌥`, and `Meta` is `^` (control key)
+
 
 ## Editor Options
 
