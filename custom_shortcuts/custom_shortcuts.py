@@ -13,6 +13,13 @@ from bs4 import BeautifulSoup
 import warnings
 from . import cs_functions as functions
 
+#Anki before version 2.1.20 do not use aqt.gui_hooks
+try:
+    from aqt import gui_hooks
+    new_hooks = True
+except:
+    new_hooks = False
+
 #Gets config.json as config
 config = mw.addonManager.getConfig(__name__)
 CS_CONFLICTSTR = "Custom Shortcut Conflicts: \n\n"
@@ -174,7 +181,10 @@ def cs_editor_setupShortcuts(self):
         cuts.append((config_scuts["editor insert mathjax chemistry"], self.insertMathjaxChemistry))
     except AttributeError:
         pass
-    runHook("setupEditorShortcuts", cuts, self)
+    if new_hooks:
+        gui_hooks.editor_did_init_shortcuts(cuts, self)
+    else:
+        runHook("setupEditorShortcuts", cuts, self)
     for row in cuts:
         if len(row) == 2:
             keys, fn = row
