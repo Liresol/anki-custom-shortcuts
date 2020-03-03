@@ -1,4 +1,4 @@
-#Last updated to be useful for: Anki 2.1.11
+#Last updated to be useful for: Anki 2.1.21
 from anki.lang import _
 from aqt import mw
 from aqt.qt import *
@@ -293,13 +293,14 @@ def cs_conflictDetect():
 
 
 def cs_toolbarCenterLinks(self):
-    if functions.get_version() <= 20:
+    #if functions.get_version() <= 20:
+    if False:
         links = [
-                ["decks", _("Decks"), _("Shortcut key: %s") % config_scuts["main deckbrowser"]],
-                ["add", _("Add"), _("Shortcut key: %s") % config_scuts["main add"]],
-                ["browse", _("Browse"), _("Shortcut key: %s") % config_scuts["main browse"]],
-                ["stats", _("Stats"), _("Shortcut key: %s") % config_scuts["main stats"]],
-                ["sync", _("Sync"), _("Shortcut key: %s") % config_scuts["main sync"]],
+            ["decks", _("Decks"), _("Shortcut key: %s") % config_scuts["main deckbrowser"]],
+            ["add", _("Add"), _("Shortcut key: %s") % config_scuts["main add"]],
+            ["browse", _("Browse"), _("Shortcut key: %s") % config_scuts["main browse"]],
+            ["stats", _("Stats"), _("Shortcut key: %s") % config_scuts["main stats"]],
+            ["sync", _("Sync"), _("Shortcut key: %s") % config_scuts["main sync"]],
             ]
         return self._linkHTML(links)
     else:
@@ -356,23 +357,28 @@ def cs_browser_setupEditor(self):
         self.csFilterScuts[filt].activated.connect(self.csFilterFuncs[filt])
 
 #Functions that execute on startup
-Editor.onAltCloze = functions.cs_editor_onAltCloze
-Editor._onAltCloze = functions.cs_uEditor_onAltCloze
-Reviewer.sToF = functions.review_sToF
-Editor.customPaste = cs_editor_custom_paste
-Editor._customPaste = cs_uEditor_custom_paste
-Editor.setupShortcuts = cs_editor_setupShortcuts
-Reviewer._shortcutKeys = cs_review_setupShortcuts
-Toolbar._centerLinks = cs_toolbarCenterLinks
-Browser.setupEditor = cs_browser_setupEditor
+if config_scuts["Ω enable main"].upper() == 'Y':
+    Toolbar._centerLinks = cs_toolbarCenterLinks
+    cs_main_setupShortcuts()
+if config_scuts["Ω enable editor"].upper() == 'Y':
+    Editor.onAltCloze = functions.cs_editor_onAltCloze
+    Editor._onAltCloze = functions.cs_uEditor_onAltCloze
+    Editor.customPaste = cs_editor_custom_paste
+    Editor._customPaste = cs_uEditor_custom_paste
+    Editor.setupShortcuts = cs_editor_setupShortcuts
+if config_scuts["Ω enable reviewer"].upper() == 'Y':
+    Reviewer._shortcutKeys = cs_review_setupShortcuts
+    Reviewer.sToF = functions.review_sToF
+if config_scuts["Ω enable m_toolbox"].upper() == 'Y':
+    cs_mt_setupShortcuts()
+#Hooks to setup shortcuts at the right time
+if config_scuts["Ω enable window_browser"].upper() == 'Y':
+    Browser.setupEditor = cs_browser_setupEditor
+    addHook('browser.setupMenus', cs_browser_setupShortcuts)
 
-#Shortcut setup for main window & other startup functions
-cs_mt_setupShortcuts()
-cs_main_setupShortcuts()
+#Detects all conflicts, regardless of enable status
 cs_conflictDetect()
 
 #Redraws the toolbar with the new shortcuts
 mw.toolbar.draw()
 
-#Hooks to setup shortcuts at the right time
-addHook('browser.setupMenus', cs_browser_setupShortcuts)

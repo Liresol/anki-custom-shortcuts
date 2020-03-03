@@ -143,7 +143,7 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "window_browser \_filters": Auto-fills the search bar of the browser with the given text. Can be used for filters such as current deck (`deck:current`) or cards due for review (`is:due`)
 
-The syntax for this is: `"(filter name): (shortcut)"`
+The syntax for this is: `"(filter name): (shortcut)"`, though one may need to escape quotes with `\` e.g. `"deck: Something something"` becomes `\"deck: Something something\"`
 
 "window_browser add card": Adds a new card (goes to the add window)
 
@@ -225,6 +225,8 @@ Otherwise, the custom paste will behave exactly like regular paste.
 
 "\u03a9 custom paste text": Controls what html will be pasted by "custom paste" in "editor \_extras"	
 e.g. `"\u03a9 custom paste text": "<span style=\"font-size: 20px; color:#3399ff\">◆</span>"`
+
+"\u03a9 enable main/window_browser/editor/etc.": If set to "n", doesn't enable the corresponding set of shortcuts for the respective functions (useful for addon compatability in a pinch)
 
 "\u03a9 enable conflict warning": If set to "y", shows a warning window whenever two shortcuts of the same type are set to the same key.
 
