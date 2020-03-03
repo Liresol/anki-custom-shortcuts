@@ -141,6 +141,10 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 ## Browser Window Options
 
+"window_browser \_filters": Auto-fills the search bar of the browser with the given text. Can be used for filters such as current deck (`deck:current`) or cards due for review (`is:due`)
+
+The syntax for this is: `"(filter name): (shortcut)"`
+
 "window_browser add card": Adds a new card (goes to the add window)
 
 "window_browser add tag": Adds a tag to the selected card

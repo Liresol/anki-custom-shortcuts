@@ -1,4 +1,5 @@
 {
+	"main _enable": "y",
 	"main debug":"Ctrl+:",
 	"main deckbrowser":"D",
 	"main study":"S",
@@ -6,6 +7,7 @@
 	"main browse":"B",
 	"main stats":"T",
 	"main sync":"Y",
+	"editor _enable": "y",
 	"editor card layout":"Ctrl+L",
 	"editor bold":"Ctrl+B",
 	"editor italic":"Ctrl+I",
@@ -30,6 +32,7 @@
 	"editor _extras": {
 		"paste custom text":"<nop>"
 	},
+	"reviewer _enable": "y",
 	"reviewer edit current":"E",
 	"reviewer flip card 1":" ",
 	"reviewer flip card 2":"Qt.Key_Return",
@@ -56,6 +59,7 @@
 	"reviewer choice 4":"4",
 	"reviewer _duplicates":{
 	},
+	"m_toolbox _enable": "y",
 	"m_toolbox quit":"Ctrl+Q",
 	"m_toolbox preferences":"Ctrl+P",
 	"m_toolbox undo":"Ctrl+Z",
@@ -68,6 +72,7 @@
 	"m_toolbox addons":"Ctrl+Shift+A",
 	"m_toolbox _duplicates":{
 	},
+	"window_browser _enable": "y",
 	"window_browser preview": "Ctrl+Shift+P",
 	"window_browser reschedule":"Ctrl+Alt+R",
 	"window_browser select all":"Ctrl+Alt+A",
@@ -103,6 +108,8 @@
 	"window_browser find duplicates":"<nop>",
 	"window_browser select notes":"<nop>",
 	"window_browser manage note types":"<nop>",
+	"window_browser _filters":{
+	},
 	"Ω enable conflict warning": "y",
 	"Ω custom paste text": "",
 	"Ω custom paste end style": "n"
