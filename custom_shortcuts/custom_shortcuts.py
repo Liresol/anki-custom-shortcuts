@@ -303,8 +303,7 @@ def cs_conflictDetect():
 
 
 def cs_toolbarCenterLinks(self):
-    #if functions.get_version() <= 20:
-    if False:
+    if functions.get_version() <= 20:
         links = [
             ["decks", _("Decks"), _("Shortcut key: %s") % config_scuts["main deckbrowser"]],
             ["add", _("Add"), _("Shortcut key: %s") % config_scuts["main add"]],
@@ -363,6 +362,7 @@ def cs_browser_setupEditor(self):
     self.csFilterFuncs = {}
     for filt in config_scuts["window_browser _filters"]:
         scut = config_scuts["window_browser _filters"][filt]
+        self.csFilterFuncs[filt] = lambda txt=filt: cs_browser_basicFilter(self, txt)
         self.csFilterScuts[filt] = QShortcut(QKeySequence(scut), self)
         self.csFilterScuts[filt].activated.connect(self.csFilterFuncs[filt])
 
@@ -391,4 +391,3 @@ cs_conflictDetect()
 
 #Redraws the toolbar with the new shortcuts
 mw.toolbar.draw()
-
