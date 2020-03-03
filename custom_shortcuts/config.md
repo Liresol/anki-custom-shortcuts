@@ -47,8 +47,6 @@
 
 "editor underline": Toggle underline
 
-"editor \_extras": Special shortcuts with functionality not originally in Anki. Default mapped to `<nop>` (no shortcut).
-
 **In the future, these shortcuts may be removed and put into a new add-on, as they are not part of Anki's default functionality.**
 
 Within "editor \_extras":
@@ -56,6 +54,12 @@ Within "editor \_extras":
 "paste custom text": Pastes a custom piece of html text into a card field (defined in "\u03a9 custom paste text")
 
 ## Main Toolbox Options
+
+"m\_toolbox \_duplicates": Takes functions and binds them to new shortcuts.
+
+This object takes inputs of the form "(function keyword)":"(shortcut)", separated by commas. (e.g. {"m\_toolbox undo":"u","m\_toolbox study":"9"})
+
+All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. 
 
 "m_toolbox addons": Go to the addons window
 
@@ -77,12 +81,6 @@ Within "editor \_extras":
 
 "m_toolbox undo": Undo the **last main window (reviewer)** action
 
-"m\_toolbox \_duplicates": Takes functions and binds them to new shortcuts.
-
-This object takes inputs of the form "(function keyword)":"(shortcut)", separated by commas. (e.g. {"m\_toolbox undo":"u","m\_toolbox study":"9"})
-
-All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. 
-
 ## Home Options
 
 **NOTE: Setting these to "Ctrl+:", "d", "s", "a", "b", "t", or "y" will not work if they are not the default setting for that function.**
@@ -102,6 +100,14 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 "main sync": Synchronize with AnkiWeb
 
 ## Reviewer Options
+
+"reviewer \_duplicates": Takes functions and binds them to new shortcuts.
+
+This object takes inputs of the form "(function keyword)":"(shortcut)", separated by commas. (e.g. {"reviewer mark card":"]","reviewer flip card 1":"-"})
+
+All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. (Those who want to remove the numbers from stuff like "reviewer flip card" can do so as well)
+
+**Make sure to remap keys to empty keyspace.**
 
 "reviewer bury card": Bury this card
 
@@ -131,20 +137,11 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "reviewer suspend note": Suspend this note
 
-"reviewer \_duplicates": Takes functions and binds them to new shortcuts.
-
-This object takes inputs of the form "(function keyword)":"(shortcut)", separated by commas. (e.g. {"reviewer mark card":"]","reviewer flip card 1":"-"})
-
-All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. (Those who want to remove the numbers from stuff like "reviewer flip card" can do so as well)
-
-**Make sure to remap keys to empty keyspace.**
-
 ## Browser Window Options
 
 "window_browser \_filters": Auto-fills the search bar of the browser with the given text. Can be used for filters such as current deck (`deck:current`) or cards due for review (`is:due`)
 
 The syntax for this is: `"(filter name): (shortcut)"`, though one may need to escape quotes with `\` e.g. `"deck: Something something"` becomes `\"deck: Something something\"`
-
 "window_browser add card": Adds a new card (goes to the add window)
 
 "window_browser add tag": Adds a tag to the selected card
