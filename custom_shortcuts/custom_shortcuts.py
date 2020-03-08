@@ -1,4 +1,4 @@
-#Last updated to be useful for: Anki 2.1.11
+#Last updated to be useful for: Anki 2.1.21
 from anki.lang import _
 from aqt import mw
 from aqt.qt import *
@@ -8,12 +8,13 @@ from aqt.utils import showWarning
 from aqt.toolbar import Toolbar
 from aqt.editor import Editor,EditorWebView
 from aqt.reviewer import Reviewer
+from aqt.browser import Browser
 from anki.utils import json
 from bs4 import BeautifulSoup
 import warnings
 from . import cs_functions as functions
 
-#Anki before version 2.1.20 do not use aqt.gui_hooks
+#Anki before version 2.1.20 does not use aqt.gui_hooks
 try:
     from aqt import gui_hooks
     new_hooks = True
@@ -145,6 +146,12 @@ def cs_review_setupShortcuts(self):
         (config_scuts["reviewer choice 3"], lambda: self._answerCard(3)),
         (config_scuts["reviewer choice 4"], lambda: self._answerCard(4)),
     ]
+    if functions.get_version() >= 20:
+        ret += [
+            (config_scuts["reviewer pause audio"], self.on_pause_audio),
+            (config_scuts["reviewer seek backward"], self.on_seek_backward),
+            (config_scuts["reviewer seek forward"], self.on_seek_forward),
+            ]
     for scut in config_scuts["reviewer _duplicates"]:
         dupes.append((config_scuts["reviewer _duplicates"][scut],self.sToF(scut)))
     return dupes + ret
@@ -177,6 +184,7 @@ def cs_editor_setupShortcuts(self):
         (config_scuts["editor focus tags"], self.onFocusTags, True),
         (config_scuts["editor _extras"]["paste custom text"], self.customPaste)
     ]
+    #There is a try-except clause to handle 2.1.0 version, which does not have this particular shortcut
     try:
         cuts.append((config_scuts["editor insert mathjax chemistry"], self.insertMathjaxChemistry))
     except AttributeError:
@@ -298,33 +306,101 @@ def cs_conflictDetect():
         conflictStr += "Please change them in the config.json."
         showWarning(conflictStr)
 
+
 def cs_toolbarCenterLinks(self):
-    links = [
+    if functions.get_version() <= 20:
+        links = [
             ["decks", _("Decks"), _("Shortcut key: %s") % config_scuts["main deckbrowser"]],
             ["add", _("Add"), _("Shortcut key: %s") % config_scuts["main add"]],
             ["browse", _("Browse"), _("Shortcut key: %s") % config_scuts["main browse"]],
             ["stats", _("Stats"), _("Shortcut key: %s") % config_scuts["main stats"]],
             ["sync", _("Sync"), _("Shortcut key: %s") % config_scuts["main sync"]],
+            ]
+        return self._linkHTML(links)
+    else:
+        links = [
+            self.create_link(
+                "decks",
+                _("Decks"),
+                self._deckLinkHandler,
+                tip=_("Shortcut key: %s") % "D",
+                id="decks",
+            ),
+            self.create_link(
+                "add",
+                _("Add"),
+                self._addLinkHandler,
+                tip=_("Shortcut key: %s") % "A",
+                id="add",
+            ),
+            self.create_link(
+                "browse",
+                _("Browse"),
+                self._browseLinkHandler,
+                tip=_("Shortcut key: %s") % "B",
+                id="browse",
+            ),
+            self.create_link(
+                "stats",
+                _("Stats"),
+                self._statsLinkHandler,
+                tip=_("Shortcut key: %s") % "T",
+                id="stats",
+            ),
         ]
-    return self._linkHTML(links)
+
+        links.append(self._create_sync_link())
+
+        gui_hooks.top_toolbar_did_init_links(links, self)
+
+        return "\n".join(links)
+
+
+def cs_browser_basicFilter(self, txt):
+    self.form.searchEdit.lineEdit().setText(txt)
+    self.onSearchActivated()
+
+#Wtf
+#Inserts the custom filter shortcuts upon browser startup
+def cs_browser_setupEditor(self):
+    self.editor = Editor(self.mw, self.form.fieldsArea, self)
+    self.csFilterScuts = {}
+    self.csFilterFuncs = {}
+    for filt in config_scuts["window_browser _filters"]:
+        scut = config_scuts["window_browser _filters"][filt]
+        self.csFilterFuncs[filt] = lambda txt=filt: cs_browser_basicFilter(self, txt)
+        self.csFilterScuts[filt] = QShortcut(QKeySequence(scut), self)
+        self.csFilterScuts[filt].activated.connect(self.csFilterFuncs[filt])
+    if config_scuts["window_browser save current filter"]:
+        self.csSaveFilterScut = QShortcut(QKeySequence(config_scuts["window_browser save current filter"]), self)
+        self.csSaveFilterScut.activated.connect(self._onSaveFilter)
+    if config_scuts["window_browser remove current filter"]:
+        self.csRemoveFilterScut = QShortcut(QKeySequence(config_scuts["window_browser remove current filter"]), self)
+        self.csRemoveFilterScut.activated.connect(self.csRemoveFilterFunc)
 
 #Functions that execute on startup
-Editor.onAltCloze = functions.cs_editor_onAltCloze
-Editor._onAltCloze = functions.cs_uEditor_onAltCloze
-Reviewer.sToF = functions.review_sToF
-Editor.customPaste = cs_editor_custom_paste
-Editor._customPaste = cs_uEditor_custom_paste
-Editor.setupShortcuts = cs_editor_setupShortcuts
-Reviewer._shortcutKeys = cs_review_setupShortcuts
-Toolbar._centerLinks = cs_toolbarCenterLinks
+if config_scuts["Ω enable main"].upper() == 'Y':
+    Toolbar._centerLinks = cs_toolbarCenterLinks
+    cs_main_setupShortcuts()
+if config_scuts["Ω enable editor"].upper() == 'Y':
+    Editor.onAltCloze = functions.cs_editor_onAltCloze
+    Editor._onAltCloze = functions.cs_uEditor_onAltCloze
+    Editor.customPaste = cs_editor_custom_paste
+    Editor._customPaste = cs_uEditor_custom_paste
+    Editor.setupShortcuts = cs_editor_setupShortcuts
+if config_scuts["Ω enable reviewer"].upper() == 'Y':
+    Reviewer._shortcutKeys = cs_review_setupShortcuts
+    Reviewer.sToF = functions.review_sToF
+if config_scuts["Ω enable m_toolbox"].upper() == 'Y':
+    cs_mt_setupShortcuts()
+#Hooks to setup shortcuts at the right time
+if config_scuts["Ω enable window_browser"].upper() == 'Y':
+    Browser.csRemoveFilterFunc = functions.remove_filter
+    Browser.setupEditor = cs_browser_setupEditor
+    addHook('browser.setupMenus', cs_browser_setupShortcuts)
 
-#Shortcut setup for main window & other startup functions
-cs_mt_setupShortcuts()
-cs_main_setupShortcuts()
+#Detects all conflicts, regardless of enable status
 cs_conflictDetect()
 
 #Redraws the toolbar with the new shortcuts
 mw.toolbar.draw()
-
-#Hooks to setup shortcuts at the right time
-addHook('browser.setupMenus', cs_browser_setupShortcuts)

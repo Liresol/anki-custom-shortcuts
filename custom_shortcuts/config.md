@@ -1,5 +1,7 @@
 ### To disable a shortcut, set that shortcut to `<nop>`
 
+### For macOS users, `Ctrl` is `⌘`, `Alt` is `⌥`, and `Meta` is `^` (control key)
+
 
 ## Editor Options
 
@@ -11,9 +13,9 @@
 
 "editor change col": Change text color
 
-"editor cloze":Insert Anki cloze
+"editor cloze": Insert cloze
 
-"editor cloze alt": Same as above
+"editor cloze alt": Insert cloze, but do not increment the cloze ID number
 
 "editor focus tags": Switch focus to the Tags field
 
@@ -45,8 +47,6 @@
 
 "editor underline": Toggle underline
 
-"editor \_extras": Special shortcuts with functionality not originally in Anki. Default mapped to `<nop>` (no shortcut).
-
 **In the future, these shortcuts may be removed and put into a new add-on, as they are not part of Anki's default functionality.**
 
 Within "editor \_extras":
@@ -54,6 +54,12 @@ Within "editor \_extras":
 "paste custom text": Pastes a custom piece of html text into a card field (defined in "\u03a9 custom paste text")
 
 ## Main Toolbox Options
+
+"m\_toolbox \_duplicates": Takes functions and binds them to new shortcuts.
+
+This object takes inputs of the form "(function keyword)":"(shortcut)", separated by commas. (e.g. {"m\_toolbox undo":"u","m\_toolbox study":"9"})
+
+All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. 
 
 "m_toolbox addons": Go to the addons window
 
@@ -75,12 +81,6 @@ Within "editor \_extras":
 
 "m_toolbox undo": Undo the **last main window (reviewer)** action
 
-"m\_toolbox \_duplicates": Takes functions and binds them to new shortcuts.
-
-This object takes inputs of the form "(function keyword)":"(shortcut)", separated by commas. (e.g. {"m\_toolbox undo":"u","m\_toolbox study":"9"})
-
-All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. 
-
 ## Home Options
 
 **NOTE: Setting these to "Ctrl+:", "d", "s", "a", "b", "t", or "y" will not work if they are not the default setting for that function.**
@@ -101,6 +101,14 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 ## Reviewer Options
 
+"reviewer \_duplicates": Takes functions and binds them to new shortcuts.
+
+This object takes inputs of the form "(function keyword)":"(shortcut)", separated by commas. (e.g. {"reviewer mark card":"]","reviewer flip card 1":"-"})
+
+All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. (Those who want to remove the numbers from stuff like "reviewer flip card" can do so as well)
+
+**Make sure to remap keys to empty keyspace.**
+
 "reviewer bury card": Bury this card
 
 "reviewer bury note": Bury this note (card and associated cards)
@@ -117,6 +125,8 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "reviewer options menu": Go to the review options menu
 
+"reviewer pause audio": Pause the audio being played
+
 "reviewer play recorded voice": If there is a recorded voice, play it
 
 "reviewer record voice": Record your voice
@@ -125,20 +135,19 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "reviewer set flag [12340]": Set a flag on this card (or none for 0), changing colors depending on the number (1/2/3/4)
 
+"reviewer seek backward": Rewind the audio 5 seconds
+
+"reviewer seek forward": More the audio forwar 5 seconds
+
 "reviewer suspend card": Suspend this card
 
 "reviewer suspend note": Suspend this note
 
-"reviewer \_duplicates": Takes functions and binds them to new shortcuts.
-
-This object takes inputs of the form "(function keyword)":"(shortcut)", separated by commas. (e.g. {"reviewer mark card":"]","reviewer flip card 1":"-"})
-
-All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. (Those who want to remove the numbers from stuff like "reviewer flip card" can do so as well)
-
-**Make sure to remap keys to empty keyspace.**
-
 ## Browser Window Options
 
+"window_browser \_filters": Auto-fills the search bar of the browser with the given text. Can be used for filters such as current deck (`deck:current`) or cards due for review (`is:due`)
+
+The syntax for this is: `"(filter name): (shortcut)"`, though one may need to escape quotes with `\` e.g. `"deck: Something something"` becomes `\"deck: Something something\"`
 "window_browser add card": Adds a new card (goes to the add window)
 
 "window_browser add tag": Adds a tag to the selected card
@@ -195,9 +204,13 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "window_browser preview": Emulates what the card will look like during review
 
+"window_browser remove current filter": *Not in vanilla Anki*, Removes the most recently used filter previously saved to the sidebar
+
 "window_browser remove tag": Removes tags from a card
 
 "window_browser reposition": Repositions a *new* card in the review schedule
+
+"window_browser save current filter": *Not in vanilla Anki*, Saves the current filter to the sidebar (and lets you name it)
 
 "window_browser select all": Selects all cards
 
@@ -219,6 +232,8 @@ Otherwise, the custom paste will behave exactly like regular paste.
 
 "\u03a9 custom paste text": Controls what html will be pasted by "custom paste" in "editor \_extras"	
 e.g. `"\u03a9 custom paste text": "<span style=\"font-size: 20px; color:#3399ff\">◆</span>"`
+
+"\u03a9 enable main/window_browser/editor/etc.": If set to "n", doesn't enable the corresponding set of shortcuts for the respective functions (useful for addon compatability in a pinch)
 
 "\u03a9 enable conflict warning": If set to "y", shows a warning window whenever two shortcuts of the same type are set to the same key.
 

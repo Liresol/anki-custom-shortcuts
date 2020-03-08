@@ -1,5 +1,6 @@
 import re
 import anki
+from aqt.utils import tooltip,showInfo
 from aqt.qt import *
 from aqt import mw
 
@@ -67,3 +68,9 @@ def review_sToF(self,scut):
     }
     return sdict[scut]
 
+
+#Performs a preliminary check for if any filter is saved before removing it
+def remove_filter(self):
+    name = self._currentFilterIsSaved()
+    if name:
+        self._onRemoveFilter()
