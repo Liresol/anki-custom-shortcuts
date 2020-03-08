@@ -54,6 +54,9 @@
 	"reviewer choice 2":"2",
 	"reviewer choice 3":"3",
 	"reviewer choice 4":"4",
+	"reviewer pause audio":"5",
+	"reviewer seek backward":"6",
+	"reviewer seek forward":"7",
 	"reviewer _duplicates":{
 	},
 	"m_toolbox quit":"Ctrl+Q",
@@ -103,6 +106,8 @@
 	"window_browser find duplicates":"<nop>",
 	"window_browser select notes":"<nop>",
 	"window_browser manage note types":"<nop>",
+	"window_browser save current filter":"<nop>",
+	"window_browser remove current filter":"<nop>",
 	"window_browser _filters":{
 	},
 	"Ω enable main": "y",

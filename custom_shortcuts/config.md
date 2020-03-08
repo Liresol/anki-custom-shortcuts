@@ -125,6 +125,8 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "reviewer options menu": Go to the review options menu
 
+"reviewer pause audio": Pause the audio being played
+
 "reviewer play recorded voice": If there is a recorded voice, play it
 
 "reviewer record voice": Record your voice
@@ -132,6 +134,10 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 "reviewer replay audio [12]": Replay audio attached to the card
 
 "reviewer set flag [12340]": Set a flag on this card (or none for 0), changing colors depending on the number (1/2/3/4)
+
+"reviewer seek backward": Rewind the audio 5 seconds
+
+"reviewer seek forward": More the audio forwar 5 seconds
 
 "reviewer suspend card": Suspend this card
 
@@ -198,9 +204,13 @@ The syntax for this is: `"(filter name): (shortcut)"`, though one may need to es
 
 "window_browser preview": Emulates what the card will look like during review
 
+"window_browser remove current filter": *Not in vanilla Anki*, Removes the most recently used filter previously saved to the sidebar
+
 "window_browser remove tag": Removes tags from a card
 
 "window_browser reposition": Repositions a *new* card in the review schedule
+
+"window_browser save current filter": *Not in vanilla Anki*, Saves the current filter to the sidebar (and lets you name it)
 
 "window_browser select all": Selects all cards
 

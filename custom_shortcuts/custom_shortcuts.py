@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 import warnings
 from . import cs_functions as functions
 
-#Anki before version 2.1.20 do not use aqt.gui_hooks
+#Anki before version 2.1.20 does not use aqt.gui_hooks
 try:
     from aqt import gui_hooks
     new_hooks = True
@@ -146,6 +146,12 @@ def cs_review_setupShortcuts(self):
         (config_scuts["reviewer choice 3"], lambda: self._answerCard(3)),
         (config_scuts["reviewer choice 4"], lambda: self._answerCard(4)),
     ]
+    if functions.get_version() >= 20:
+        ret += [
+            (config_scuts["reviewer pause audio"], self.on_pause_audio),
+            (config_scuts["reviewer seek backward"], self.on_seek_backward),
+            (config_scuts["reviewer seek forward"], self.on_seek_forward),
+            ]
     for scut in config_scuts["reviewer _duplicates"]:
         dupes.append((config_scuts["reviewer _duplicates"][scut],self.sToF(scut)))
     return dupes + ret
@@ -237,7 +243,6 @@ def cs_browser_setupShortcuts(self):
     f.actionFindDuplicates.setShortcut(config_scuts["window_browser find duplicates"])
     f.actionSelectNotes.setShortcut(config_scuts["window_browser select notes"])
     f.actionManage_Note_Types.setShortcut(config_scuts["window_browser manage note types"])
-        #cuts.append((val, self.setFilter(key), True))
 
 #Mimics the style of other Anki functions, analogue of customPaste
 #Note that the saveNow function used earler takes the cursor to the end of the line,
@@ -356,6 +361,7 @@ def cs_browser_basicFilter(self, txt):
     self.onSearchActivated()
 
 #Wtf
+#Inserts the custom filter shortcuts upon browser startup
 def cs_browser_setupEditor(self):
     self.editor = Editor(self.mw, self.form.fieldsArea, self)
     self.csFilterScuts = {}
@@ -365,6 +371,12 @@ def cs_browser_setupEditor(self):
         self.csFilterFuncs[filt] = lambda txt=filt: cs_browser_basicFilter(self, txt)
         self.csFilterScuts[filt] = QShortcut(QKeySequence(scut), self)
         self.csFilterScuts[filt].activated.connect(self.csFilterFuncs[filt])
+    if config_scuts["window_browser save current filter"]:
+        self.csSaveFilterScut = QShortcut(QKeySequence(config_scuts["window_browser save current filter"]), self)
+        self.csSaveFilterScut.activated.connect(self._onSaveFilter)
+    if config_scuts["window_browser remove current filter"]:
+        self.csRemoveFilterScut = QShortcut(QKeySequence(config_scuts["window_browser remove current filter"]), self)
+        self.csRemoveFilterScut.activated.connect(self.csRemoveFilterFunc)
 
 #Functions that execute on startup
 if config_scuts["Ω enable main"].upper() == 'Y':
@@ -383,6 +395,7 @@ if config_scuts["Ω enable m_toolbox"].upper() == 'Y':
     cs_mt_setupShortcuts()
 #Hooks to setup shortcuts at the right time
 if config_scuts["Ω enable window_browser"].upper() == 'Y':
+    Browser.csRemoveFilterFunc = functions.remove_filter
     Browser.setupEditor = cs_browser_setupEditor
     addHook('browser.setupMenus', cs_browser_setupShortcuts)
 
