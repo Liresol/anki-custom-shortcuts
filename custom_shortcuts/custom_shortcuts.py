@@ -308,16 +308,7 @@ def cs_conflictDetect():
 
 
 def cs_toolbarCenterLinks(self):
-    if functions.get_version() <= 20:
-        links = [
-            ["decks", _("Decks"), _("Shortcut key: %s") % config_scuts["main deckbrowser"]],
-            ["add", _("Add"), _("Shortcut key: %s") % config_scuts["main add"]],
-            ["browse", _("Browse"), _("Shortcut key: %s") % config_scuts["main browse"]],
-            ["stats", _("Stats"), _("Shortcut key: %s") % config_scuts["main stats"]],
-            ["sync", _("Sync"), _("Shortcut key: %s") % config_scuts["main sync"]],
-            ]
-        return self._linkHTML(links)
-    else:
+    try:
         links = [
             self.create_link(
                 "decks",
@@ -354,6 +345,15 @@ def cs_toolbarCenterLinks(self):
         gui_hooks.top_toolbar_did_init_links(links, self)
 
         return "\n".join(links)
+    except:
+        links = [
+            ["decks", _("Decks"), _("Shortcut key: %s") % config_scuts["main deckbrowser"]],
+            ["add", _("Add"), _("Shortcut key: %s") % config_scuts["main add"]],
+            ["browse", _("Browse"), _("Shortcut key: %s") % config_scuts["main browse"]],
+            ["stats", _("Stats"), _("Shortcut key: %s") % config_scuts["main stats"]],
+            ["sync", _("Sync"), _("Shortcut key: %s") % config_scuts["main sync"]],
+            ]
+        return self._linkHTML(links)
 
 
 def cs_browser_basicFilter(self, txt):
