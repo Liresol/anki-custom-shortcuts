@@ -1,6 +1,6 @@
-### To disable a shortcut, set that shortcut to `<nop>`
+### To disable a shortcut, set that shortcut to `<nop>`.
 
-### For macOS users, `Ctrl` is `⌘`, `Alt` is `⌥`, and `Meta` is `^` (control key)
+### For macOS users, `Ctrl` is `⌘`, `Alt` is `⌥`, and `Meta` is `^` (control key).
 
 
 ## Editor Options
@@ -51,7 +51,7 @@
 
 Within "editor \_extras":
 
-"paste custom text": Pastes a custom piece of html text into a card field (defined in "\u03a9 custom paste text")
+"paste custom text": Pastes a custom piece of html text into a card field (defined in "Ω custom paste text")
 
 ## Main Toolbox Options
 
@@ -226,14 +226,14 @@ The syntax for this is: `"(filter name): (shortcut)"`, though one may need to es
 
 **These options are for changing a few settings on the add-on itself.**
 
-"\u03a9 custom paste end style": For the exceptionally lazy (like me). If set to "y", inserts a `</span>` and a zero-width space at the end of the custom text to stop the custom style from bleeding into new text.
+"Ω custom paste end style": For the exceptionally lazy (like me). If set to "y", inserts a `</span>` and a zero-width space at the end of the custom text to stop the custom style from bleeding into new text.
 
 Otherwise, the custom paste will behave exactly like regular paste.
 
-"\u03a9 custom paste text": Controls what html will be pasted by "custom paste" in "editor \_extras"	
-e.g. `"\u03a9 custom paste text": "<span style=\"font-size: 20px; color:#3399ff\">◆</span>"`
+"Ω custom paste text": Controls what html will be pasted by "custom paste" in "editor \_extras"	
+e.g. `"Ω custom paste text": "<span style=\"font-size: 20px; color:#3399ff\">◆</span>"`
 
-"\u03a9 enable main/window_browser/editor/etc.": If set to "n", doesn't enable the corresponding set of shortcuts for the respective functions (useful for addon compatability in a pinch)
+"Ω enable main/window_browser/editor/etc.": If set to "n", doesn't enable the corresponding set of shortcuts for the respective functions (useful for addon compatability in a pinch)
 
-"\u03a9 enable conflict warning": If set to "y", shows a warning window whenever two shortcuts of the same type are set to the same key.
+"Ω enable conflict warning": If set to "y", shows a warning window whenever two shortcuts of the same type are set to the same key.
 
