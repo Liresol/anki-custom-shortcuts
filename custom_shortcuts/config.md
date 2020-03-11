@@ -53,6 +53,10 @@ Within "editor \_extras":
 
 "paste custom text": Pastes a custom piece of html text into a card field (defined in "Ω custom paste text")
 
+"editor \_pastes": Same functionality as paste custom text, but allows any number of texts with any label (texts are defined in "Ω custom paste extra texts", labels must match)
+
+e.g. `"editor _pastes": {"dashes":"Ctrl+Shift+5", "dots":"Ctrl+Shift+6"}` matched with `"Ω custom paste extra texts": {"dashes":"<b>--</b>","dots":". . ."}` pastes the corresponding text with the corresponding label
+
 ## Main Toolbox Options
 
 "m\_toolbox \_duplicates": Takes functions and binds them to new shortcuts.
@@ -232,6 +236,8 @@ Otherwise, the custom paste will behave exactly like regular paste.
 
 "Ω custom paste text": Controls what html will be pasted by "custom paste" in "editor \_extras"	
 e.g. `"Ω custom paste text": "<span style=\"font-size: 20px; color:#3399ff\">◆</span>"`
+
+"Ω custom paste extra texts": Controls what html will be pasted by the correspondingly labeled paste in "editor \_pastes" (See "editor \_pastes" for an example)
 
 "Ω enable main/window_browser/editor/etc.": If set to "n", doesn't enable the corresponding set of shortcuts for the respective functions (useful for addon compatability in a pinch)
 
