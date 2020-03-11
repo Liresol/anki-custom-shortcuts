@@ -30,6 +30,8 @@
 	"editor _extras": {
 		"paste custom text":"<nop>"
 	},
+	"editor _pastes": {
+	},
 	"reviewer edit current":"E",
 	"reviewer flip card 1":" ",
 	"reviewer flip card 2":"Qt.Key_Return",
@@ -117,6 +119,8 @@
 	"Ω enable window_browser": "y",
 	"Ω enable conflict warning": "y",
 	"Ω custom paste text": "",
+	"Ω custom paste extra texts": {
+	},
 	"Ω custom paste end style": "n"
 }
 

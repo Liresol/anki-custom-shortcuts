@@ -56,10 +56,10 @@ def cs_traverseKeys(Rep, D):
     for key in D:
         if isinstance(D[key],dict):
             ret[key] = cs_traverseKeys(Rep,D[key])
-        elif D[key] not in Rep:
-            ret[key] = D[key]
-        else:
+        elif D[key] in Rep:
             ret[key] = Rep[D[key]]
+        else:
+            ret[key] = D[key]
     return ret
 
 #This contains the processed shortcuts used for the rest of the functions
@@ -182,9 +182,15 @@ def cs_editor_setupShortcuts(self):
         (config_scuts["editor insert mathjax block"], self.insertMathjaxBlock),
         (config_scuts["editor html edit"], self.onHtmlEdit),
         (config_scuts["editor focus tags"], self.onFocusTags, True),
-        (config_scuts["editor _extras"]["paste custom text"], self.customPaste)
+        (config_scuts["editor _extras"]["paste custom text"],
+         lambda text=config_scuts["Ω custom paste text"]: self.customPaste(text))
     ]
-    #There is a try-except clause to handle 2.1.0 version, which does not have this particular shortcut
+    for label in config_scuts["editor _pastes"]:
+        if label in config_scuts["Ω custom paste extra texts"]:
+            scut = config_scuts["editor _pastes"][label]
+            temp = config_scuts["Ω custom paste extra texts"][label]
+            cuts.append((scut, lambda text=temp: self.customPaste(text)))
+    #There is a try-except clause to handle 2.1.0 version, which does not have this shortcut
     try:
         cuts.append((config_scuts["editor insert mathjax chemistry"], self.insertMathjaxChemistry))
     except AttributeError:
@@ -247,12 +253,12 @@ def cs_browser_setupShortcuts(self):
 #Mimics the style of other Anki functions, analogue of customPaste
 #Note that the saveNow function used earler takes the cursor to the end of the line,
 #as it is meant to save work before entering a new window
-def cs_editor_custom_paste(self):
-    self._customPaste()
+def cs_editor_custom_paste(self, text):
+    self._customPaste(text)
 
 #Mimics the style of other Anki functions, analogue of _customPaste
-def cs_uEditor_custom_paste(self):
-    html = config_scuts["Ω custom paste text"]
+def cs_uEditor_custom_paste(self, text):
+    html = text
     if config_scuts["Ω custom paste end style"].upper() == "Y":
         html += "</span>\u200b"
     with warnings.catch_warnings() as w:
@@ -263,43 +269,63 @@ def cs_uEditor_custom_paste(self):
                         
 
 #detects shortcut conflicts
+#Gets all the shortcuts in a given object of the form {name: scut, ...} and names them
+#Returns a dictionary of the form {scut: [labels of objects with that scut], ...}
+def cs_getAllScuts(obj, strCont):
+    res = {}
+    for key in obj:
+        if isinstance(obj[key], dict):
+            rec = cs_getAllScuts(obj[key], key + " in " + strCont)
+            for term in rec:
+                if term in res:
+                    res[term] += rec[term]
+                else:
+                    res[term] = rec[term]
+        else:
+            text_scut = obj[key].upper()
+            if text_scut in res:
+                res[text_scut].append(key + " in " + strCont)
+            else:
+                res[text_scut] = [key + " in " + strCont]
+    return res
+
 #Ignores the Add-on (Ω) options
 def cs_conflictDetect():
     if config["Ω enable conflict warning"].upper() != "Y":
         return
     ext_list = {}
-    dupes = False
     for e in config:
         sub = e[0:(e.find(" "))]
         val = config[e]
-        if sub in ext_list:
-            if isinstance(val,dict):
-                for key in val:
-                    ext_list[sub][key + " in " + e] = val[key].upper()
+        if sub == "Ω":
+            continue
+        if sub not in ext_list:
+            ext_list[sub] = {}
+        if isinstance(val, dict):
+            scuts = cs_getAllScuts(val, e)
+            for scut in scuts:
+                if scut in ext_list[sub]:
+                    ext_list[sub][scut] += scuts[scut]
+                else:
+                    ext_list[sub][scut] = scuts[scut]
+        else:
+            text_val = val.upper()
+            if text_val in ext_list:
+                ext_list[sub][text_val].append(e)
             else:
-                ext_list[sub][e] = val.upper()
-        elif sub != "Ω":
-            ext_list[sub] = {e:val.upper()}
-    inv = {}
+                ext_list[sub][text_val] = [e]
     conflictStr = CS_CONFLICTSTR
     conflict = False
     for key in ext_list:
-        inv = {}
-        x = ext_list[key]
-        for e in x:
-            if x[e] not in inv:
-                inv[x[e]] = [e]
-            else:
-                inv[x[e]].append(e)
-        for k in inv:
-            if(len(inv[k])) == 1:
+        for k in ext_list[key]:
+            if len(ext_list[key][k]) == 1:
                 continue
             if k == "<NOP>":
                 continue
             if not k:
                 continue
             conflict = True
-            conflictStr += ", ".join(inv[k])
+            conflictStr += ", ".join(ext_list[key][k])
             conflictStr += "\nshare '" + k + "' as a shortcut\n\n"
     if conflict:
         conflictStr += "\nThese shortcuts will not work.\n"
