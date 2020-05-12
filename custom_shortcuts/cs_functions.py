@@ -8,10 +8,13 @@ def get_version():
     """Return the integer subversion of Anki on which the addon is run ("2.1.11" -> 11)"""
     return int(anki.version.split('.')[2])
 
-def cs_editor_onAltCloze(self):
-    self.saveNow(self._onAltCloze, keepFocus=True)
+def cs_editor_on_alt_cloze(self):
+    self.saveNow(self.cs_u_onAltCloze, keepFocus=True)
 
-def cs_uEditor_onAltCloze(self):
+def cs_editor_on_std_cloze(self):
+    self.saveNow(self.cs_u_onStdCloze, keepFocus=True)
+
+def cs_editor_generate_cloze(self, altModifier = False):
         # check that the model is set up for cloze deletion
     if not re.search('{{(.*:)*cloze:',self.note.model()['tmpls'][0]['qfmt']):
         if self.addMode:
@@ -29,6 +32,8 @@ to a cloze type first, via Edit>Change Note Type."""))
         if m:
             highest = max(highest, sorted([int(x) for x in m])[-1])
         # reuse last?
+    if not altModifier:
+        highest += 1
     highest = max(1, highest)
     self.web.eval("wrap('{{c%d::', '}}');" % highest)
 

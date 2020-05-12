@@ -171,8 +171,8 @@ def cs_editor_setupShortcuts(self):
         (config_scuts["editor remove format"], self.removeFormat),
         (config_scuts["editor foreground"], self.onForeground),
         (config_scuts["editor change col"], self.onChangeCol),
-        (config_scuts["editor cloze"], self.onCloze),
-        (config_scuts["editor cloze alt"], self.onAltCloze),
+        (config_scuts["editor cloze"], self.cs_onStdCloze),
+        (config_scuts["editor cloze alt"], self.cs_onAltCloze),
         (config_scuts["editor add media"], self.onAddMedia),
         (config_scuts["editor record sound"], self.onRecSound),
         (config_scuts["editor insert latex"], self.insertLatex),
@@ -409,10 +409,11 @@ if config_scuts["Ω enable main"].upper() == 'Y':
     Toolbar._centerLinks = cs_toolbarCenterLinks
     cs_main_setupShortcuts()
 if config_scuts["Ω enable editor"].upper() == 'Y':
-    Editor.onAltCloze = functions.cs_editor_onAltCloze
-    Editor._onAltCloze = functions.cs_uEditor_onAltCloze
+    Editor.cs_u_onAltCloze = lambda self: functions.cs_editor_generate_cloze(self, True)
+    Editor.cs_u_onStdCloze = lambda self: functions.cs_editor_generate_cloze(self, False)
+    Editor.cs_onAltCloze = functions.cs_editor_on_alt_cloze
+    Editor.cs_onStdCloze = functions.cs_editor_on_std_cloze
     Editor.customPaste = cs_editor_custom_paste
-    Editor._customPaste = cs_uEditor_custom_paste
     Editor.setupShortcuts = cs_editor_setupShortcuts
 if config_scuts["Ω enable reviewer"].upper() == 'Y':
     Reviewer._shortcutKeys = cs_review_setupShortcuts
