@@ -414,6 +414,7 @@ if config_scuts["Ω enable editor"].upper() == 'Y':
     Editor.cs_onAltCloze = functions.cs_editor_on_alt_cloze
     Editor.cs_onStdCloze = functions.cs_editor_on_std_cloze
     Editor.customPaste = cs_editor_custom_paste
+    Editor._customPaste = cs_uEditor_custom_paste
     Editor.setupShortcuts = cs_editor_setupShortcuts
 if config_scuts["Ω enable reviewer"].upper() == 'Y':
     Reviewer._shortcutKeys = cs_review_setupShortcuts
