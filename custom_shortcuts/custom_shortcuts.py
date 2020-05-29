@@ -438,8 +438,8 @@ if config_scuts["Ω enable main"].upper() == 'Y':
     Toolbar._centerLinks = cs_toolbarCenterLinks
     cs_main_setupShortcuts()
 if config_scuts["Ω enable editor"].upper() == 'Y':
-    Editor.cs_u_onAltCloze = lambda self: functions.cs_editor_generate_cloze(self, True)
-    Editor.cs_u_onStdCloze = lambda self: functions.cs_editor_generate_cloze(self, False)
+    Editor.cs_u_onAltCloze = lambda self: functions.cs_editor_generate_cloze(self, altModifier=True)
+    Editor.cs_u_onStdCloze = lambda self: functions.cs_editor_generate_cloze(self, altModifier=False)
     Editor.cs_onAltCloze = functions.cs_editor_on_alt_cloze
     Editor.cs_onStdCloze = functions.cs_editor_on_std_cloze
     Editor.customPaste = cs_editor_custom_paste

@@ -15,7 +15,7 @@
 
 "editor cloze": Insert cloze
 
-"editor cloze alt": Insert cloze, but do not increment the cloze ID number
+"editor cloze alt": Insert cloze, **but do not increment the cloze ID number**
 
 "editor focus tags": Switch focus to the Tags field
 
@@ -149,9 +149,16 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 ## Browser Window Options
 
-"window_browser \_filters": Auto-fills the search bar of the browser with the given text. Can be used for filters such as current deck (`deck:current`) or cards due for review (`is:due`)
+"window\_browser \_filters": Auto-fills the search bar of the browser with the given text. Can be used for filters such as current deck (`deck:current`) or cards due for review (`is:due`)
 
 The syntax for this is: `"(filter name): (shortcut)"`, though one may need to escape quotes with `\` e.g. `"deck: Something something"` becomes `\"deck: Something something\"`
+
+Sub-objects within `_filters`: 
+
+"\_concat": Instead of replacing text in the search bar, adds the text to the end of the search bar
+
+"\_orConcat": Adds the "or" + the text to the end of the search bar ("or" acts like logical or for searches)
+
 "window_browser add card": Adds a new card (goes to the add window)
 
 "window_browser add tag": Adds a tag to the selected card
