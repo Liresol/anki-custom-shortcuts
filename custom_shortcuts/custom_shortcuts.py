@@ -416,16 +416,18 @@ def cs_browser_setupEditor(self):
         self.csFilterFuncs[filt] = lambda txt=filt: cs_browser_basicFilter(self, txt)
         self.csFilterScuts[filt] = QShortcut(QKeySequence(scut), self)
         self.csFilterScuts[filt].activated.connect(self.csFilterFuncs[filt])
-    for filt in config_scuts["window_browser _filters"]["_concat"]:
-        scut = config_scuts["window_browser _filters"]["_concat"][filt]
-        self.csCatFilterFuncs[filt] = lambda txt=filt: cs_browser_concatFilter(self, txt)
-        self.csCatFilterScuts[filt] = QShortcut(QKeySequence(scut), self)
-        self.csCatFilterScuts[filt].activated.connect(self.csCatFilterFuncs[filt])
-    for filt in config_scuts["window_browser _filters"]["_orConcat"]:
-        scut = config_scuts["window_browser _filters"]["_orConcat"][filt]
-        self.csOCatFilterFuncs[filt] = lambda txt=filt: cs_browser_orConcatFilter(self, txt)
-        self.csOCatFilterScuts[filt] = QShortcut(QKeySequence(scut), self)
-        self.csOCatFilterScuts[filt].activated.connect(self.csOCatFilterFuncs[filt])
+    if "_concat" in config_scuts["window_browser _filters"]:
+        for filt in config_scuts["window_browser _filters"]["_concat"]:
+            scut = config_scuts["window_browser _filters"]["_concat"][filt]
+            self.csCatFilterFuncs[filt] = lambda txt=filt: cs_browser_concatFilter(self, txt)
+            self.csCatFilterScuts[filt] = QShortcut(QKeySequence(scut), self)
+            self.csCatFilterScuts[filt].activated.connect(self.csCatFilterFuncs[filt])
+    if "_orConcat" in config_scuts["window_browser _filters"]:
+        for filt in config_scuts["window_browser _filters"]["_orConcat"]:
+            scut = config_scuts["window_browser _filters"]["_orConcat"][filt]
+            self.csOCatFilterFuncs[filt] = lambda txt=filt: cs_browser_orConcatFilter(self, txt)
+            self.csOCatFilterScuts[filt] = QShortcut(QKeySequence(scut), self)
+            self.csOCatFilterScuts[filt].activated.connect(self.csOCatFilterFuncs[filt])
     if config_scuts["window_browser save current filter"]:
         self.csSaveFilterScut = QShortcut(QKeySequence(config_scuts["window_browser save current filter"]), self)
         self.csSaveFilterScut.activated.connect(self._onSaveFilter)
