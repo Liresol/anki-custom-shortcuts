@@ -111,6 +111,8 @@
 	"window_browser save current filter":"<nop>",
 	"window_browser remove current filter":"<nop>",
 	"window_browser _filters":{
+		"_concat":{},
+		"_orConcat":{}
 	},
 	"Ω enable main": "y",
 	"Ω enable editor": "y",
