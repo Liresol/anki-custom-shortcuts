@@ -45,9 +45,6 @@ Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter,
 #QShortcuts mapped to the same key and function and both are enabled,
 #the shortcut doesn't work
 
-#Part of this code exploits that by adding QShortcuts mapped to the defaults
-#and activating/deactivating them to deactivate/activate default shortcuts
-
 #There isn't an obvious way to get the original QShortcut objects, as
 #The addons executes after the setup phase (which creates QShortcut objects)
 
@@ -160,7 +157,8 @@ def cs_review_setupShortcuts(self):
 #Something funky is going on with the default MathJax and LaTeX shortcuts
 #It does not affect the function (as I currently know of)
 def cs_editor_setupShortcuts(self):
-    # if a third element is provided, enable shortcut even when no field selected
+    dupes = []
+    # if a third element is provided, enable shortcut even when no field is selected
     cuts = [
         (config_scuts["editor card layout"], self.onCardLayout, True),
         (config_scuts["editor bold"], self.toggleBold),
@@ -185,6 +183,9 @@ def cs_editor_setupShortcuts(self):
         (config_scuts["editor _extras"]["paste custom text"],
          lambda text=config_scuts["Ω custom paste text"]: self.customPaste(text))
     ]
+    for scut in config_scuts["editor _duplicates"]:
+        dupes.append((config_scuts["editor _duplicates"][scut],)+self.sToF(scut))
+    cuts += dupes
     for label in config_scuts["editor _pastes"]:
         if label in config_scuts["Ω custom paste extra texts"]:
             scut = config_scuts["editor _pastes"][label]
@@ -440,6 +441,7 @@ if config_scuts["Ω enable main"].upper() == 'Y':
     Toolbar._centerLinks = cs_toolbarCenterLinks
     cs_main_setupShortcuts()
 if config_scuts["Ω enable editor"].upper() == 'Y':
+    Editor.sToF = functions.editor_sToF
     Editor.cs_u_onAltCloze = lambda self: functions.cs_editor_generate_cloze(self, altModifier=True)
     Editor.cs_u_onStdCloze = lambda self: functions.cs_editor_generate_cloze(self, altModifier=False)
     Editor.cs_onAltCloze = functions.cs_editor_on_alt_cloze

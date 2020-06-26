@@ -73,6 +73,32 @@ def review_sToF(self,scut):
     }
     return sdict[scut]
 
+#Converts json shortcuts into functions for the reviewer
+#sToF: shortcutToFunction
+def editor_sToF(self,scut):
+    sdict = {
+            "editor card layout": (self.onCardLayout, True),
+            "editor bold": (self.toggleBold,),
+            "editor italic": (self.toggleItalic,),
+            "editor underline": (self.toggleUnderline,),
+            "editor superscript": (self.toggleSuper,),
+            "editor subscript": (self.toggleSub,),
+            "editor remove format": (self.removeFormat,),
+            "editor foreground": (self.onForeground,),
+            "editor change col": (self.onChangeCol,),
+            "editor cloze": (self.cs_onStdCloze,),
+            "editor cloze alt": (self.cs_onAltCloze,),
+            "editor add media": (self.onAddMedia,),
+            "editor record sound": (self.onRecSound,),
+            "editor insert latex": (self.insertLatex,),
+            "editor insert latex equation": (self.insertLatexEqn,),
+            "editor insert latex math environment": (self.insertLatexMathEnv,),
+            "editor insert mathjax inline": (self.insertMathjaxInline,),
+            "editor insert mathjax block": (self.insertMathjaxBlock,),
+            "editor html edit": (self.onHtmlEdit,),
+            "editor focus tags": (self.onFocusTags, True),
+        }
+    return sdict[scut]
 
 #Performs a preliminary check for if any filter is saved before removing it
 def remove_filter(self):

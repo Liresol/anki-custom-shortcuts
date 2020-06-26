@@ -32,6 +32,8 @@
 	},
 	"editor _pastes": {
 	},
+	"editor _duplicates": {
+	},
 	"reviewer edit current":"E",
 	"reviewer flip card 1":" ",
 	"reviewer flip card 2":"Qt.Key_Return",

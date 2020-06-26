@@ -5,6 +5,12 @@
 
 ## Editor Options
 
+"editor \_duplicates": Takes functions and binds them to new shortcuts.
+
+This object takes inputs of the form "(function keyword)":"(shortcut)", separated by commas. (e.g. {"editor bold":"Ctrl+Shift+9", "editor cloze":"Alt+Shift+2"})
+
+All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. 
+
 "editor add media": Add external media
 
 "editor bold": Toggle bold 
