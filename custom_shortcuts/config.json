@@ -17,6 +17,8 @@
 	"editor change col":"F8",
 	"editor cloze":"Ctrl+Shift+C",
 	"editor cloze alt":"Ctrl+Shift+Alt+C",
+	"editor cloze forced increment":"<nop>",
+	"editor cloze no increment":"<nop>",
 	"editor add media":"F3",
 	"editor record sound":"F5",
 	"editor insert latex":"Ctrl+T, T",

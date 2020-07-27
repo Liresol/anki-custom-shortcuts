@@ -19,9 +19,15 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "editor change col": Change text color
 
-"editor cloze": Insert cloze
+"editor cloze": Insert cloze (increments cloze ID if `Alt` is *not* part of your keybind, so `Ctrl+Shift+C` does increment ID, while `Ctrl+Shift+Alt+C` does not)
 
-"editor cloze alt": Insert cloze, **but do not increment the cloze ID number**
+"editor cloze alt": Insert cloze (behaves identically to "editor cloze")
+
+"editor cloze forced increment": Insert cloze, **always increments the cloze ID number**, *does not activate cloze add-ons*
+
+"editor cloze no increment": Insert cloze, **never increments the cloze ID number**, *does not activate cloze add-ons*
+
+The reason for the seemingly weird editor cloze behavior is Anki's internal implementation of the cloze insertion shortcuts. Anki's implementation is used in "editor cloze" and "editor cloze alt" and should play well with other addons, while a different implementation is used for "forced increment" and "no increment".
 
 "editor focus tags": Switch focus to the Tags field
 
@@ -147,7 +153,7 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "reviewer seek backward": Rewind the audio 5 seconds
 
-"reviewer seek forward": More the audio forwar 5 seconds
+"reviewer seek forward": More the audio forward 5 seconds
 
 "reviewer suspend card": Suspend this card
 
