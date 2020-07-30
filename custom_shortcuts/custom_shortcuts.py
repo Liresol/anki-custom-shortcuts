@@ -313,7 +313,7 @@ def cs_conflictDetect():
                     ext_list[sub][scut] = scuts[scut]
         else:
             text_val = val.upper()
-            if text_val in ext_list:
+            if text_val in ext_list[sub]:
                 ext_list[sub][text_val].append(e)
             else:
                 ext_list[sub][text_val] = [e]
