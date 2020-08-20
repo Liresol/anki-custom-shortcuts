@@ -66,11 +66,17 @@ def review_sToF(self,scut):
         "reviewer set flag 4": lambda: self.setFlag(4),
         "reviewer set flag 0": lambda: self.setFlag(0),
         "reviewer replay audio": self.replayAudio,
+        "reviewer replay audio 1": self.replayAudio,
+        "reviewer replay audio 2": self.replayAudio,
         "reviewer choice 1": lambda: self._answerCard(1),
         "reviewer choice 2": lambda: self._answerCard(2),
         "reviewer choice 3": lambda: self._answerCard(3),
         "reviewer choice 4": lambda: self._answerCard(4),
     }
+    if get_version() >= 20:
+        sdict["reviewer pause audio"] = self.on_pause_audio
+        sdict["reviewer seek backward"] = self.on_seek_backward
+        sdict["reviewer seek forward"] = self.on_seek_forward
     return sdict[scut]
 
 #Converts json shortcuts into functions for the reviewer
