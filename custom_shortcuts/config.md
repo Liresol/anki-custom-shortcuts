@@ -139,6 +139,8 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "reviewer mark card": Mark this card with a star
 
+"reviewer more options": Display the menu showing other review options for this card (e.g. flagging the card, suspend/delete/bury, playing audio, etc.)
+
 "reviewer options menu": Go to the review options menu
 
 "reviewer pause audio": Pause the audio being played

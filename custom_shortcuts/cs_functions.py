@@ -77,6 +77,9 @@ def review_sToF(self,scut):
         sdict["reviewer pause audio"] = self.on_pause_audio
         sdict["reviewer seek backward"] = self.on_seek_backward
         sdict["reviewer seek forward"] = self.on_seek_forward
+    if get_version() >= 33:
+        sdict["reviewer more options"] = self.showContextMenu
+
     return sdict[scut]
 
 #Converts json shortcuts into functions for the reviewer

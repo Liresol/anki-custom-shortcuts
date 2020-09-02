@@ -149,6 +149,10 @@ def cs_review_setupShortcuts(self):
             (config_scuts["reviewer seek backward"], self.on_seek_backward),
             (config_scuts["reviewer seek forward"], self.on_seek_forward),
             ]
+    if functions.get_version() >= 33:
+        ret += [
+            (config_scuts["reviewer more options"], self.showContextMenu)
+            ]
     for scut in config_scuts["reviewer _duplicates"]:
         dupes.append((config_scuts["reviewer _duplicates"][scut],self.sToF(scut)))
     return dupes + ret
