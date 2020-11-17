@@ -114,3 +114,28 @@ def remove_filter(self):
     name = self._currentFilterIsSaved()
     if name:
         self._onRemoveFilter()
+
+#For reviewer shortcut assignments:
+#Takes as input ls (the list of shortcuts, of the form (shortcut, function pointer))
+#and replacements (a dict mapping function pointers to new shortcuts)
+#Then, for every tuple in the list, if its function pointer has a replacement shortcut, replace it
+#Changes the list in-place
+def reviewer_find_and_replace_functions(ls, replacements):
+    for i, val in enumerate(ls):
+        func = val[1]
+        if func in replacements:
+            ls[i] = (replacements[func].pop(), func)
+            if not replacements[func]:
+                replacements.pop(func)
+
+#For reviewer shortcut assignments:
+#Takes as input ls (the list of shortcuts, of the form (shortcut, function pointer))
+#and replacements (a dict mapping old shortcuts to new shortcuts)
+#Then, for every tuple in the list, if its shortcut is in the list, replace it
+#Changes the list in-place
+#Prefer reviewer_find_and_replace_functions to this because functions are less fragile
+def reviewer_find_and_replace_scuts(ls, replacements):
+    for i, val in enumerate(ls):
+        scut = val[0]
+        if scut in replacements:
+            ls[i] = (replacements.pop(scut), val[1])

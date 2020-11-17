@@ -2,7 +2,7 @@
 from anki.lang import _
 from aqt import mw
 from aqt.qt import *
-from anki.hooks import runHook,addHook
+from anki.hooks import runHook,addHook,wrap
 from anki.lang import _
 from aqt.utils import showWarning
 from aqt.toolbar import Toolbar
@@ -115,47 +115,59 @@ def cs_mt_setupShortcuts():
     m.actionAdd_ons.setShortcuts(scuts_list["m_toolbox addons"])
 
 #Governs the shortcuts on the review window
-def cs_review_setupShortcuts(self):
-    dupes = []
-    ret = [
-        (config_scuts["reviewer edit current"], self.mw.onEditCurrent),
-        (config_scuts["reviewer flip card 1"], self.onEnterKey),
-        (config_scuts["reviewer flip card 2"], self.onEnterKey),
-        (config_scuts["reviewer flip card 3"], self.onEnterKey),
-        (config_scuts["reviewer replay audio 1"], self.replayAudio),
-        (config_scuts["reviewer replay audio 2"], self.replayAudio),
-        (config_scuts["reviewer set flag 1"], lambda: self.setFlag(1)),
-        (config_scuts["reviewer set flag 2"], lambda: self.setFlag(2)),
-        (config_scuts["reviewer set flag 3"], lambda: self.setFlag(3)),
-        (config_scuts["reviewer set flag 4"], lambda: self.setFlag(4)),
-        (config_scuts["reviewer set flag 0"], lambda: self.setFlag(0)),
-        (config_scuts["reviewer mark card"], self.onMark),
-        (config_scuts["reviewer bury note"], self.onBuryNote),
-        (config_scuts["reviewer bury card"], self.onBuryCard),
-        (config_scuts["reviewer suspend note"], self.onSuspend),
-        (config_scuts["reviewer suspend card"], self.onSuspendCard),
-        (config_scuts["reviewer delete note"], self.onDelete),
-        (config_scuts["reviewer play recorded voice"], self.onReplayRecorded),
-        (config_scuts["reviewer record voice"], self.onRecordVoice),
-        (config_scuts["reviewer options menu"], self.onOptions),
-        (config_scuts["reviewer choice 1"], lambda: self._answerCard(1)),
-        (config_scuts["reviewer choice 2"], lambda: self._answerCard(2)),
-        (config_scuts["reviewer choice 3"], lambda: self._answerCard(3)),
-        (config_scuts["reviewer choice 4"], lambda: self._answerCard(4)),
-    ]
+#This replacement method is pretty blind but tries to minimize disruption
+#Replaces shortcuts at the start first
+#Assuming that other addons append shortcuts, this shouldn't bother those addons
+def cs_review_setupShortcuts(self, _old):
+    #More fragile replacement: For these shortcuts, their functions are lambdas
+    #So we can't directly address them
+    #I'm not completely satisfied by this option
+    new_scut_replacements = {
+            "Ctrl+1" : config_scuts["reviewer set flag 1"],
+            "Ctrl+2" : config_scuts["reviewer set flag 2"],
+            "Ctrl+3" : config_scuts["reviewer set flag 3"],
+            "Ctrl+4" : config_scuts["reviewer set flag 4"],
+            "1" : config_scuts["reviewer choice 1"],
+            "2" : config_scuts["reviewer choice 2"],
+            "3" : config_scuts["reviewer choice 3"],
+            "4" : config_scuts["reviewer choice 4"],
+            }
+    #Less fragile replacement: For these shortcuts, address them by pointer and replace shortcut
+    #The keys are dicts because we will want to replace multiply shortcut keys
+    new_function_replacements = {
+            self.mw.onEditCurrent : [config_scuts["reviewer edit current"]],
+            self.onEnterKey : [
+                config_scuts["reviewer flip card 1"],
+                config_scuts["reviewer flip card 2"],
+                config_scuts["reviewer flip card 3"]],
+            self.replayAudio : [
+                config_scuts["reviewer replay audio 1"],
+                config_scuts["reviewer replay audio 2"],
+                ],
+            self.onMark : [config_scuts["reviewer mark card"]],
+            self.onBuryNote : [config_scuts["reviewer bury note"]],
+            self.onBuryCard : [config_scuts["reviewer bury card"]],
+            self.onSuspend : [config_scuts["reviewer suspend note"]],
+            self.onSuspendCard : [config_scuts["reviewer suspend card"]],
+            self.onDelete : [config_scuts["reviewer delete note"]],
+            self.onReplayRecorded : [config_scuts["reviewer play recorded voice"]],
+            self.onRecordVoice : [config_scuts["reviewer record voice"]],
+            self.onOptions : [config_scuts["reviewer options menu"]],
+            }
+    cuts = _old(self)
+    #Order is important: shortcut-based replacement should come first
+    functions.reviewer_find_and_replace_scuts(cuts,new_scut_replacements)
+    functions.reviewer_find_and_replace_functions(cuts,new_function_replacements)
+
     if functions.get_version() >= 20:
-        ret += [
-            (config_scuts["reviewer pause audio"], self.on_pause_audio),
-            (config_scuts["reviewer seek backward"], self.on_seek_backward),
-            (config_scuts["reviewer seek forward"], self.on_seek_forward),
-            ]
+        cuts.append((config_scuts["reviewer pause audio"], self.on_pause_audio))
+        cuts.append((config_scuts["reviewer seek backward"], self.on_seek_backward))
+        cuts.append((config_scuts["reviewer seek forward"], self.on_seek_forward))
     if functions.get_version() >= 33:
-        ret += [
-            (config_scuts["reviewer more options"], self.showContextMenu)
-            ]
+        cuts.append((config_scuts["reviewer more options"], self.showContextMenu))
     for scut in config_scuts["reviewer _duplicates"]:
-        dupes.append((config_scuts["reviewer _duplicates"][scut],self.sToF(scut)))
-    return dupes + ret
+        cuts.append((config_scuts["reviewer _duplicates"][scut], self.sToF(scut)))
+    return cuts
 
 #The function to setup shortcuts on the Editor
 #Something funky is going on with the default MathJax and LaTeX shortcuts
@@ -272,8 +284,6 @@ def cs_uEditor_custom_paste(self, text):
         warnings.simplefilter('ignore', UserWarning)
         html = str(BeautifulSoup(html, "html.parser"))
     self.doPaste(html,True,True)
-
-                        
 
 #detects shortcut conflicts
 #Gets all the shortcuts in a given object of the form {name: scut, ...} and names them
@@ -456,7 +466,7 @@ if config_scuts["Ω enable editor"].upper() == 'Y':
     Editor._customPaste = cs_uEditor_custom_paste
     Editor.setupShortcuts = cs_editor_setupShortcuts
 if config_scuts["Ω enable reviewer"].upper() == 'Y':
-    Reviewer._shortcutKeys = cs_review_setupShortcuts
+    Reviewer._shortcutKeys = wrap(Reviewer._shortcutKeys, cs_review_setupShortcuts, "around")
     Reviewer.sToF = functions.review_sToF
 if config_scuts["Ω enable m_toolbox"].upper() == 'Y':
     cs_mt_setupShortcuts()
