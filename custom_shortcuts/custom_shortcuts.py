@@ -157,14 +157,14 @@ def cs_review_setupShortcuts(self, _old):
     cuts = _old(self)
     #Order is important: shortcut-based replacement should come first
     functions.reviewer_find_and_replace_scuts(cuts,new_scut_replacements)
-    functions.reviewer_find_and_replace_functions(cuts,new_function_replacements)
 
     if functions.get_version() >= 20:
-        cuts.append((config_scuts["reviewer pause audio"], self.on_pause_audio))
-        cuts.append((config_scuts["reviewer seek backward"], self.on_seek_backward))
-        cuts.append((config_scuts["reviewer seek forward"], self.on_seek_forward))
+        new_function_replacements[self.on_pause_audio] = [config_scuts["reviewer pause audio"]]
+        new_function_replacements[self.on_seek_backward] = [config_scuts["reviewer seek backward"]]
+        new_function_replacements[self.on_seek_forward] = [config_scuts["reviewer seek forward"]]
     if functions.get_version() >= 33:
-        cuts.append((config_scuts["reviewer more options"], self.showContextMenu))
+        new_function_replacements[self.showContextMenu] = [config_scuts["reviewer more options"]]
+    functions.reviewer_find_and_replace_functions(cuts,new_function_replacements)
     for scut in config_scuts["reviewer _duplicates"]:
         cuts.append((config_scuts["reviewer _duplicates"][scut], self.sToF(scut)))
     return cuts
