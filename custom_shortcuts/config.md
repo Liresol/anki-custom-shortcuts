@@ -29,6 +29,10 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 The reason for the seemingly weird editor cloze behavior is Anki's internal implementation of the cloze insertion shortcuts. Anki's implementation is used in "editor cloze" and "editor cloze alt" and should play well with other addons, while a different implementation is used for "forced increment" and "no increment".
 
+"editor change note type": Change the type of the given note
+
+"editor confirm add card": In the add card editing window, adds the card
+
 "editor focus tags": Switch focus to the Tags field
 
 "editor foreground": Set foreground color

@@ -80,7 +80,9 @@ def review_sToF(self,scut):
     if get_version() >= 33:
         sdict["reviewer more options"] = self.showContextMenu
 
-    return sdict[scut]
+    if scut in sdict:
+        return sdict[scut]
+    return None
 
 #Converts json shortcuts into functions for the reviewer
 #sToF: shortcutToFunction
@@ -107,7 +109,9 @@ def editor_sToF(self,scut):
             "editor html edit": (self.onHtmlEdit,),
             "editor focus tags": (self.onFocusTags, True),
         }
-    return sdict[scut]
+    if scut in sdict:
+        return sdict[scut]
+    return None
 
 #Performs a preliminary check for if any filter is saved before removing it
 def remove_filter(self):

@@ -9,6 +9,8 @@ from aqt.toolbar import Toolbar
 from aqt.editor import Editor,EditorWebView
 from aqt.reviewer import Reviewer
 from aqt.browser import Browser
+from aqt.modelchooser import ModelChooser
+from aqt.addcards import AddCards
 from anki.utils import json
 from bs4 import BeautifulSoup
 import warnings
@@ -202,7 +204,8 @@ def cs_editor_setupShortcuts(self):
          lambda text=config_scuts["Ω custom paste text"]: self.customPaste(text))
     ]
     for scut in config_scuts["editor _duplicates"]:
-        dupes.append((config_scuts["editor _duplicates"][scut],)+self.sToF(scut))
+        if self.sToF(scut):
+            dupes.append((config_scuts["editor _duplicates"][scut],)+self.sToF(scut))
     cuts += dupes
     for label in config_scuts["editor _pastes"]:
         if label in config_scuts["Ω custom paste extra texts"]:
@@ -226,6 +229,29 @@ def cs_editor_setupShortcuts(self):
             keys, fn, _ = row
         scut = QShortcut(QKeySequence(keys), self.widget, activated=fn)
 
+#Wrapper function to add another shortcut to change note type
+#Not with the other custom shortcut editor functions because
+#the Anki functionality handling card type is not
+#in the Editor itself
+def cs_editorChangeNoteType(self):
+    NOTE_TYPE_STR = "editor change note type"
+    new_scuts = {config_scuts[NOTE_TYPE_STR]}
+    if NOTE_TYPE_STR in config_scuts["editor _duplicates"]:
+        new_scuts.add(config_scuts["editor _duplicates"][NOTE_TYPE_STR])
+    for scut in new_scuts:
+        if functions.get_version() >= 36:
+            QShortcut(QKeySequence(scut), self.widget, activated=self.on_activated)
+        else:
+            QShortcut(QKeySequence(scut), self.widget, activated=self.onModelChange)
+
+#Wrapper function to change the shortcut to add a card
+#Not with the other custom shortcut editor functions because
+#the add card button is not within the Editor class
+def cs_editorAddCard(self):
+    ADD_CARD_STR = "editor confirm add card"
+    self.addButton.setShortcut(QKeySequence(config_scuts[ADD_CARD_STR]))
+    if ADD_CARD_STR in config_scuts["editor _duplicates"]:
+        QShortcut(QKeySequence(config_scuts["editor _duplicates"][ADD_CARD_STR]), self, activated=self.addCards)
 
 #IMPLEMENTS Browser shortcuts
 def cs_browser_setupShortcuts(self):
@@ -416,6 +442,7 @@ def cs_browser_orConcatFilter(self, txt):
         txt = cur + " or " + txt
     self.form.searchEdit.lineEdit().setText(txt)
     self.onSearchActivated()
+
 #Wtf
 #Inserts the custom filter shortcuts upon browser startup
 def cs_browser_setupEditor(self):
@@ -465,6 +492,8 @@ if config_scuts["Ω enable editor"].upper() == 'Y':
     Editor.customPaste = cs_editor_custom_paste
     Editor._customPaste = cs_uEditor_custom_paste
     Editor.setupShortcuts = cs_editor_setupShortcuts
+    ModelChooser.setupModels = wrap(ModelChooser.setupModels, cs_editorChangeNoteType)
+    AddCards.setupButtons = wrap(AddCards.setupButtons, cs_editorAddCard)
 if config_scuts["Ω enable reviewer"].upper() == 'Y':
     Reviewer._shortcutKeys = wrap(Reviewer._shortcutKeys, cs_review_setupShortcuts, "around")
     Reviewer.sToF = functions.review_sToF

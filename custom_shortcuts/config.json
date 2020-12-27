@@ -29,6 +29,8 @@
 	"editor insert mathjax chemistry":"Ctrl+M, C",
 	"editor html edit":"Ctrl+Shift+X",
 	"editor focus tags":"Ctrl+Shift+T",
+	"editor confirm add card":"Ctrl+Return",
+	"editor change note type":"<nop>",
 	"editor _extras": {
 		"paste custom text":"<nop>"
 	},
