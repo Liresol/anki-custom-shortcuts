@@ -1,14 +1,18 @@
 #Last updated to be useful for: Anki 2.1.21
+import warnings
 from anki.lang import _
 from aqt import mw
 from aqt.qt import *
 from anki.hooks import runHook,addHook,wrap
-from aqt.utils import (
-        TR,
-        shortcut,
-        showWarning,
-        tr,
-        )
+try:
+    from aqt.utils import (
+            TR,
+            shortcut,
+            showWarning,
+            tr,
+            )
+except:
+    from aqt.utils import showWarning
 from aqt.toolbar import Toolbar
 from aqt.editor import Editor,EditorWebView
 from aqt.reviewer import Reviewer
@@ -17,7 +21,6 @@ from aqt.modelchooser import ModelChooser
 from aqt.addcards import AddCards
 from anki.utils import json
 from bs4 import BeautifulSoup
-import warnings
 from . import cs_functions as functions
 
 #Anki before version 2.1.20 does not use aqt.gui_hooks
