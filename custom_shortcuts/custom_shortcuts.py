@@ -3,8 +3,12 @@ from anki.lang import _
 from aqt import mw
 from aqt.qt import *
 from anki.hooks import runHook,addHook,wrap
-from anki.lang import _
-from aqt.utils import showWarning
+from aqt.utils import (
+        TR,
+        shortcut,
+        showWarning,
+        tr,
+        )
 from aqt.toolbar import Toolbar
 from aqt.editor import Editor,EditorWebView
 from aqt.reviewer import Reviewer
@@ -256,7 +260,10 @@ def cs_editorAddCard(self):
 #IMPLEMENTS Browser shortcuts
 def cs_browser_setupShortcuts(self):
     f = self.form
-    f.previewButton.setShortcut(config_scuts["window_browser preview"])
+    try:
+        f.previewButton.setShortcut(config_scuts["window_browser preview"])
+    except:
+        pass
     f.actionReschedule.setShortcut(config_scuts["window_browser reschedule"])
     f.actionSelectAll.setShortcut(config_scuts["window_browser select all"])
     f.actionUndo.setShortcut(config_scuts["window_browser undo"])
@@ -446,7 +453,32 @@ def cs_browser_orConcatFilter(self, txt):
 #Wtf
 #Inserts the custom filter shortcuts upon browser startup
 def cs_browser_setupEditor(self):
-    self.editor = Editor(self.mw, self.form.fieldsArea, self)
+    if functions.get_version() >= 39:
+        def add_preview_button(leftbuttons, editor):
+            preview_shortcut = config_scuts["window_browser preview"]
+            leftbuttons.insert(
+                0,
+                editor.addButton(
+                    None,
+                    "preview",
+                    lambda _editor: self.onTogglePreview(),
+                    tr(
+                        TR.BROWSING_PREVIEW_SELECTED_CARD,
+                        val=shortcut(preview_shortcut),
+                    ),
+                    tr(TR.ACTIONS_PREVIEW),
+                    id="previewButton",
+                    keys=preview_shortcut,
+                    disables=False,
+                    rightside=False,
+                    toggleable=True,
+                ),
+            )
+        gui_hooks.editor_did_init_left_buttons.append(add_preview_button)
+        self.editor = Editor(self.mw, self.form.fieldsArea, self)
+        gui_hooks.editor_did_init_left_buttons.remove(add_preview_button)
+    else:
+        self.editor = Editor(self.mw, self.form.fieldsArea, self)
     self.csFilterScuts = {}
     self.csFilterFuncs = {}
     self.csCatFilterScuts = {}
