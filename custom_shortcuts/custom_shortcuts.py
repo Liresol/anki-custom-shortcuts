@@ -5,6 +5,7 @@ from aqt import mw
 from aqt.qt import *
 from anki.hooks import runHook,addHook,wrap
 try:
+    tr_import = True
     from aqt.utils import (
             TR,
             shortcut,
@@ -12,6 +13,7 @@ try:
             tr,
             )
 except:
+    tr_import = False
     from aqt.utils import showWarning
 from aqt.toolbar import Toolbar
 from aqt.editor import Editor,EditorWebView
@@ -385,36 +387,74 @@ def cs_conflictDetect():
         conflictStr += "Please change them in the config.json."
         showWarning(conflictStr)
 
-
 def cs_toolbarCenterLinks(self):
+    try:
+        links = [
+            self.create_link(
+                "decks",
+                tr(TR.ACTIONS_DECKS),
+                self._deckLinkHandler,
+                tip=tr(TR.ACTIONS_SHORTCUT_KEY, val=config_scuts["main deckbrowser"]),
+                id="decks",
+                ),
+            self.create_link(
+                "add",
+                tr(TR.ACTIONS_ADD),
+                self._addLinkHandler,
+                tip=tr(TR.ACTIONS_SHORTCUT_KEY, val=config_scuts["main add"]),
+                id="add",
+                ),
+            self.create_link(
+                "browse",
+                tr(TR.QT_MISC_BROWSE),
+                self._browseLinkHandler,
+                tip=tr(TR.ACTIONS_SHORTCUT_KEY, val=config_scuts["main browse"]),
+                id="browse",
+                ),
+            self.create_link(
+                "stats",
+                tr(TR.QT_MISC_STATS),
+                self._statsLinkHandler,
+                tip=tr(TR.ACTIONS_SHORTCUT_KEY, val=config_scuts["main stats"]),
+                id="stats",
+                ),
+            ]
+
+        links.append(self._create_sync_link())
+
+        gui_hooks.top_toolbar_did_init_links(links, self)
+
+        return "\n".join(links)
+    except:
+        pass
     try:
         links = [
             self.create_link(
                 "decks",
                 _("Decks"),
                 self._deckLinkHandler,
-                tip=_("Shortcut key: %s") % "D",
+                tip=_("Shortcut key: %s") % config_scuts["main deckbrowser"],
                 id="decks",
             ),
             self.create_link(
                 "add",
                 _("Add"),
                 self._addLinkHandler,
-                tip=_("Shortcut key: %s") % "A",
+                tip=_("Shortcut key: %s") % config_scuts["main add"],
                 id="add",
             ),
             self.create_link(
                 "browse",
                 _("Browse"),
                 self._browseLinkHandler,
-                tip=_("Shortcut key: %s") % "B",
+                tip=_("Shortcut key: %s") % config_scuts["main browse"],
                 id="browse",
             ),
             self.create_link(
                 "stats",
                 _("Stats"),
                 self._statsLinkHandler,
-                tip=_("Shortcut key: %s") % "T",
+                tip=_("Shortcut key: %s") % config_scuts["main stats"],
                 id="stats",
             ),
         ]
@@ -433,7 +473,6 @@ def cs_toolbarCenterLinks(self):
             ["sync", _("Sync"), _("Shortcut key: %s") % config_scuts["main sync"]],
             ]
         return self._linkHTML(links)
-
 
 def cs_browser_basicFilter(self, txt):
     self.form.searchEdit.lineEdit().setText(txt)
