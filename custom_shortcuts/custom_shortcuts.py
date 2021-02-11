@@ -280,7 +280,10 @@ def cs_browser_setupShortcuts(self):
     f.actionChangeModel.setShortcut(config_scuts["window_browser change note type"])
     f.actionGuide.setShortcut(config_scuts["window_browser guide"])
     f.actionFindReplace.setShortcut(config_scuts["window_browser find and replace"])
-    f.actionTags.setShortcut(config_scuts["window_browser filter"])
+    try:
+        f.actionTags.setShortcut(config_scuts["window_browser filter"])
+    except AttributeError:
+        f.actionSidebarFilter.setShortcut(config_scuts["window_browser filter"])
     f.actionCardList.setShortcut(config_scuts["window_browser goto card list"])
     f.actionReposition.setShortcut(config_scuts["window_browser reposition"])
     f.actionFirstCard.setShortcut(config_scuts["window_browser first card"])
