@@ -248,7 +248,9 @@ def cs_editorChangeNoteType(self):
     if NOTE_TYPE_STR in config_scuts["editor _duplicates"]:
         new_scuts.add(config_scuts["editor _duplicates"][NOTE_TYPE_STR])
     for scut in new_scuts:
-        if functions.get_version() >= 36:
+        if functions.get_version() >= 41:
+            QShortcut(QKeySequence(scut), self._widget, activated=self.on_activated)
+        elif functions.get_version() >= 36:
             QShortcut(QKeySequence(scut), self.widget, activated=self.on_activated)
         else:
             QShortcut(QKeySequence(scut), self.widget, activated=self.onModelChange)
