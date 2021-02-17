@@ -237,7 +237,7 @@ Sub-objects within `_filters`:
 
 "window_browser remove tag": Removes tags from a card
 
-"window_browser reposition": Repositions a *new* card in the review schedule
+"window_browser reschedule": Reschedules a card in the review schedule, named "set due date" in Anki 2.1.41+
 
 "window_browser save current filter": *Not in vanilla Anki*, Saves the current filter to the sidebar (and lets you name it)
 

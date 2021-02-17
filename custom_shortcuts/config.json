@@ -81,7 +81,7 @@
 	"m_toolbox _duplicates":{
 	},
 	"window_browser preview": "Ctrl+Shift+P",
-	"window_browser reschedule":"Ctrl+Alt+R",
+	"window_browser reschedule":"Ctrl+Shift+D",
 	"window_browser select all":"Ctrl+Alt+A",
 	"window_browser undo":"Ctrl+Alt+Z",
 	"window_browser invert selection":"Ctrl+Alt+S",
@@ -100,7 +100,7 @@
 	"window_browser close":"Ctrl+W",
 	"window_browser info":"Ctrl+Shift+I",
 	"window_browser add tag":"Ctrl+Shift+A",
-	"window_browser remove tag":"Ctrl+Shift+D",
+	"window_browser remove tag":"Ctrl+Alt+Shift+A",
 	"window_browser suspend":"Ctrl+J",
 	"window_browser delete":"Ctrl+Del",
 	"window_browser add note":"Ctrl+E",

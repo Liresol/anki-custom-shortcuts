@@ -271,7 +271,10 @@ def cs_browser_setupShortcuts(self):
         f.previewButton.setShortcut(config_scuts["window_browser preview"])
     except:
         pass
-    f.actionReschedule.setShortcut(config_scuts["window_browser reschedule"])
+    try:
+        f.action_set_due_date.setShortcut(config_scuts["window_browser reschedule"])
+    except:
+        f.actionReschedule.setShortcut(config_scuts["window_browser reschedule"])
     f.actionSelectAll.setShortcut(config_scuts["window_browser select all"])
     f.actionUndo.setShortcut(config_scuts["window_browser undo"])
     f.actionInvertSelection.setShortcut(config_scuts["window_browser invert selection"])
