@@ -57,6 +57,7 @@
 	"reviewer delete note":"Ctrl+Delete",
 	"reviewer play recorded voice":"v",
 	"reviewer record voice":"Shift+v",
+	"reviewer set due date":"Ctrl+Shift+D",
 	"reviewer options menu":"o",
 	"reviewer choice 1":"1",
 	"reviewer choice 2":"2",

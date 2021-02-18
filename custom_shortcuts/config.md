@@ -155,6 +155,8 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "reviewer replay audio [12]": Replay audio attached to the card
 
+"reviewer set due date": Reschedules a card in the review schedule in Anki 2.1.41+
+
 "reviewer set flag [12340]": Set a flag on this card (or none for 0), changing colors depending on the number (1/2/3/4)
 
 "reviewer seek backward": Rewind the audio 5 seconds
@@ -236,6 +238,8 @@ Sub-objects within `_filters`:
 "window_browser remove current filter": *Not in vanilla Anki*, Removes the most recently used filter previously saved to the sidebar
 
 "window_browser remove tag": Removes tags from a card
+
+"window_browser reposition": Repositions a new card in the new card queue
 
 "window_browser reschedule": Reschedules a card in the review schedule, named "set due date" in Anki 2.1.41+
 

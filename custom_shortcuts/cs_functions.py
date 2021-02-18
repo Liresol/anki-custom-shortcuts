@@ -79,6 +79,8 @@ def review_sToF(self,scut):
         sdict["reviewer seek forward"] = self.on_seek_forward
     if get_version() >= 33:
         sdict["reviewer more options"] = self.showContextMenu
+    if get_version() >= 41:
+        sdict["reviewer set due date"] = self.on_set_due
 
     if scut in sdict:
         return sdict[scut]
