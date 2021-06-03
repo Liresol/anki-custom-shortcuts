@@ -513,7 +513,18 @@ def cs_browser_orConcatFilter(self, txt):
 
 # Inserts the custom filter shortcuts upon browser startup
 def cs_browser_setupEditor(self):
-    if functions.get_version() >= 39:
+    if functions.get_version() >= 45:
+        def add_preview_button(editor):
+            preview_shortcut = config_scuts["window_browser preview"]
+
+            editor._links["preview"] = lambda _editor: self.onTogglePreview()
+            editor.web.eval(
+                    "$editorToolbar.then(({ notetypeButtons }) => notetypeButtons.appendButton({ component: editorToolbar.PreviewButton, id: 'preview' }));"
+                    )
+        gui_hooks.editor_did_init.append(add_preview_button)
+        self.editor = Editor(self.mw, self.form.fieldsArea, self)
+        gui_hooks.editor_did_init.remove(add_preview_button)
+    elif functions.get_version() >= 39:
         def add_preview_button(leftbuttons, editor):
             preview_shortcut = config_scuts["window_browser preview"]
             leftbuttons.insert(
