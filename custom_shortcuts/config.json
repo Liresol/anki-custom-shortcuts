@@ -15,6 +15,7 @@
 	"editor remove format":"Ctrl+R",
 	"editor foreground":"F7",
 	"editor change col":"F8",
+	"editor change deck":"<nop>",
 	"editor cloze":"Ctrl+Shift+C",
 	"editor cloze alt":"Ctrl+Shift+Alt+C",
 	"editor cloze forced increment":"<nop>",

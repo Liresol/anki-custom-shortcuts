@@ -1,4 +1,4 @@
-#Last updated to be useful for: Anki 2.1.21
+# Last updated to be useful for: Anki 2.1.42
 import warnings
 from anki.lang import _
 from aqt import mw
@@ -7,6 +7,7 @@ from anki.hooks import runHook,addHook,wrap
 try:
     tr_import = True
     from aqt.utils import (
+            HelpPage,
             TR,
             shortcut,
             showWarning,
@@ -25,17 +26,17 @@ from anki.utils import json
 from bs4 import BeautifulSoup
 from . import cs_functions as functions
 
-#Anki before version 2.1.20 does not use aqt.gui_hooks
+# Anki before version 2.1.20 does not use aqt.gui_hooks
 try:
     from aqt import gui_hooks
     new_hooks = True
 except:
     new_hooks = False
 
-#Gets config.json as config
+# Gets config.json as config
 config = mw.addonManager.getConfig(__name__)
 CS_CONFLICTSTR = "Custom Shortcut Conflicts: \n\n"
-#config_scuts initialized after cs_traverseKeys
+# config_scuts initialized after cs_traverseKeys
 Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter, 
                 "Qt.Key_Return":Qt.Key_Return,
                 "Qt.Key_Escape":Qt.Key_Escape,
@@ -52,12 +53,12 @@ Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter,
                 "<nop>":""
                 }
 
-#There is a weird interaction with QShortcuts wherein if there are 2 (or more)
-#QShortcuts mapped to the same key and function and both are enabled,
-#the shortcut doesn't work
+# There is a weird interaction with QShortcuts wherein if there are 2 (or more)
+# QShortcuts mapped to the same key and function and both are enabled,
+# the shortcut doesn't work
 
-#There isn't an obvious way to get the original QShortcut objects, as
-#The addons executes after the setup phase (which creates QShortcut objects)
+# There isn't an obvious way to get the original QShortcut objects, as
+# The addons executes after the setup phase (which creates QShortcut objects)
 
 def cs_traverseKeys(Rep, D):
     ret = {}
@@ -70,13 +71,13 @@ def cs_traverseKeys(Rep, D):
             ret[key] = D[key]
     return ret
 
-#This contains the processed shortcuts used for the rest of the functions
+# This contains the processed shortcuts used for the rest of the functions
 config_scuts = cs_traverseKeys(Qt_functions,config)
 
-#This is the worst code I think I've written for custom-shortcuts
-#Since QShortcuts cannot reveal their action (to the best of my knowledge),
-#This map reconstructs what each QShortcut is supposed to do from its id
-#The ids were found manually and are thus incredibly dubious
+# This is the worst code I think I've written for custom-shortcuts
+# Since QShortcuts cannot reveal their action (to the best of my knowledge),
+# This map reconstructs what each QShortcut is supposed to do from its id
+# The ids were found manually and are thus incredibly dubious
 id_main_config = {-1: "main debug",
                   -2: "main deckbrowser",
                   -3: "main study",
@@ -86,9 +87,9 @@ id_main_config = {-1: "main debug",
                   -7: "main sync"
                   }
 
-#Finds all the shortcuts, figures out relevant ones from hardcoded id check,
-#and sets it to the right one
-#This function has a side effect of changing the shortcut's id
+# Finds all the shortcuts, figures out relevant ones from hardcoded id check,
+# and sets it to the right one
+# This function has a side effect of changing the shortcut's id
 def cs_main_setupShortcuts():
     qshortcuts = mw.findChildren(QShortcut)
     for scut in qshortcuts:
@@ -96,10 +97,10 @@ def cs_main_setupShortcuts():
             scut.setKey(config_scuts[id_main_config[scut.id()]])
 
 
-#Governs the shortcuts on the main toolbar
+# Governs the shortcuts on the main toolbar
 def cs_mt_setupShortcuts():
     m = mw.form
-    #Goes through and includes anything on the duplicates list
+    # Goes through and includes anything on the duplicates list
     scuts_list = {
         "m_toolbox quit": [config_scuts["m_toolbox quit"]],
         "m_toolbox preferences": [config_scuts["m_toolbox preferences"]],
@@ -125,14 +126,14 @@ def cs_mt_setupShortcuts():
     m.actionCreateFiltered.setShortcuts(scuts_list["m_toolbox create filtered deck"])
     m.actionAdd_ons.setShortcuts(scuts_list["m_toolbox addons"])
 
-#Governs the shortcuts on the review window
-#This replacement method is pretty blind but tries to minimize disruption
-#Replaces shortcuts at the start first
-#Assuming that other addons append shortcuts, this shouldn't bother those addons
+# Governs the shortcuts on the review window
+# This replacement method is pretty blind but tries to minimize disruption
+# Replaces shortcuts at the start first
+# If other addons append shortcuts, this shouldn't bother those addons
 def cs_review_setupShortcuts(self, _old):
-    #More fragile replacement: For these shortcuts, their functions are lambdas
-    #So we can't directly address them
-    #I'm not completely satisfied by this option
+    # More fragile replacement: For these shortcuts,
+    # Their functions are lambdas, so we can't directly address them
+    # I'm not completely satisfied by this option
     new_scut_replacements = {
             "Ctrl+1" : config_scuts["reviewer set flag 1"],
             "Ctrl+2" : config_scuts["reviewer set flag 2"],
@@ -143,8 +144,8 @@ def cs_review_setupShortcuts(self, _old):
             "3" : config_scuts["reviewer choice 3"],
             "4" : config_scuts["reviewer choice 4"],
             }
-    #Less fragile replacement: For these shortcuts, address them by pointer and replace shortcut
-    #The keys are dicts because we will want to replace multiply shortcut keys
+    # Less fragile replacement: For these shortcuts, address them by pointer and replace shortcut
+    # The keys are dicts because we will want to replace multiply shortcut keys
     new_function_replacements = {
             self.mw.onEditCurrent : [config_scuts["reviewer edit current"]],
             self.onEnterKey : [
@@ -166,7 +167,7 @@ def cs_review_setupShortcuts(self, _old):
             self.onOptions : [config_scuts["reviewer options menu"]],
             }
     cuts = _old(self)
-    #Order is important: shortcut-based replacement should come first
+    # Order is important: shortcut-based replacement should come first
     functions.reviewer_find_and_replace_scuts(cuts,new_scut_replacements)
 
     if functions.get_version() >= 20:
@@ -182,9 +183,9 @@ def cs_review_setupShortcuts(self, _old):
         cuts.append((config_scuts["reviewer _duplicates"][scut], self.sToF(scut)))
     return cuts
 
-#The function to setup shortcuts on the Editor
-#Something funky is going on with the default MathJax and LaTeX shortcuts
-#It does not affect the function (as I currently know of)
+# The function to setup shortcuts on the Editor
+# Something funky is going on with the default MathJax and LaTeX shortcuts
+# It does not affect the function (as I currently know of)
 def cs_editor_setupShortcuts(self):
     dupes = []
     # if a third element is provided, enable shortcut even when no field is selected
@@ -223,7 +224,7 @@ def cs_editor_setupShortcuts(self):
             scut = config_scuts["editor _pastes"][label]
             temp = config_scuts["Ω custom paste extra texts"][label]
             cuts.append((scut, lambda text=temp: self.customPaste(text)))
-    #There is a try-except clause to handle 2.1.0 version, which does not have this shortcut
+    # There is a try-except clause to handle 2.1.0 version, which does not have this shortcut
     try:
         cuts.append((config_scuts["editor insert mathjax chemistry"], self.insertMathjaxChemistry))
     except AttributeError:
@@ -240,10 +241,10 @@ def cs_editor_setupShortcuts(self):
             keys, fn, _ = row
         scut = QShortcut(QKeySequence(keys), self.widget, activated=fn)
 
-#Wrapper function to add another shortcut to change note type
-#Not with the other custom shortcut editor functions because
-#the Anki functionality handling card type is not
-#in the Editor itself
+# Wrapper function to add another shortcut to change note type
+# Not with the other custom shortcut editor functions because
+# the Anki functionality handling card type is not
+# in the Editor itself
 def cs_editorChangeNoteType(self):
     NOTE_TYPE_STR = "editor change note type"
     new_scuts = {config_scuts[NOTE_TYPE_STR]}
@@ -257,16 +258,24 @@ def cs_editorChangeNoteType(self):
         else:
             QShortcut(QKeySequence(scut), self.widget, activated=self.onModelChange)
 
-#Wrapper function to change the shortcut to add a card
-#Not with the other custom shortcut editor functions because
-#the add card button is not within the Editor class
+# Wrapper function to change the shortcut to add a card
+# Not with the other custom shortcut editor functions because
+# the add card button is not within the Editor class
 def cs_editorAddCard(self):
     ADD_CARD_STR = "editor confirm add card"
     self.addButton.setShortcut(QKeySequence(config_scuts[ADD_CARD_STR]))
     if ADD_CARD_STR in config_scuts["editor _duplicates"]:
         QShortcut(QKeySequence(config_scuts["editor _duplicates"][ADD_CARD_STR]), self, activated=self.addCards)
 
-#IMPLEMENTS Browser shortcuts
+def cs_editorChangeDeck(self):
+    CHANGE_DECK_STR = "editor change deck"
+    new_scuts = {config_scuts[CHANGE_DECK_STR]}
+    if CHANGE_DECK_STR in config_scuts["editor _duplicates"]:
+        new_scuts.add(config_scuts["editor _duplicates"][CHANGE_DECK_STR])
+    for scut in new_scuts:
+        QShortcut(QKeySequence(scut), self.widget, activated=self.cs_changeDeck)
+
+# IMPLEMENTS Browser shortcuts
 def cs_browser_setupShortcuts(self):
     f = self.form
     try:
@@ -317,13 +326,13 @@ def cs_browser_setupShortcuts(self):
     f.actionSelectNotes.setShortcut(config_scuts["window_browser select notes"])
     f.actionManage_Note_Types.setShortcut(config_scuts["window_browser manage note types"])
 
-#Mimics the style of other Anki functions, analogue of customPaste
-#Note that the saveNow function used earler takes the cursor to the end of the line,
-#as it is meant to save work before entering a new window
+# Mimics the style of other Anki functions, analogue of customPaste
+# Note that the saveNow function used earler takes the cursor to the end of the line,
+# as it is meant to save work before entering a new window
 def cs_editor_custom_paste(self, text):
     self._customPaste(text)
 
-#Mimics the style of other Anki functions, analogue of _customPaste
+# Mimics the style of other Anki functions, analogue of _customPaste
 def cs_uEditor_custom_paste(self, text):
     html = text
     if config_scuts["Ω custom paste end style"].upper() == "Y":
@@ -333,9 +342,9 @@ def cs_uEditor_custom_paste(self, text):
         html = str(BeautifulSoup(html, "html.parser"))
     self.doPaste(html,True,True)
 
-#detects shortcut conflicts
-#Gets all the shortcuts in a given object of the form {name: scut, ...} and names them
-#Returns a dictionary of the form {scut: [labels of objects with that scut], ...}
+# detects shortcut conflicts
+# Gets all the shortcuts in a given object of the form {name: scut, ...} and names them
+# Returns a dictionary of the form {scut: [labels of objects with that scut], ...}
 def cs_getAllScuts(obj, strCont):
     res = {}
     for key in obj:
@@ -354,7 +363,7 @@ def cs_getAllScuts(obj, strCont):
                 res[text_scut] = [key + " in " + strCont]
     return res
 
-#Ignores the Add-on (Ω) options
+# Ignores the Add-on (Ω) options
 def cs_conflictDetect():
     if config["Ω enable conflict warning"].upper() != "Y":
         return
@@ -502,8 +511,7 @@ def cs_browser_orConcatFilter(self, txt):
     self.form.searchEdit.lineEdit().setText(txt)
     self.onSearchActivated()
 
-#Wtf
-#Inserts the custom filter shortcuts upon browser startup
+# Inserts the custom filter shortcuts upon browser startup
 def cs_browser_setupEditor(self):
     if functions.get_version() >= 39:
         def add_preview_button(leftbuttons, editor):
@@ -563,11 +571,12 @@ def cs_browser_setupEditor(self):
         self.csRemoveFilterScut = QShortcut(QKeySequence(config_scuts["window_browser remove current filter"]), self)
         self.csRemoveFilterScut.activated.connect(self.csRemoveFilterFunc)
 
-#Functions that execute on startup
+# Functions that execute on startup
 if config_scuts["Ω enable main"].upper() == 'Y':
     Toolbar._centerLinks = cs_toolbarCenterLinks
     cs_main_setupShortcuts()
 if config_scuts["Ω enable editor"].upper() == 'Y':
+    Editor.cs_changeDeck = functions.editor_changeDeck
     Editor.sToF = functions.editor_sToF
     Editor.cs_u_onAltCloze = lambda self: functions.cs_editor_generate_cloze(self, altModifier=True)
     Editor.cs_u_onStdCloze = lambda self: functions.cs_editor_generate_cloze(self, altModifier=False)
@@ -576,6 +585,7 @@ if config_scuts["Ω enable editor"].upper() == 'Y':
     Editor.customPaste = cs_editor_custom_paste
     Editor._customPaste = cs_uEditor_custom_paste
     Editor.setupShortcuts = cs_editor_setupShortcuts
+    Editor.setupShortcuts = wrap(Editor.setupShortcuts, cs_editorChangeDeck)
     ModelChooser.setupModels = wrap(ModelChooser.setupModels, cs_editorChangeNoteType)
     AddCards.setupButtons = wrap(AddCards.setupButtons, cs_editorAddCard)
 if config_scuts["Ω enable reviewer"].upper() == 'Y':
@@ -583,14 +593,14 @@ if config_scuts["Ω enable reviewer"].upper() == 'Y':
     Reviewer.sToF = functions.review_sToF
 if config_scuts["Ω enable m_toolbox"].upper() == 'Y':
     cs_mt_setupShortcuts()
-#Hooks to setup shortcuts at the right time
+# Hooks to setup shortcuts at the right time
 if config_scuts["Ω enable window_browser"].upper() == 'Y':
     Browser.csRemoveFilterFunc = functions.remove_filter
     Browser.setupEditor = cs_browser_setupEditor
     addHook('browser.setupMenus', cs_browser_setupShortcuts)
 
-#Detects all conflicts, regardless of enable status
+# Detects all conflicts, regardless of enable status
 cs_conflictDetect()
 
-#Redraws the toolbar with the new shortcuts
+# Redraws the toolbar with the new shortcuts
 mw.toolbar.draw()

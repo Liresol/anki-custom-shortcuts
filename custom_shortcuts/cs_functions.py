@@ -1,8 +1,21 @@
 import re
 import anki
-from aqt.utils import tooltip,showInfo
+from aqt.utils import tooltip, showInfo
+try:
+    from aqt.utils import (
+            HelpPage,
+            TR,
+            tr,
+            )
+except:
+    pass
 from aqt.qt import *
 from aqt import mw
+try:
+    from aqt.operations.card import set_card_deck
+except:
+    pass
+
 
 def get_version():
     """Return the integer subversion of Anki on which the addon is run ("2.1.11" -> 11)"""
@@ -114,6 +127,30 @@ def editor_sToF(self,scut):
     if scut in sdict:
         return sdict[scut]
     return None
+
+def editor_changeDeck(self):
+        if not self.card:
+            return
+        from aqt.studydeck import StudyDeck
+        cid = self.card.id
+        did = self.card.did
+        current = self.mw.col.decks.get(did)["name"]
+        ret = StudyDeck(
+                self.mw,
+                current=current,
+                accept=tr(TR.BROWSING_MOVE_CARDS),
+                title=tr(TR.BROWSING_CHANGE_DECK),
+                help=HelpPage.BROWSING,
+                parent=self.mw,
+                )
+        if not ret.name:
+            return
+        did = self.mw.col.decks.id(ret.name)
+        try:
+            set_card_deck(parent=self.widget, card_ids=[cid], deck_id=did).run_in_background()
+        except:
+            self.mw.col.set_deck([cid], did)
+
 
 #Performs a preliminary check for if any filter is saved before removing it
 def remove_filter(self):
