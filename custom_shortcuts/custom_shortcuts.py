@@ -5,17 +5,16 @@ from aqt import mw
 from aqt.qt import *
 from anki.hooks import runHook,addHook,wrap
 try:
-    tr_import = True
     from aqt.utils import (
-            HelpPage,
             TR,
             shortcut,
             showWarning,
             tr,
             )
+    tr_import = True
 except:
-    tr_import = False
     from aqt.utils import showWarning
+    tr_import = False
 from aqt.toolbar import Toolbar
 from aqt.editor import Editor,EditorWebView
 from aqt.reviewer import Reviewer
