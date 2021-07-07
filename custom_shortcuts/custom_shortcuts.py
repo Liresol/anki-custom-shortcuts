@@ -209,11 +209,21 @@ def cs_editor_setupShortcuts(self):
         (config_scuts["editor insert latex math environment"], self.insertLatexMathEnv),
         (config_scuts["editor insert mathjax inline"], self.insertMathjaxInline),
         (config_scuts["editor insert mathjax block"], self.insertMathjaxBlock),
-        (config_scuts["editor html edit"], self.onHtmlEdit),
         (config_scuts["editor focus tags"], self.onFocusTags, True),
         (config_scuts["editor _extras"]["paste custom text"],
-         lambda text=config_scuts["Ω custom paste text"]: self.customPaste(text))
+         lambda text=config_scuts["Ω custom paste text"]: self.customPaste(text)),
     ]
+    if functions.get_version() < 45:
+        cuts += [
+                (config_scuts["editor html edit"], self.onHtmlEdit),]
+    else:
+        cuts += [
+                (config_scuts["editor html edit"], lambda:
+                    self.web.eval(
+                    "{const currentField = getCurrentField(); if (currentField) { currentField.toggleHtmlEdit(); }}"
+                        )),
+                    ]
+
     for scut in config_scuts["editor _duplicates"]:
         if self.sToF(scut):
             dupes.append((config_scuts["editor _duplicates"][scut],)+self.sToF(scut))
