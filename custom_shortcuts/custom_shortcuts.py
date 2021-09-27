@@ -1,4 +1,4 @@
-# Last updated to be useful for: Anki 2.1.42
+# Last updated to be useful for: Anki 2.1.45
 import warnings
 from anki.lang import _
 from aqt import mw
@@ -16,7 +16,7 @@ except:
     from aqt.utils import showWarning
     tr_import = False
 from aqt.toolbar import Toolbar
-from aqt.editor import Editor,EditorWebView
+from aqt.editor import Editor, EditorWebView
 from aqt.reviewer import Reviewer
 from aqt.browser import Browser
 from aqt.modelchooser import ModelChooser
@@ -36,20 +36,20 @@ except:
 config = mw.addonManager.getConfig(__name__)
 CS_CONFLICTSTR = "Custom Shortcut Conflicts: \n\n"
 # config_scuts initialized after cs_traverseKeys
-Qt_functions = {"Qt.Key_Enter":Qt.Key_Enter, 
-                "Qt.Key_Return":Qt.Key_Return,
-                "Qt.Key_Escape":Qt.Key_Escape,
-                "Qt.Key_Space":Qt.Key_Space,
-                "Qt.Key_Tab":Qt.Key_Tab,
-                "Qt.Key_Backspace":Qt.Key_Backspace,
-                "Qt.Key_Delete":Qt.Key_Delete,
-                "Qt.Key_Left":Qt.Key_Left,
-                "Qt.Key_Down":Qt.Key_Down,
-                "Qt.Key_Right":Qt.Key_Right,
-                "Qt.Key_Up":Qt.Key_Up,
-                "Qt.Key_PageUp":Qt.Key_PageUp,
-                "Qt.Key_PageDown":Qt.Key_PageDown,
-                "<nop>":""
+Qt_functions = {"Qt.Key_Enter": Qt.Key_Enter,
+                "Qt.Key_Return": Qt.Key_Return,
+                "Qt.Key_Escape": Qt.Key_Escape,
+                "Qt.Key_Space": Qt.Key_Space,
+                "Qt.Key_Tab": Qt.Key_Tab,
+                "Qt.Key_Backspace": Qt.Key_Backspace,
+                "Qt.Key_Delete": Qt.Key_Delete,
+                "Qt.Key_Left": Qt.Key_Left,
+                "Qt.Key_Down": Qt.Key_Down,
+                "Qt.Key_Right": Qt.Key_Right,
+                "Qt.Key_Up": Qt.Key_Up,
+                "Qt.Key_PageUp": Qt.Key_PageUp,
+                "Qt.Key_PageDown": Qt.Key_PageDown,
+                "<nop>": ""
                 }
 
 # There is a weird interaction with QShortcuts wherein if there are 2 (or more)
@@ -591,6 +591,34 @@ def cs_browser_setupEditor(self):
         self.csRemoveFilterScut = QShortcut(QKeySequence(config_scuts["window_browser remove current filter"]), self)
         self.csRemoveFilterScut.activated.connect(self.csRemoveFilterFunc)
 
+
+# Corresponds to _setup_tools in the SidebarToolbar class in Anki 2.1.45
+sidebar_tool_names = [
+        "window_browser sidebar search",
+        "window_browser sidebar select"
+        ]
+
+
+def cs_sidebar_setup_tools(self):
+    from aqt.theme import theme_manager
+    for row, tool in enumerate(self._tools):
+        action = self.addAction(
+            theme_manager.icon_from_resources(tool[1]), tool[2]()
+        )
+        action.setCheckable(True)
+        # If we are aware of the row, set it in the tools
+        # otherwise, use the default
+        action.setShortcut(
+                config_scuts[sidebar_tool_names[row]]
+                if row < len(sidebar_tool_names) else
+                f"Alt+{row + 1}"
+                )
+        self._action_group.addAction(action)
+    # always start with first tool
+    active = 0
+    self._action_group.actions()[active].setChecked(True)
+    self.sidebar.tool = self._tools[active][0]
+
 # Functions that execute on startup
 if config_scuts["Ω enable main"].upper() == 'Y':
     Toolbar._centerLinks = cs_toolbarCenterLinks
@@ -618,6 +646,9 @@ if config_scuts["Ω enable window_browser"].upper() == 'Y':
     Browser.csRemoveFilterFunc = functions.remove_filter
     Browser.setupEditor = cs_browser_setupEditor
     addHook('browser.setupMenus', cs_browser_setupShortcuts)
+    if functions.get_version() >= 45:
+        from aqt.browser import SidebarToolbar
+        SidebarToolbar._setup_tools = cs_sidebar_setup_tools
 
 # Detects all conflicts, regardless of enable status
 cs_conflictDetect()

@@ -119,6 +119,8 @@
 	"window_browser manage note types":"<nop>",
 	"window_browser save current filter":"<nop>",
 	"window_browser remove current filter":"<nop>",
+	"window_browser sidebar search": "Alt+1",
+	"window_browser sidebar select": "Alt+2",
 	"window_browser _filters":{
 		"_concat":{},
 		"_orConcat":{}

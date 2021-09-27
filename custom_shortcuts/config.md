@@ -249,6 +249,10 @@ Sub-objects within `_filters`:
 
 "window_browser select notes": *Not in vanilla Anki*, Selects only the current notes
 
+"window_browser sidebar search": *Useful only in Anki 2.1.45+* Sets the sidebar to initialize a search of the selected item in the sidebar
+
+"window_browser sidebar select": *Useful only in Anki 2.1.45+* Sets the sidebar to just select the item in the sidebar
+
 "window_browser suspend": Suspends the selected cards
 
 "window_browser toggle mark": Toggles the mark on the selected cards
