@@ -523,6 +523,7 @@ def cs_browser_orConcatFilter(self, txt):
 # Inserts the custom filter shortcuts upon browser startup
 def cs_browser_setupEditor(self):
     if functions.get_version() >= 45:
+        QShortcut(QKeySequence(config_scuts["window_browser preview"]), self, self.onTogglePreview)
         def add_preview_button(editor):
             preview_shortcut = config_scuts["window_browser preview"]
 
