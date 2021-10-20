@@ -20,6 +20,12 @@ from aqt.editor import Editor, EditorWebView
 from aqt.reviewer import Reviewer
 from aqt.browser import Browser
 from aqt.modelchooser import ModelChooser
+
+try:
+    from aqt.notetypechooser import NotetypeChooser
+    notetypechooser_import = True
+except:
+    notetypechooser_import = False
 from aqt.addcards import AddCards
 from anki.utils import json
 from bs4 import BeautifulSoup
@@ -266,6 +272,16 @@ def cs_editorChangeNoteType(self):
             QShortcut(QKeySequence(scut), self.widget, activated=self.on_activated)
         else:
             QShortcut(QKeySequence(scut), self.widget, activated=self.onModelChange)
+
+def cs_editorNotetypeChooser(self, show_label: bool):
+    NOTE_TYPE_STR = "editor change note type"
+    new_scuts = {config_scuts[NOTE_TYPE_STR]}
+    if NOTE_TYPE_STR in config_scuts["editor _duplicates"]:
+        new_scuts.add(config_scuts["editor _duplicates"][NOTE_TYPE_STR])
+    for scut in new_scuts:
+        qconnect(QShortcut(QKeySequence(scut), self._widget).activated,
+                self.on_button_activated
+                )
 
 # Wrapper function to change the shortcut to add a card
 # Not with the other custom shortcut editor functions because
@@ -635,6 +651,8 @@ if config_scuts["Ω enable editor"].upper() == 'Y':
     Editor._customPaste = cs_uEditor_custom_paste
     Editor.setupShortcuts = cs_editor_setupShortcuts
     Editor.setupShortcuts = wrap(Editor.setupShortcuts, cs_editorChangeDeck)
+    if notetypechooser_import:
+        NotetypeChooser._setup_ui = wrap(NotetypeChooser._setup_ui, cs_editorNotetypeChooser)
     ModelChooser.setupModels = wrap(ModelChooser.setupModels, cs_editorChangeNoteType)
     AddCards.setupButtons = wrap(AddCards.setupButtons, cs_editorAddCard)
 if config_scuts["Ω enable reviewer"].upper() == 'Y':

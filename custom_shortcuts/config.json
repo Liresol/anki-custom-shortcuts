@@ -31,7 +31,7 @@
 	"editor html edit":"Ctrl+Shift+X",
 	"editor focus tags":"Ctrl+Shift+T",
 	"editor confirm add card":"Ctrl+Return",
-	"editor change note type":"<nop>",
+	"editor change note type":"Ctrl+N",
 	"editor _extras": {
 		"paste custom text":"<nop>"
 	},
