@@ -677,7 +677,10 @@ if config_scuts["Ω enable editor"].upper() == 'Y':
         NotetypeChooser._setup_ui = wrap(NotetypeChooser._setup_ui, cs_editorNotetypeChooser)
     ModelChooser.setupModels = wrap(ModelChooser.setupModels, cs_editorChangeNoteType)
     AddCards.setupButtons = wrap(AddCards.setupButtons, cs_editorAddCard)
-    gui_hooks.add_cards_did_init.append(cs_injectCloseShortcut([config_scuts["editor add card close window"]]))
+    try:
+        gui_hooks.add_cards_did_init.append(cs_injectCloseShortcut([config_scuts["editor add card close window"]]))
+    except:
+        pass
 if config_scuts["Ω enable reviewer"].upper() == 'Y':
     Reviewer._shortcutKeys = wrap(Reviewer._shortcutKeys, cs_review_setupShortcuts, "around")
     Reviewer.sToF = functions.review_sToF
