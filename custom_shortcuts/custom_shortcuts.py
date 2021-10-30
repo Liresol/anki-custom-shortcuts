@@ -185,6 +185,7 @@ def cs_review_setupShortcuts(self, _old):
         new_function_replacements[self.on_set_due] = [config_scuts["reviewer set due date"]]
     if functions.get_version() >= 45:
         new_function_replacements[self.on_card_info] = [config_scuts["reviewer card info"]]
+    if functions.get_version() >= 49:
         new_function_replacements[self.on_previous_card_info] = [config_scuts["reviewer previous card info"]]
     functions.reviewer_find_and_replace_functions(cuts,new_function_replacements)
     for scut in config_scuts["reviewer _duplicates"]:
