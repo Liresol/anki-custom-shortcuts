@@ -13,6 +13,8 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "editor add media": Add external media
 
+"editor add card close window": In the Add Card dialog, closes the given window. For some reason, Macs have a default shortcut for this while all other OSes don't. Since the default is OS dependent, it is given to be `<default>` rather than any specified value.
+
 "editor bold": Toggle bold 
 
 "editor card layout": Change Card Layout
@@ -133,6 +135,8 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "reviewer bury note": Bury this note (card and associated cards)
 
+"reviewer card info": Display info about this card
+
 "reviewer choice [1234]": Select 1/2/3/4 (Again/Hard/Good/Easy or Again/Good/Easy)
 
 "reviewer delete note": Delete this note
@@ -150,6 +154,8 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 "reviewer pause audio": Pause the audio being played
 
 "reviewer play recorded voice": If there is a recorded voice, play it
+
+"reviewer previous card info": Display info about the previous card
 
 "reviewer record voice": Record your voice
 

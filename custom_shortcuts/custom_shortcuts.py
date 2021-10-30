@@ -183,6 +183,9 @@ def cs_review_setupShortcuts(self, _old):
         new_function_replacements[self.showContextMenu] = [config_scuts["reviewer more options"]]
     if functions.get_version() >= 41:
         new_function_replacements[self.on_set_due] = [config_scuts["reviewer set due date"]]
+    if functions.get_version() >= 45:
+        new_function_replacements[self.on_card_info] = [config_scuts["reviewer card info"]]
+        new_function_replacements[self.on_previous_card_info] = [config_scuts["reviewer previous card info"]]
     functions.reviewer_find_and_replace_functions(cuts,new_function_replacements)
     for scut in config_scuts["reviewer _duplicates"]:
         cuts.append((config_scuts["reviewer _duplicates"][scut], self.sToF(scut)))
@@ -636,6 +639,25 @@ def cs_sidebar_setup_tools(self):
     self._action_group.actions()[active].setChecked(True)
     self.sidebar.tool = self._tools[active][0]
 
+def cs_injectCloseShortcut(scuts):
+    def inject_shortcut(self):
+        from aqt.utils import isMac
+        cutExistingShortcut = False
+        for scut in scuts:
+            if scut == "<default>":
+                continue
+            addedShortcut = False
+            if isMac and not cutExistingShortcut:
+                for child in self.findChildren(QShortcut):
+                    if child.key().toString() == 'Ctrl+W':
+                        child.setKey(scut)
+                        addedShortcut = cutExistingShortcut = True
+            if not addedShortcut:
+                shortcut = QShortcut(QKeySequence(scut), self)
+                qconnect(shortcut.activated, self.reject)
+                setattr(self, "_closeShortcut", shortcut)
+    return inject_shortcut
+
 # Functions that execute on startup
 if config_scuts["Ω enable main"].upper() == 'Y':
     Toolbar._centerLinks = cs_toolbarCenterLinks
@@ -655,6 +677,7 @@ if config_scuts["Ω enable editor"].upper() == 'Y':
         NotetypeChooser._setup_ui = wrap(NotetypeChooser._setup_ui, cs_editorNotetypeChooser)
     ModelChooser.setupModels = wrap(ModelChooser.setupModels, cs_editorChangeNoteType)
     AddCards.setupButtons = wrap(AddCards.setupButtons, cs_editorAddCard)
+    gui_hooks.add_cards_did_init.append(cs_injectCloseShortcut([config_scuts["editor add card close window"]]))
 if config_scuts["Ω enable reviewer"].upper() == 'Y':
     Reviewer._shortcutKeys = wrap(Reviewer._shortcutKeys, cs_review_setupShortcuts, "around")
     Reviewer.sToF = functions.review_sToF
@@ -668,6 +691,12 @@ if config_scuts["Ω enable window_browser"].upper() == 'Y':
     if functions.get_version() >= 45:
         from aqt.browser import SidebarToolbar
         SidebarToolbar._setup_tools = cs_sidebar_setup_tools
+
+# Fun fact: the stats window shortcut can also be customized (very slightly)
+# Due to the added complexity of handling this relative to what is probably zero demand, this will remain unimplemented for the time being
+# gui_hooks.stats_dialog_will_show.append(cs_injectCloseShortcut([config_scuts["stats close window"]]))
+# The deck options window is another feature that probably won't be implemented unless requested
+# gui_hooks.deck_options_did_load.append(cs_injectCloseShortcut([config_scuts["editor deck options close window"]]))
 
 # Detects all conflicts, regardless of enable status
 cs_conflictDetect()

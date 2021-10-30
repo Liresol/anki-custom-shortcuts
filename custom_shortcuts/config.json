@@ -31,6 +31,7 @@
 	"editor html edit":"Ctrl+Shift+X",
 	"editor focus tags":"Ctrl+Shift+T",
 	"editor confirm add card":"Ctrl+Return",
+	"editor add card close window":"<default>",
 	"editor change note type":"Ctrl+N",
 	"editor _extras": {
 		"paste custom text":"<nop>"
@@ -67,6 +68,8 @@
 	"reviewer pause audio":"5",
 	"reviewer seek backward":"6",
 	"reviewer seek forward":"7",
+	"reviewer card info":"I",
+	"reviewer previous card info":"Alt+I",
 	"reviewer _duplicates":{
 	},
 	"reviewer more options":"M",

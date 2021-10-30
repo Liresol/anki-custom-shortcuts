@@ -94,6 +94,9 @@ def review_sToF(self,scut):
         sdict["reviewer more options"] = self.showContextMenu
     if get_version() >= 41:
         sdict["reviewer set due date"] = self.on_set_due
+    if get_version() >= 45:
+        sdict["reviewer card info"] = self.on_card_info
+        sdict["reviewer previous card info"] = self.on_previous_card_info
 
     if scut in sdict:
         return sdict[scut]
