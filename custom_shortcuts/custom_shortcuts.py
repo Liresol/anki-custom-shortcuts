@@ -79,27 +79,27 @@ def cs_traverseKeys(Rep, D):
 # This contains the processed shortcuts used for the rest of the functions
 config_scuts = cs_traverseKeys(Qt_functions,config)
 
-# This is the worst code I think I've written for custom-shortcuts
-# Since QShortcuts cannot reveal their action (to the best of my knowledge),
-# This map reconstructs what each QShortcut is supposed to do from its id
-# The ids were found manually and are thus incredibly dubious
-id_main_config = {-1: "main debug",
-                  -2: "main deckbrowser",
-                  -3: "main study",
-                  -4: "main add",
-                  -5: "main browse",
-                  -6: "main stats",
-                  -7: "main sync"
-                  }
+# The main shortcuts are now found by manually going through all QT shortcuts
+# and replacing them with their custom shortcut equivalent
 
-# Finds all the shortcuts, figures out relevant ones from hardcoded id check,
+mainShortcutPairs = {
+        "Ctrl+:": config_scuts["main debug"],
+        "D": config_scuts["main deckbrowser"],
+        "S": config_scuts["main study"],
+        "A": config_scuts["main add"],
+        "B": config_scuts["main browse"],
+        "T": config_scuts["main stats"],
+        "Y": config_scuts["main sync"],
+        }
+
+# Finds all the shortcuts, figures out relevant ones from hardcoded shortcut check,
 # and sets it to the right one
 # This function has a side effect of changing the shortcut's id
 def cs_main_setupShortcuts():
-    qshortcuts = mw.findChildren(QShortcut)
-    for scut in qshortcuts:
-        if scut.id() in id_main_config:
-            scut.setKey(config_scuts[id_main_config[scut.id()]])
+    for child in mw.findChildren(QShortcut):
+        if child.key().toString() in mainShortcutPairs:
+            newScut = mainShortcutPairs[child.key().toString()]
+            child.setKey(newScut)
 
 
 # Governs the shortcuts on the main toolbar
