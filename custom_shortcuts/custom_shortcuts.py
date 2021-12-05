@@ -76,6 +76,19 @@ def cs_traverseKeys(Rep, D):
             ret[key] = D[key]
     return ret
 
+
+# Since QShortcuts cannot reveal their action (to the best of my knowledge),
+# This map reconstructs what each QShortcut is supposed to do from its id
+# The ids were found manually but so far have remained constant
+mainShortcutIds = {-1: "main debug",
+                  -2: "main deckbrowser",
+                  -3: "main study",
+                  -4: "main add",
+                  -5: "main browse",
+                  -6: "main stats",
+                  -7: "main sync"
+                  }
+
 # This contains the processed shortcuts used for the rest of the functions
 config_scuts = cs_traverseKeys(Qt_functions,config)
 
@@ -96,10 +109,20 @@ mainShortcutPairs = {
 # and sets it to the right one
 # This function has a side effect of changing the shortcut's id
 def cs_main_setupShortcuts():
-    for child in mw.findChildren(QShortcut):
-        if child.key().toString() in mainShortcutPairs:
-            newScut = mainShortcutPairs[child.key().toString()]
-            child.setKey(newScut)
+    mwShortcuts = mw.findChildren(QShortcut)
+    if functions.get_version() >= 50:
+        for child in mwShortcuts:
+            if child.key().toString() in mainShortcutPairs:
+                oldScut = child.key().toString()
+                newScut = mainShortcutPairs[oldScut]
+                child.setKey(newScut)
+                mainShortcutPairs.pop(oldScut) # Only replace shortcuts once (the first time would be the main shortcut)
+    else: # If possible, use the old shortcut remapping method
+        # This may be removed if the new method is fount to be more stable
+        for scut in mwShortcuts:
+            if scut.id() in mainShortcutIds:
+                scut.setKey(config_scuts[mainShortcutIds[scut.id()]])
+
 
 
 # Governs the shortcuts on the main toolbar
