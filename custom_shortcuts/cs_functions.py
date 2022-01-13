@@ -127,6 +127,8 @@ def editor_sToF(self,scut):
             "editor insert mathjax block": (self.insertMathjaxBlock,),
             "editor html edit": (self.onHtmlEdit,),
             "editor focus tags": (self.onFocusTags, True),
+            "editor toggle sticky current": (self.csToggleStickyCurrent,),
+            "editor toggle sticky all": (self.csToggleStickyAll,),
         }
     if scut in sdict:
         return sdict[scut]

@@ -33,6 +33,8 @@
 	"editor confirm add card":"Ctrl+Return",
 	"editor add card close window":"<default>",
 	"editor change note type":"Ctrl+N",
+	"editor toggle sticky current":"F9",
+	"editor toggle sticky all":"Shift+F9",
 	"editor _extras": {
 		"paste custom text":"<nop>"
 	},

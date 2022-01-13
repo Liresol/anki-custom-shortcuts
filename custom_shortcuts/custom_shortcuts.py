@@ -30,6 +30,10 @@ from aqt.addcards import AddCards
 from anki.utils import json
 from bs4 import BeautifulSoup
 from . import cs_functions as functions
+try:
+    from aqt.operations.notetype import update_notetype_legacy
+except:
+    pass
 
 # Anki before version 2.1.20 does not use aqt.gui_hooks
 try:
@@ -122,7 +126,6 @@ def cs_main_setupShortcuts():
         for scut in mwShortcuts:
             if scut.id() in mainShortcutIds:
                 scut.setKey(config_scuts[mainShortcutIds[scut.id()]])
-
 
 
 # Governs the shortcuts on the main toolbar
@@ -255,6 +258,8 @@ def cs_editor_setupShortcuts(self):
                     self.web.eval(
                     "{const currentField = getCurrentField(); if (currentField) { currentField.toggleHtmlEdit(); }}"
                         )),
+                    (config_scuts["editor toggle sticky current"], self.csToggleStickyCurrent),
+                    (config_scuts["editor toggle sticky all"], self.csToggleStickyAll),
                     ]
 
     for scut in config_scuts["editor _duplicates"]:
@@ -309,6 +314,74 @@ def cs_editorNotetypeChooser(self, show_label: bool):
         qconnect(QShortcut(QKeySequence(scut), self._widget).activated,
                 self.on_button_activated
                 )
+
+def cs_editorUpdateStickyPins(self, stickies, model):
+    stickiesStr = ""
+
+    # Hack: the svelte interface exposes a function "setSticky" which manually sets the sticky displays of all the pins
+    # Manually create a set of stickies in order to set the sticky pins to the right display value
+    stickiesStr += "["
+    firstInput = True
+    for sticky in stickies:
+        if not firstInput:
+            stickiesStr += ","
+        firstInput = False
+        stickiesStr += ("true" if sticky else "false")
+    stickiesStr += "]"
+
+    try:
+        update_notetype_legacy(parent=self.mw, notetype=model).run_in_background(
+            initiator=self
+        )
+        self.web.eval("setSticky({})".format(stickiesStr))
+    except:
+        pass
+
+def cs_editorToggleSticky(self, index: int):
+    model = self.note.note_type()
+    flds = model["flds"]
+    stickies = []
+    flds[index]["sticky"] = not flds[index]["sticky"]
+    for fld in flds:
+        stickies.append(fld["sticky"])
+    cs_editorUpdateStickyPins(self, stickies, model)
+
+
+# Toggle sticky on all fields
+# "Toggle" is interpreted as it is in Anki:
+# If any sticky is on, turn everything off
+# If all stickies are off, turn everything on
+def cs_editorToggleStickyAll(self):
+    model = self.note.note_type()
+    flds = model["flds"]
+
+    any_sticky = any([fld["sticky"] for fld in flds])
+    stickies = []
+    for fld in flds:
+        if not any_sticky or fld["sticky"]:
+            fld["sticky"] = not fld["sticky"]
+        stickies.append(fld["sticky"])
+    cs_editorUpdateStickyPins(self, stickies, model)
+
+# Toggle sticky on the current field
+def cs_editorToggleStickyCurrent(self):
+    if self.currentField is not None:
+        cs_editorToggleSticky(self,self.currentField)
+
+# Intercepts the bridge functions normally used to toggle stickiness
+def cs_captureBridgeToggleSticky(self, cmd, _old):
+    # If we intercept a "toggle sticky all" command, then
+    if cmd.startswith("toggleStickyAll") and config_scuts["editor toggle sticky all"] != "Shift+F9":
+        model = self.note.note_type()
+        return model["flds"]["sticky"]
+    elif cmd.startswith("toggleSticky") and config_scuts["editor toggle sticky current"] != "F9":
+        model = self.note.note_type()
+        (_, num) = cmd.split(":",1)
+        idx = int(num)
+
+        return model["flds"][idx]["sticky"]
+    return _old(self,cmd)
+
 
 # Wrapper function to change the shortcut to add a card
 # Not with the other custom shortcut editor functions because
@@ -697,6 +770,10 @@ if config_scuts["Ω enable editor"].upper() == 'Y':
     Editor._customPaste = cs_uEditor_custom_paste
     Editor.setupShortcuts = cs_editor_setupShortcuts
     Editor.setupShortcuts = wrap(Editor.setupShortcuts, cs_editorChangeDeck)
+    if functions.get_version() >= 45:
+        Editor.csToggleStickyCurrent = cs_editorToggleStickyCurrent
+        Editor.csToggleStickyAll = cs_editorToggleStickyAll
+        Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, cs_captureBridgeToggleSticky, "around")
     if notetypechooser_import:
         NotetypeChooser._setup_ui = wrap(NotetypeChooser._setup_ui, cs_editorNotetypeChooser)
     ModelChooser.setupModels = wrap(ModelChooser.setupModels, cs_editorChangeNoteType)
