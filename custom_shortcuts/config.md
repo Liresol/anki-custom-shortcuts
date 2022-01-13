@@ -63,9 +63,9 @@ The reason for the seemingly weird editor cloze behavior is Anki's internal impl
 
 "editor superscript": Toggle superscript
 
-"editor toggle sticky all": Toggle the stickiness of all fields. "Toggle all" is interpreted the same was as in vanilla Anki: If any field is sticky, turn all stickies off. Otherwise, turn all stickies on.
+"editor toggle sticky all": *Anki 2.1.45+* Toggle the stickiness of all fields. "Toggle all" is interpreted the same was as in vanilla Anki: If any field is sticky, turn all stickies off. Otherwise, turn all stickies on.
 
-"editor toggle sticky current": Toggle the stickiness of the current field.
+"editor toggle sticky current": *Anki 2.1.45+* Toggle the stickiness of the current field.
 
 *In the current implementation for toggling stickies, setting this to something other than the default will lose you the ability to click to toggle the sticky pins. If you want to retain this ability, using a duplicate `"editor toggle sticky current"` will still allow you to click pins.*
 
