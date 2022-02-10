@@ -142,11 +142,11 @@ def editor_sToF(self,scut):
                 self.web.eval(
                     """ document.execCommand("outdent") """
                 ), ),
-            "editor list toggle unordered": (lambda:
+            "editor list insert unordered": (lambda:
                 self.web.eval(
                     """ document.execCommand("insertUnorderedList"); """
                 ), ),
-            "editor list toggle ordered": (lambda:
+            "editor list insert ordered": (lambda:
                 self.web.eval(
                     """ document.execCommand("insertOrderedList"); """
                 ), ),
