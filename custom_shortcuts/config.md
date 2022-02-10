@@ -15,6 +15,10 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "editor add card close window": In the Add Card dialog, closes the given window. For some reason, Macs have a default shortcut for this while all other OSes don't. Since the default is OS dependent, it is given to be `<default>` rather than any specified value.
 
+"editor block indent": Indents the active field. Useful for indenting lists.
+
+"editor block outdent": Outdents (unindents) the active field. Useful for unindenting lists.
+
 "editor bold": Toggle bold 
 
 "editor card layout": Change Card Layout
@@ -52,6 +56,10 @@ The reason for the seemingly weird editor cloze behavior is Anki's internal impl
 "editor insert mathjax chemistry": Insert a chemistry thing in MathJax
 
 "editor insert mathjax inline": Insert an inline MathJax expresesion
+
+"editor list insert ordered": Put an ordered list into the active field.
+k
+"editor list insert unordered": Put an unordered list into the active field.
 
 "editor italic": Toggle italics
 

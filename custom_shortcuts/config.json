@@ -35,6 +35,10 @@
 	"editor change note type":"Ctrl+N",
 	"editor toggle sticky current":"F9",
 	"editor toggle sticky all":"Shift+F9",
+	"editor block indent": "<nop>",
+	"editor block outdent": "<nop>",
+	"editor list insert ordered": "<nop>",
+	"editor list insert unordered": "<nop>",
 	"editor _extras": {
 		"paste custom text":"<nop>"
 	},

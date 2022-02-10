@@ -129,7 +129,29 @@ def editor_sToF(self,scut):
             "editor focus tags": (self.onFocusTags, True),
             "editor toggle sticky current": (self.csToggleStickyCurrent,),
             "editor toggle sticky all": (self.csToggleStickyAll,),
+
+
         }
+    if get_version() >= 45:
+        sdict.update({
+            "editor block indent": (lambda:
+                self.web.eval(
+                    """ document.execCommand("indent"); """
+                ), ),
+            "editor block outdent": (lambda:
+                self.web.eval(
+                    """ document.execCommand("outdent") """
+                ), ),
+            "editor list toggle unordered": (lambda:
+                self.web.eval(
+                    """ document.execCommand("insertUnorderedList"); """
+                ), ),
+            "editor list toggle ordered": (lambda:
+                self.web.eval(
+                    """ document.execCommand("insertOrderedList"); """
+                ), ),
+                })
+
     if scut in sdict:
         return sdict[scut]
     return None

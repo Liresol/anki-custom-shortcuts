@@ -249,18 +249,50 @@ def cs_editor_setupShortcuts(self):
         (config_scuts["editor _extras"]["paste custom text"],
          lambda text=config_scuts["Ω custom paste text"]: self.customPaste(text)),
     ]
-    if functions.get_version() < 45:
-        cuts += [
-                (config_scuts["editor html edit"], self.onHtmlEdit),]
-    else:
+    if functions.get_version() >= 45:
         cuts += [
                 (config_scuts["editor html edit"], lambda:
                     self.web.eval(
-                    "{const currentField = getCurrentField(); if (currentField) { currentField.toggleHtmlEdit(); }}"
+                    """{const currentField = getCurrentField(); if (currentField) { currentField.toggleHtmlEdit(); }}"""
                         )),
                     (config_scuts["editor toggle sticky current"], self.csToggleStickyCurrent),
                     (config_scuts["editor toggle sticky all"], self.csToggleStickyAll),
+                    (config_scuts["editor block indent"], lambda:
+                        self.web.eval(
+                            """
+                                {
+                                    document.execCommand("indent");
+                                }
+                            """
+                            )
+                        ),
+                    (config_scuts["editor block outdent"], lambda:
+                        self.web.eval(
+                            """
+                                {
+                                    document.execCommand("outdent")
+                                }
+                            """
+                            )
+                        ),
+                    (config_scuts["editor list insert unordered"], lambda:
+                        self.web.eval(
+                            """
+                            document.execCommand("insertUnorderedList");
+                            """
+                            )
+                        ),
+                    (config_scuts["editor list insert ordered"], lambda:
+                        self.web.eval(
+                            """
+                            document.execCommand("insertOrderedList");
+                            """
+                            )
+                        ),
                     ]
+    else:
+        cuts += [
+                (config_scuts["editor html edit"], self.onHtmlEdit),]
 
     for scut in config_scuts["editor _duplicates"]:
         if self.sToF(scut):
