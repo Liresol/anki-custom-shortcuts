@@ -66,6 +66,9 @@ def review_sToF(self,scut):
         "reviewer choice 3": lambda: self._answerCard(3),
         "reviewer choice 4": lambda: self._answerCard(4),
     }
+    prefix_idx = scut.find('+++')
+    if scut.find('+++') != -1:
+        return sdict[scut[:prefix_idx]]
     return sdict[scut]
 
 
