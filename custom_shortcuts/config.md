@@ -143,6 +143,8 @@ This object takes inputs of the form "(function keyword)":"(shortcut)", separate
 
 All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. (Those who want to remove the numbers from stuff like "reviewer flip card" can do so as well)
 
+If you want to set more than one duplicate per shortcut for the reviewer, you can do so by adding the suffix "+++" *immediately* after the shortcut name followed by any distinct string. (e.g. {"reviewer flip card 3+++ first": "l", "reviewer flip card 3+++ 2nd": "t"})
+
 **Make sure to remap keys to empty keyspace.**
 
 "reviewer bury card": Bury this card

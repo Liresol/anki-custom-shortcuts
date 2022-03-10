@@ -152,6 +152,11 @@ def editor_sToF(self,scut):
                 ), ),
                 })
 
+    prefix_idx = scut.find('+++')
+    if scut.find('+++') != -1:
+        # If the multiple duplicates "+++" is found,
+        # truncate the shortcut to the proper name
+        scut = scut[:prefix_idx]
     if scut in sdict:
         return sdict[scut]
     return None
