@@ -50,6 +50,16 @@ to a cloze type first, via Edit>Change Note Type."""))
     highest = max(1, highest)
     self.web.eval("wrap('{{c%d::', '}}');" % highest)
 
+#If the shortcut has "+++" in it for multiple duplications,
+#Truncate the shortcut from that point to get the original name
+def normalizeShortcutName(scut):
+    prefix_idx = scut.find('+++')
+    if scut.find('+++') != -1:
+        # If the multiple duplicates "+++" is found,
+        # truncate the shortcut to the proper name
+        scut = scut[:prefix_idx]
+    return scut
+
 #Converts json shortcuts into functions for the reviewer
 #sToF: shortcutToFunction
 def review_sToF(self,scut):
@@ -99,6 +109,7 @@ def review_sToF(self,scut):
     if get_version() >= 48:
         sdict["reviewer previous card info"] = self.on_previous_card_info
 
+    scut = normalizeShortcutName(scut)
     if scut in sdict:
         return sdict[scut]
     return None
@@ -152,11 +163,7 @@ def editor_sToF(self,scut):
                 ), ),
                 })
 
-    prefix_idx = scut.find('+++')
-    if scut.find('+++') != -1:
-        # If the multiple duplicates "+++" is found,
-        # truncate the shortcut to the proper name
-        scut = scut[:prefix_idx]
+    scut = normalizeShortcutName(scut)
     if scut in sdict:
         return sdict[scut]
     return None
