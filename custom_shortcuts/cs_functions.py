@@ -145,6 +145,10 @@ def editor_sToF(self,scut):
         }
     if get_version() >= 45:
         sdict.update({
+            "editor html edit": (lambda:
+                self.web.eval(
+                    """{const currentField = getCurrentField(); if (currentField) { currentField.toggleHtmlEdit(); }}"""
+                ), ),
             "editor block indent": (lambda:
                 self.web.eval(
                     """ document.execCommand("indent"); """
