@@ -144,8 +144,8 @@ def cs_mt_setupShortcuts():
         "m_toolbox create filtered deck": [config_scuts["m_toolbox create filtered deck"]],
         "m_toolbox addons": [config_scuts["m_toolbox addons"]]
     }
-    for act,key in config_scuts["m_toolbox _duplicates"].items():
-        scuts_list[act].append(key)
+    for act, key in config_scuts["m_toolbox _duplicates"].items():
+        scuts_list[functions.normalizeShortcutName(act)].append(key)
     m.actionExit.setShortcuts(scuts_list["m_toolbox quit"])
     m.actionPreferences.setShortcuts(scuts_list["m_toolbox preferences"])
     m.actionUndo.setShortcuts(scuts_list["m_toolbox undo"])
@@ -327,8 +327,9 @@ def cs_editor_setupShortcuts(self):
 def cs_editorChangeNoteType(self):
     NOTE_TYPE_STR = "editor change note type"
     new_scuts = {config_scuts[NOTE_TYPE_STR]}
-    if NOTE_TYPE_STR in config_scuts["editor _duplicates"]:
-        new_scuts.add(config_scuts["editor _duplicates"][NOTE_TYPE_STR])
+    for act, key in config_scuts["editor _duplicates"].items():
+        if functions.normalizeShortcutName(act) == NOTE_TYPE_STR:
+            new_scuts.add(key)
     for scut in new_scuts:
         if functions.get_version() >= 41:
             QShortcut(QKeySequence(scut), self._widget, activated=self.on_activated)
@@ -340,8 +341,9 @@ def cs_editorChangeNoteType(self):
 def cs_editorNotetypeChooser(self, show_label: bool):
     NOTE_TYPE_STR = "editor change note type"
     new_scuts = {config_scuts[NOTE_TYPE_STR]}
-    if NOTE_TYPE_STR in config_scuts["editor _duplicates"]:
-        new_scuts.add(config_scuts["editor _duplicates"][NOTE_TYPE_STR])
+    for act, key in config_scuts["editor _duplicates"].items():
+        if functions.normalizeShortcutName(act) == NOTE_TYPE_STR:
+            new_scuts.add(key)
     for scut in new_scuts:
         qconnect(QShortcut(QKeySequence(scut), self._widget).activated,
                 self.on_button_activated
@@ -421,14 +423,16 @@ def cs_captureBridgeToggleSticky(self, cmd, _old):
 def cs_editorAddCard(self):
     ADD_CARD_STR = "editor confirm add card"
     self.addButton.setShortcut(QKeySequence(config_scuts[ADD_CARD_STR]))
-    if ADD_CARD_STR in config_scuts["editor _duplicates"]:
-        QShortcut(QKeySequence(config_scuts["editor _duplicates"][ADD_CARD_STR]), self, activated=self.addCards)
+    for act, key in config_scuts["editor _duplicates"].items():
+        if functions.normalizeShortcutName(act) == ADD_CARD_STR:
+            QShortcut(QKeySequence(key), self, activated=self.addCards)
 
 def cs_editorChangeDeck(self):
     CHANGE_DECK_STR = "editor change deck"
     new_scuts = {config_scuts[CHANGE_DECK_STR]}
-    if CHANGE_DECK_STR in config_scuts["editor _duplicates"]:
-        new_scuts.add(config_scuts["editor _duplicates"][CHANGE_DECK_STR])
+    for act, key in config_scuts["editor _duplicates"].items():
+        if functions.normalizeShortcutName(act) == CHANGE_DECK_STR:
+            new_scuts.add(key)
     for scut in new_scuts:
         QShortcut(QKeySequence(scut), self.widget, activated=self.cs_changeDeck)
 

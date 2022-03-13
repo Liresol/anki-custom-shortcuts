@@ -9,6 +9,8 @@
 
 This object takes inputs of the form "(function keyword)":"(shortcut)", separated by commas. (e.g. {"editor bold":"Ctrl+Shift+9", "editor cloze":"Alt+Shift+2"})
 
+If you want to set more than one duplicate per shortcut for the reviewer, you can do so by adding the suffix "+++" *immediately* after the shortcut name followed by any distinct string. (e.g. {"editor bold+++ first": "Ctrl+Shift+0", "editor bold+++ 2nd": "Ctrl+Shift+8"})
+
 All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. 
 
 "editor add media": Add external media
@@ -96,6 +98,8 @@ e.g. `"editor _pastes": {"dashes":"Ctrl+Shift+5", "dots":"Ctrl+Shift+6"}` matche
 This object takes inputs of the form "(function keyword)":"(shortcut)", separated by commas. (e.g. {"m\_toolbox undo":"u","m\_toolbox study":"9"})
 
 All the keywords are exactly the same as the keywords used in the json file, making the lines copy-pastable. 
+
+If you want to set more than one duplicate per shortcut for the reviewer, you can do so by adding the suffix "+++" *immediately* after the shortcut name followed by any distinct string. (e.g. {"m\_toolbox study+++ first": "6", "m\_toolbox study+++ 2nd": "V"})
 
 "m_toolbox addons": Go to the addons window
 
