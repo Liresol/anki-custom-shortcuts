@@ -183,7 +183,7 @@ If you want to set more than one duplicate per shortcut for the reviewer, you ca
 
 "reviewer set due date": Reschedules a card in the review schedule in Anki 2.1.41+
 
-"reviewer set flag [12340]": Set a flag on this card (or none for 0), changing colors depending on the number (1/2/3/4)
+"reviewer set flag [12345670]": Set a flag on this card (or none for 0), changing colors depending on the number (1/2/3/4, and for 2.1.45+, 5/6/7 as well)
 
 "reviewer seek backward": Rewind the audio 5 seconds
 

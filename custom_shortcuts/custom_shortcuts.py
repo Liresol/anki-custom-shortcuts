@@ -175,6 +175,11 @@ def cs_review_setupShortcuts(self, _old):
             "3" : config_scuts["reviewer choice 3"],
             "4" : config_scuts["reviewer choice 4"],
             }
+    if functions.get_version() >= 45:
+            new_scut_replacements["Ctrl+5"] = config_scuts["reviewer set flag 5"]
+            new_scut_replacements["Ctrl+6"] = config_scuts["reviewer set flag 6"]
+            new_scut_replacements["Ctrl+7"] = config_scuts["reviewer set flag 7"]
+
     # Less fragile replacement: For these shortcuts, address them by pointer and replace shortcut
     # The keys are dicts because we will want to replace multiply shortcut keys
     new_function_replacements = {

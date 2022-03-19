@@ -106,6 +106,9 @@ def review_sToF(self,scut):
         sdict["reviewer set due date"] = self.on_set_due
     if get_version() >= 45:
         sdict["reviewer card info"] = self.on_card_info
+        sdict["reviewer set flag 5"] = lambda: self.setFlag(5)
+        sdict["reviewer set flag 6"] = lambda: self.setFlag(6)
+        sdict["reviewer set flag 7"] = lambda: self.setFlag(7)
     if get_version() >= 48:
         sdict["reviewer previous card info"] = self.on_previous_card_info
 
