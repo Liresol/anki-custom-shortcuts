@@ -17,6 +17,11 @@ except:
     tr_import = False
 from aqt.toolbar import Toolbar
 from aqt.editor import Editor, EditorWebView
+try:
+    from aqt.editor import EditorMode
+    editor_mode_import = True
+except:
+    editor_mode_import = False
 from aqt.reviewer import Reviewer
 from aqt.browser import Browser
 from aqt.modelchooser import ModelChooser
@@ -679,7 +684,14 @@ def cs_browser_orConcatFilter(self, txt):
 
 # Inserts the custom filter shortcuts upon browser startup
 def cs_browser_setupEditor(self):
-    if functions.get_version() >= 45:
+    if functions.get_version() >= 50 and editor_mode_import:
+        QShortcut(QKeySequence(config_scuts["window_browser preview"]), self, self.onTogglePreview)
+        def add_preview_button(editor):
+            editor._links["preview"] = lambda _editor: self.onTogglePreview()
+        gui_hooks.editor_did_init.append(add_preview_button)
+        self.editor = Editor(self.mw, self.form.fieldsArea, self, editor_mode=EditorMode.BROWSER,)
+        gui_hooks.editor_did_init.remove(add_preview_button)
+    elif functions.get_version() >= 45:
         QShortcut(QKeySequence(config_scuts["window_browser preview"]), self, self.onTogglePreview)
         def add_preview_button(editor):
             preview_shortcut = config_scuts["window_browser preview"]
