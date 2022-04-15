@@ -260,11 +260,16 @@ def cs_editor_setupShortcuts(self):
          lambda text=config_scuts["Ω custom paste text"]: self.customPaste(text)),
     ]
     if functions.get_version() >= 45:
-        cuts += [
-                (config_scuts["editor html edit"], lambda:
-                    self.web.eval(
-                    """{const currentField = getCurrentField(); if (currentField) { currentField.toggleHtmlEdit(); }}"""
+        if functions.get_version() >= 50:
+            pass
+        else:
+            cuts += [
+                        (config_scuts["editor html edit"], lambda:
+                        self.web.eval(
+                        """{const currentField = getCurrentField(); if (currentField) { currentField.toggleHtmlEdit(); }}"""
                         )),
+                    ]
+        cuts += [
                     (config_scuts["editor toggle sticky current"], self.csToggleStickyCurrent),
                     (config_scuts["editor toggle sticky all"], self.csToggleStickyAll),
                     (config_scuts["editor block indent"], lambda:
