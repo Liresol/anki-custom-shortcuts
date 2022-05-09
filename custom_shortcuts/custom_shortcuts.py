@@ -242,7 +242,6 @@ def cs_editor_setupShortcuts(self):
         (config_scuts["editor superscript"], self.toggleSuper),
         (config_scuts["editor subscript"], self.toggleSub),
         (config_scuts["editor remove format"], self.removeFormat),
-        (config_scuts["editor foreground"], self.onForeground),
         (config_scuts["editor change col"], self.onChangeCol),
         (config_scuts["editor cloze"], self.onCloze),
         (config_scuts["editor cloze alt"], self.onCloze),
@@ -259,6 +258,9 @@ def cs_editor_setupShortcuts(self):
         (config_scuts["editor _extras"]["paste custom text"],
          lambda text=config_scuts["Ω custom paste text"]: self.customPaste(text)),
     ]
+    if functions.get_version() < 49:
+        # Due to the svelte changes, this shortcut breaks
+        cuts += [(config_scuts["editor foreground"], self.onForeground)]
     if functions.get_version() >= 45:
         if functions.get_version() >= 50:
             pass
@@ -360,6 +362,11 @@ def cs_editorNotetypeChooser(self, show_label: bool):
         if functions.normalizeShortcutName(act) == NOTE_TYPE_STR:
             new_scuts.add(key)
     for scut in new_scuts:
+        # Since the hard-coded shortcut for this is Ctrl+N,
+        # Don't destroy the existing shortcut
+        # (has the side effect of leaving Ctrl+N assigned at all times)
+        if scut == "Ctrl+N":
+            continue
         qconnect(QShortcut(QKeySequence(scut), self._widget).activated,
                 self.on_button_activated
                 )
@@ -765,7 +772,6 @@ def cs_browser_setupEditor(self):
     if config_scuts["window_browser remove current filter"]:
         self.csRemoveFilterScut = QShortcut(QKeySequence(config_scuts["window_browser remove current filter"]), self)
         self.csRemoveFilterScut.activated.connect(self.csRemoveFilterFunc)
-
 
 # Corresponds to _setup_tools in the SidebarToolbar class in Anki 2.1.45
 sidebar_tool_names = [
