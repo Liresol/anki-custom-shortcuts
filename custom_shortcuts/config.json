@@ -143,7 +143,6 @@
 	"Ω enable m_toolbox": "y",
 	"Ω enable window_browser": "y",
 	"Ω enable conflict warning": "y",
-	"Ω enable legacy editor shortcuts": "n",
 	"Ω custom paste text": "",
 	"Ω custom paste extra texts": {
 	},

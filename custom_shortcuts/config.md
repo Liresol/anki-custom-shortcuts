@@ -27,7 +27,7 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "editor change col": Change text color
 
-*Since this uses an older version of the color editor, this shortcut will only be active when using "Ω enable legacy editor shortcuts"
+*Note that this shortcut currently exclusively uses the legacy version of color editing. This is incompatible with the new color editing as of Anki 2.1.49. If you don't want to use the old version, disable this shortcut by setting it to <nop>.*
 
 "editor cloze": Insert cloze (increments cloze ID if `Alt` is *not* part of your keybind, so `Ctrl+Shift+C` does increment ID, while `Ctrl+Shift+Alt+C` does not)
 
@@ -47,7 +47,7 @@ The reason for the seemingly weird editor cloze behavior is Anki's internal impl
 
 "editor foreground": Set foreground color
 
-*Since this uses an older version of the color editor, this shortcut will only be active when using "Ω enable legacy editor shortcuts"
+*Note that this shortcut currently exclusively uses the legacy version of color editing. This is incompatible with the new color editing as of Anki 2.1.49. If you don't want to use the old version, disable this shortcut by setting it to <nop>.*
 
 "editor html edit": Edit the card's HTML
 
@@ -305,9 +305,3 @@ e.g. `"Ω custom paste text": "<span style=\"font-size: 20px; color:#3399ff\">�
 "Ω enable main/window_browser/editor/etc.": If set to "n", doesn't enable the corresponding set of shortcuts for the respective functions (useful for addon compatability in a pinch)
 
 "Ω enable conflict warning": If set to "y", shows a warning window whenever two shortcuts of the same type are set to the same key.
-
-"Ω enable legacy editor shortcuts": If set to "y", enables certain shortcuts that have been replaced by newer svelte shortcuts
-The list of affected shortcuts are currently:
-
-- "editor foreground"
-- "editor change col"

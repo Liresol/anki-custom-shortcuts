@@ -257,11 +257,11 @@ def cs_editor_setupShortcuts(self):
         (config_scuts["editor _extras"]["paste custom text"],
          lambda text=config_scuts["Ω custom paste text"]: self.customPaste(text)),
     ]
-    if functions.get_version() < 49 or config_scuts["Ω enable legacy editor shortcuts"].upper() == 'Y':
-        # Due to the svelte changes, these shortcuts break
-        cuts += [(config_scuts["editor foreground"], self.onForeground),
-                (config_scuts["editor change col"], self.onChangeCol),
-                ]
+    # Due to the svelte changes, these shortcuts "break"
+    # in the sense that they no longer correspond to the most recent shortcuts
+    cuts += [(config_scuts["editor foreground"], self.onForeground),
+            (config_scuts["editor change col"], self.onChangeCol),
+            ]
     if functions.get_version() >= 45:
         if functions.get_version() >= 50:
             pass
@@ -803,7 +803,11 @@ def cs_sidebar_setup_tools(self):
 
 def cs_injectCloseShortcut(scuts):
     def inject_shortcut(self):
-        from aqt.utils import isMac
+        try:
+            from aqt.utils import is_mac
+            isMac = is_mac
+        except:
+            from aqt.utils import isMac
         cutExistingShortcut = False
         for scut in scuts:
             if scut == "<default>":
