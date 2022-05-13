@@ -242,7 +242,6 @@ def cs_editor_setupShortcuts(self):
         (config_scuts["editor superscript"], self.toggleSuper),
         (config_scuts["editor subscript"], self.toggleSub),
         (config_scuts["editor remove format"], self.removeFormat),
-        (config_scuts["editor change col"], self.onChangeCol),
         (config_scuts["editor cloze"], self.onCloze),
         (config_scuts["editor cloze alt"], self.onCloze),
         (config_scuts["editor cloze forced increment"], self.cs_onStdCloze),
@@ -258,9 +257,11 @@ def cs_editor_setupShortcuts(self):
         (config_scuts["editor _extras"]["paste custom text"],
          lambda text=config_scuts["Ω custom paste text"]: self.customPaste(text)),
     ]
-    if functions.get_version() < 49:
-        # Due to the svelte changes, this shortcut breaks
-        cuts += [(config_scuts["editor foreground"], self.onForeground)]
+    if functions.get_version() < 49 or config_scuts["Ω enable legacy editor shortcuts"].upper() == 'Y':
+        # Due to the svelte changes, these shortcuts break
+        cuts += [(config_scuts["editor foreground"], self.onForeground),
+                (config_scuts["editor change col"], self.onChangeCol),
+                ]
     if functions.get_version() >= 45:
         if functions.get_version() >= 50:
             pass

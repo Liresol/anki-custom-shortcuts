@@ -27,6 +27,8 @@ All the keywords are exactly the same as the keywords used in the json file, mak
 
 "editor change col": Change text color
 
+*Since this uses an older version of the color editor, this shortcut will only be active when using "Ω enable legacy editor shortcuts"
+
 "editor cloze": Insert cloze (increments cloze ID if `Alt` is *not* part of your keybind, so `Ctrl+Shift+C` does increment ID, while `Ctrl+Shift+Alt+C` does not)
 
 "editor cloze alt": Insert cloze (behaves identically to "editor cloze")
@@ -44,6 +46,8 @@ The reason for the seemingly weird editor cloze behavior is Anki's internal impl
 "editor focus tags": Switch focus to the Tags field
 
 "editor foreground": Set foreground color
+
+*Since this uses an older version of the color editor, this shortcut will only be active when using "Ω enable legacy editor shortcuts"
 
 "editor html edit": Edit the card's HTML
 
@@ -302,3 +306,8 @@ e.g. `"Ω custom paste text": "<span style=\"font-size: 20px; color:#3399ff\">�
 
 "Ω enable conflict warning": If set to "y", shows a warning window whenever two shortcuts of the same type are set to the same key.
 
+"Ω enable legacy editor shortcuts": If set to "y", enables certain shortcuts that have been replaced by newer svelte shortcuts
+The list of affected shortcuts are currently:
+
+- "editor foreground"
+- "editor change col"
