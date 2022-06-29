@@ -509,6 +509,10 @@ def cs_browser_setupShortcuts(self):
     f.actionFindDuplicates.setShortcut(config_scuts["window_browser find duplicates"])
     f.actionSelectNotes.setShortcut(config_scuts["window_browser select notes"])
     f.actionManage_Note_Types.setShortcut(config_scuts["window_browser manage note types"])
+    try:
+        f.action_forget.setShortcut(config_scuts["window_browser forget card"])
+    except AttributeError:
+        pass
 
 # Mimics the style of other Anki functions, analogue of customPaste
 # Note that the saveNow function used earler takes the cursor to the end of the line,

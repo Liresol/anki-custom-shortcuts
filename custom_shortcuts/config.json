@@ -133,6 +133,7 @@
 	"window_browser remove current filter":"<nop>",
 	"window_browser sidebar search": "Alt+1",
 	"window_browser sidebar select": "Alt+2",
+	"window_browser forget card": "Ctrl+Alt+N",
 	"window_browser _filters":{
 		"_concat":{},
 		"_orConcat":{}

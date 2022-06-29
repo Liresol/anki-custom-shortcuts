@@ -243,6 +243,8 @@ Sub-objects within `_filters`:
 
 "window_browser flag_red": Toggles the red flag
 
+"window_browser forget card": Forgets the selected card (sets the card as new)
+
 "window_browser goto card list": Switches focus to the card list
 
 "window_browser goto next note": Selects the note after the selected note in the list
