@@ -106,6 +106,7 @@
 	"window_browser guide":"F1",
 	"window_browser change note type":"Ctrl+Shift+M",
 	"window_browser find and replace":"Ctrl+Alt+F",
+	"window_browser create filtered deck": "Ctrl+G",
 	"window_browser filter":"Ctrl+Shift+F",
 	"window_browser goto card list":"Ctrl+Shift+L",
 	"window_browser reposition":"Ctrl+Shift+S",

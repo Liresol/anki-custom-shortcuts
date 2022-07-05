@@ -478,6 +478,7 @@ def cs_browser_setupShortcuts(self):
     f.actionChangeModel.setShortcut(config_scuts["window_browser change note type"])
     f.actionGuide.setShortcut(config_scuts["window_browser guide"])
     f.actionFindReplace.setShortcut(config_scuts["window_browser find and replace"])
+    f.actionCreateFilteredDeck.setShortcut(config_scuts["window_browser create filtered deck"])
     try:
         f.actionTags.setShortcut(config_scuts["window_browser filter"])
     except AttributeError:
