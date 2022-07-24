@@ -171,3 +171,5 @@ tags
 
 
 # End of https://www.gitignore.io/api/vim,macos,python
+custom_shortcuts/meta.json
+.gitignore
