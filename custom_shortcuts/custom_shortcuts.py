@@ -824,7 +824,7 @@ def cs_injectCloseShortcut(scuts):
                         addedShortcut = cutExistingShortcut = True
             if not addedShortcut:
                 shortcut = QShortcut(QKeySequence(scut), self)
-                qconnect(shortcut.activated, self.reject)
+                qconnect(shortcut.activated, self.close)
                 setattr(self, "_closeShortcut", shortcut)
     return inject_shortcut
 
