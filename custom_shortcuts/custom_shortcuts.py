@@ -196,7 +196,6 @@ def cs_editor_setupShortcuts(self):
     for row in cuts:
         if len(row) == 2:
             keys, fn = row
-            fn = self._addFocusCheck(fn)
         else:
             keys, fn, _ = row
         scut = QShortcut(QKeySequence(keys), self.widget, activated=fn)
