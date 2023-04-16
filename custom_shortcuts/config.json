@@ -117,6 +117,7 @@
 	"window_browser add tag":"Ctrl+Shift+A",
 	"window_browser remove tag":"Ctrl+Alt+Shift+A",
 	"window_browser suspend":"Ctrl+J",
+	"window_browser bury":"Ctrl+Shift+J",
 	"window_browser delete":"Ctrl+Del",
 	"window_browser add note":"Ctrl+E",
 	"window_browser change deck":"Ctrl+D",

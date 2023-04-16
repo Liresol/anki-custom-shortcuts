@@ -492,6 +492,7 @@ def cs_browser_setupShortcuts(self):
     f.actionAdd_Tags.setShortcut(config_scuts["window_browser add tag"])
     f.actionRemove_Tags.setShortcut(config_scuts["window_browser remove tag"])
     f.actionToggle_Suspend.setShortcut(config_scuts["window_browser suspend"])
+    f.action_toggle_bury.setShortcut(config_scuts["window_browser bury"])
     f.actionDelete.setShortcut(config_scuts["window_browser delete"])
     f.actionAdd.setShortcut(config_scuts["window_browser add note"])
     f.actionChange_Deck.setShortcut(config_scuts["window_browser change deck"])
