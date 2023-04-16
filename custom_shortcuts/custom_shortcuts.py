@@ -1,6 +1,5 @@
 # Last updated to be useful for: Anki 2.1.45
 import warnings
-from anki.lang import _
 from aqt import mw
 from aqt.qt import *
 from anki.hooks import runHook,addHook,wrap
@@ -32,7 +31,6 @@ try:
 except:
     notetypechooser_import = False
 from aqt.addcards import AddCards
-from anki.utils import json
 from bs4 import BeautifulSoup
 from . import cs_functions as functions
 try:
@@ -51,19 +49,19 @@ except:
 config = mw.addonManager.getConfig(__name__)
 CS_CONFLICTSTR = "Custom Shortcut Conflicts: \n\n"
 # config_scuts initialized after cs_traverseKeys
-Qt_functions = {"Qt.Key_Enter": Qt.Key_Enter,
-                "Qt.Key_Return": Qt.Key_Return,
-                "Qt.Key_Escape": Qt.Key_Escape,
-                "Qt.Key_Space": Qt.Key_Space,
-                "Qt.Key_Tab": Qt.Key_Tab,
-                "Qt.Key_Backspace": Qt.Key_Backspace,
-                "Qt.Key_Delete": Qt.Key_Delete,
-                "Qt.Key_Left": Qt.Key_Left,
-                "Qt.Key_Down": Qt.Key_Down,
-                "Qt.Key_Right": Qt.Key_Right,
-                "Qt.Key_Up": Qt.Key_Up,
-                "Qt.Key_PageUp": Qt.Key_PageUp,
-                "Qt.Key_PageDown": Qt.Key_PageDown,
+Qt_functions = {"Qt.Key_Enter": Qt.Key.Key_Enter,
+                "Qt.Key_Return": Qt.Key.Key_Return,
+                "Qt.Key_Escape": Qt.Key.Key_Escape,
+                "Qt.Key_Space": Qt.Key.Key_Space,
+                "Qt.Key_Tab": Qt.Key.Key_Tab,
+                "Qt.Key_Backspace": Qt.Key.Key_Backspace,
+                "Qt.Key_Delete": Qt.Key.Key_Delete,
+                "Qt.Key_Left": Qt.Key.Key_Left,
+                "Qt.Key_Down": Qt.Key.Key_Down,
+                "Qt.Key_Right": Qt.Key.Key_Right,
+                "Qt.Key_Up": Qt.Key.Key_Up,
+                "Qt.Key_PageUp": Qt.Key.Key_PageUp,
+                "Qt.Key_PageDown": Qt.Key.Key_PageDown,
                 "<nop>": ""
                 }
 
@@ -480,6 +478,7 @@ def cs_browser_setupShortcuts(self):
     f.actionChangeModel.setShortcut(config_scuts["window_browser change note type"])
     f.actionGuide.setShortcut(config_scuts["window_browser guide"])
     f.actionFindReplace.setShortcut(config_scuts["window_browser find and replace"])
+    f.actionCreateFilteredDeck.setShortcut(config_scuts["window_browser create filtered deck"])
     try:
         f.actionTags.setShortcut(config_scuts["window_browser filter"])
     except AttributeError:
@@ -493,6 +492,7 @@ def cs_browser_setupShortcuts(self):
     f.actionAdd_Tags.setShortcut(config_scuts["window_browser add tag"])
     f.actionRemove_Tags.setShortcut(config_scuts["window_browser remove tag"])
     f.actionToggle_Suspend.setShortcut(config_scuts["window_browser suspend"])
+    f.action_toggle_bury.setShortcut(config_scuts["window_browser bury"])
     f.actionDelete.setShortcut(config_scuts["window_browser delete"])
     f.actionAdd.setShortcut(config_scuts["window_browser add note"])
     f.actionChange_Deck.setShortcut(config_scuts["window_browser change deck"])
@@ -599,30 +599,30 @@ def cs_toolbarCenterLinks(self):
         links = [
             self.create_link(
                 "decks",
-                tr(TR.ACTIONS_DECKS),
+                tr.action_decks(),
                 self._deckLinkHandler,
-                tip=tr(TR.ACTIONS_SHORTCUT_KEY, val=config_scuts["main deckbrowser"]),
+                tip=tr.actions_shortcut_key(val=config_scuts["main deckbrowser"]),
                 id="decks",
                 ),
             self.create_link(
                 "add",
-                tr(TR.ACTIONS_ADD),
+                tr.actions_add(),
                 self._addLinkHandler,
-                tip=tr(TR.ACTIONS_SHORTCUT_KEY, val=config_scuts["main add"]),
+                tip=tr.actions_shortcut_key(val=config_scuts["main add"]),
                 id="add",
                 ),
             self.create_link(
                 "browse",
-                tr(TR.QT_MISC_BROWSE),
+                tr.qt_misc_browse(),
                 self._browseLinkHandler,
-                tip=tr(TR.ACTIONS_SHORTCUT_KEY, val=config_scuts["main browse"]),
+                tip=tr.actions_shortcut_key(val=config_scuts["main browse"]),
                 id="browse",
                 ),
             self.create_link(
                 "stats",
-                tr(TR.QT_MISC_STATS),
+                tr.qt_misc_stats(),
                 self._statsLinkHandler,
-                tip=tr(TR.ACTIONS_SHORTCUT_KEY, val=config_scuts["main stats"]),
+                tip=tr.actions_shortcut_key(val=config_scuts["main stats"]),
                 id="stats",
                 ),
             ]
@@ -638,30 +638,30 @@ def cs_toolbarCenterLinks(self):
         links = [
             self.create_link(
                 "decks",
-                _("Decks"),
+                "Decks",
                 self._deckLinkHandler,
-                tip=_("Shortcut key: %s") % config_scuts["main deckbrowser"],
+                tip="Shortcut key: %s" % config_scuts["main deckbrowser"],
                 id="decks",
             ),
             self.create_link(
                 "add",
-                _("Add"),
+                "Add",
                 self._addLinkHandler,
-                tip=_("Shortcut key: %s") % config_scuts["main add"],
+                tip="Shortcut key: %s" % config_scuts["main add"],
                 id="add",
             ),
             self.create_link(
                 "browse",
-                _("Browse"),
+                "Browse",
                 self._browseLinkHandler,
-                tip=_("Shortcut key: %s") % config_scuts["main browse"],
+                tip="Shortcut key: %s" % config_scuts["main browse"],
                 id="browse",
             ),
             self.create_link(
                 "stats",
-                _("Stats"),
+                "Stats",
                 self._statsLinkHandler,
-                tip=_("Shortcut key: %s") % config_scuts["main stats"],
+                tip="Shortcut key: %s" % config_scuts["main stats"],
                 id="stats",
             ),
         ]
@@ -673,11 +673,11 @@ def cs_toolbarCenterLinks(self):
         return "\n".join(links)
     except:
         links = [
-            ["decks", _("Decks"), _("Shortcut key: %s") % config_scuts["main deckbrowser"]],
-            ["add", _("Add"), _("Shortcut key: %s") % config_scuts["main add"]],
-            ["browse", _("Browse"), _("Shortcut key: %s") % config_scuts["main browse"]],
-            ["stats", _("Stats"), _("Shortcut key: %s") % config_scuts["main stats"]],
-            ["sync", _("Sync"), _("Shortcut key: %s") % config_scuts["main sync"]],
+            ["decks", "Decks", "Shortcut key: %s" % config_scuts["main deckbrowser"]],
+            ["add", "Add", "Shortcut key: %s" % config_scuts["main add"]],
+            ["browse", "Browse", "Shortcut key: %s" % config_scuts["main browse"]],
+            ["stats", "Stats", "Shortcut key: %s" % config_scuts["main stats"]],
+            ["sync", "Sync", "Shortcut key: %s" % config_scuts["main sync"]],
             ]
         return self._linkHTML(links)
 
