@@ -65,6 +65,10 @@ def review_sToF(self,scut):
         "reviewer choice 2": lambda: self._answerCard(2),
         "reviewer choice 3": lambda: self._answerCard(3),
         "reviewer choice 4": lambda: self._answerCard(4),
+        "reviewer choice vim 1": lambda: self._answerCard(1),
+        "reviewer choice vim 2": lambda: self._answerCard(2),
+        "reviewer choice vim 3": lambda: self._answerCard(3),
+        "reviewer choice vim 4": lambda: self._answerCard(4),
     }
     prefix_idx = scut.find('+++')
     if scut.find('+++') != -1:
