@@ -145,6 +145,10 @@ def cs_review_setupShortcuts(self):
         (config_scuts["reviewer choice 2"], lambda: self._answerCard(2)),
         (config_scuts["reviewer choice 3"], lambda: self._answerCard(3)),
         (config_scuts["reviewer choice 4"], lambda: self._answerCard(4)),
+        (config_scuts["reviewer choice vim 1"], lambda: self._answerCard(1)),
+        (config_scuts["reviewer choice vim 2"], lambda: self._answerCard(2)),
+        (config_scuts["reviewer choice vim 3"], lambda: self._answerCard(3)),
+        (config_scuts["reviewer choice vim 4"], lambda: self._answerCard(4)),
     ]
     if functions.get_version() >= 20:
         ret += [
