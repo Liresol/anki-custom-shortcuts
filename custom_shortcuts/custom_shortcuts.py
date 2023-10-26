@@ -51,20 +51,20 @@ except:
 config = mw.addonManager.getConfig(__name__)
 CS_CONFLICTSTR = "Custom Shortcut Conflicts: \n\n"
 # config_scuts initialized after cs_traverseKeys
-Qt_functions = {"Qt.Key_Enter": Qt.Key_Enter,
-                "Qt.Key_Return": Qt.Key_Return,
-                "Qt.Key_Escape": Qt.Key_Escape,
-                "Qt.Key_Space": Qt.Key_Space,
-                "Qt.Key_Tab": Qt.Key_Tab,
-                "Qt.Key_Backspace": Qt.Key_Backspace,
-                "Qt.Key_Delete": Qt.Key_Delete,
-                "Qt.Key_Left": Qt.Key_Left,
-                "Qt.Key_Down": Qt.Key_Down,
-                "Qt.Key_Right": Qt.Key_Right,
-                "Qt.Key_Up": Qt.Key_Up,
-                "Qt.Key_PageUp": Qt.Key_PageUp,
-                "Qt.Key_PageDown": Qt.Key_PageDown,
-                "<nop>": ""
+Qt_functions = {"Qt.Key_Enter":Qt.Key.Key_Enter,
+                "Qt.Key_Return":Qt.Key.Key_Return,
+                "Qt.Key_Escape":Qt.Key.Key_Escape,
+                "Qt.Key_Space":Qt.Key.Key_Space,
+                "Qt.Key_Tab":Qt.Key.Key_Tab,
+                "Qt.Key_Backspace":Qt.Key.Key_Backspace,
+                "Qt.Key_Delete":Qt.Key.Key_Delete,
+                "Qt.Key_Left":Qt.Key.Key_Left,
+                "Qt.Key_Down":Qt.Key.Key_Down,
+                "Qt.Key_Right":Qt.Key.Key_Right,
+                "Qt.Key_Up":Qt.Key.Key_Up,
+                "Qt.Key_PageUp":Qt.Key.Key_PageUp,
+                "Qt.Key_PageDown":Qt.Key.Key_PageDown,
+                "<nop>":""
                 }
 
 # There is a weird interaction with QShortcuts wherein if there are 2 (or more)
