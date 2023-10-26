@@ -1,5 +1,6 @@
 import re
 import anki
+from anki.utils import pointVersion
 from aqt.utils import tooltip, showInfo
 try:
     from aqt.utils import (
@@ -19,7 +20,7 @@ except:
 
 def get_version():
     """Return the integer subversion of Anki on which the addon is run ("2.1.11" -> 11)"""
-    return int(anki.version.split('.')[2])
+    return pointVersion()
 
 def cs_editor_on_alt_cloze(self):
     self.saveNow(self.cs_u_onAltCloze, keepFocus=True)
