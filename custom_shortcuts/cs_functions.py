@@ -97,6 +97,7 @@ def review_sToF(self,scut):
         "reviewer choice 3": lambda: self._answerCard(3),
         "reviewer choice 4": lambda: self._answerCard(4),
     }
+
     if get_version() >= 20:
         sdict["reviewer pause audio"] = self.on_pause_audio
         sdict["reviewer seek backward"] = self.on_seek_backward
@@ -114,6 +115,10 @@ def review_sToF(self,scut):
         sdict["reviewer previous card info"] = self.on_previous_card_info
 
     scut = normalizeShortcutName(scut)
+    
+    prefix_idx = scut.find('+++')
+    if scut.find('+++') != -1:
+        return sdict[scut[:prefix_idx]]
     if scut in sdict:
         return sdict[scut]
     return None
