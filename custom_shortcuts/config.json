@@ -15,8 +15,11 @@
 	"editor remove format":"Ctrl+R",
 	"editor foreground":"F7",
 	"editor change col":"F8",
+	"editor change deck":"<nop>",
 	"editor cloze":"Ctrl+Shift+C",
 	"editor cloze alt":"Ctrl+Shift+Alt+C",
+	"editor cloze forced increment":"<nop>",
+	"editor cloze no increment":"<nop>",
 	"editor add media":"F3",
 	"editor record sound":"F5",
 	"editor insert latex":"Ctrl+T, T",
@@ -27,8 +30,21 @@
 	"editor insert mathjax chemistry":"Ctrl+M, C",
 	"editor html edit":"Ctrl+Shift+X",
 	"editor focus tags":"Ctrl+Shift+T",
+	"editor confirm add card":"Ctrl+Return",
+	"editor add card close window":"<default>",
+	"editor change note type":"Ctrl+N",
+	"editor toggle sticky current":"F9",
+	"editor toggle sticky all":"Shift+F9",
+	"editor block indent": "<nop>",
+	"editor block outdent": "<nop>",
+	"editor list insert ordered": "<nop>",
+	"editor list insert unordered": "<nop>",
 	"editor _extras": {
 		"paste custom text":"<nop>"
+	},
+	"editor _pastes": {
+	},
+	"editor _duplicates": {
 	},
 	"reviewer edit current":"E",
 	"reviewer flip card 1":" ",
@@ -40,6 +56,9 @@
 	"reviewer set flag 2":"Ctrl+2",
 	"reviewer set flag 3":"Ctrl+3",
 	"reviewer set flag 4":"Ctrl+4",
+	"reviewer set flag 5":"Ctrl+5",
+	"reviewer set flag 6":"Ctrl+6",
+	"reviewer set flag 7":"Ctrl+7",
 	"reviewer set flag 0":"Ctrl+0",
 	"reviewer mark card":"*",
 	"reviewer bury note":"=",
@@ -49,6 +68,7 @@
 	"reviewer delete note":"Ctrl+Delete",
 	"reviewer play recorded voice":"v",
 	"reviewer record voice":"Shift+v",
+	"reviewer set due date":"Ctrl+Shift+D",
 	"reviewer options menu":"o",
 	"reviewer choice 1":"1",
 	"reviewer choice 2":"2",
@@ -57,8 +77,11 @@
 	"reviewer pause audio":"5",
 	"reviewer seek backward":"6",
 	"reviewer seek forward":"7",
+	"reviewer card info":"I",
+	"reviewer previous card info":"Alt+I",
 	"reviewer _duplicates":{
 	},
+	"reviewer more options":"M",
 	"m_toolbox quit":"Ctrl+Q",
 	"m_toolbox preferences":"Ctrl+P",
 	"m_toolbox undo":"Ctrl+Z",
@@ -72,7 +95,7 @@
 	"m_toolbox _duplicates":{
 	},
 	"window_browser preview": "Ctrl+Shift+P",
-	"window_browser reschedule":"Ctrl+Alt+R",
+	"window_browser reschedule":"Ctrl+Shift+D",
 	"window_browser select all":"Ctrl+Alt+A",
 	"window_browser undo":"Ctrl+Alt+Z",
 	"window_browser invert selection":"Ctrl+Alt+S",
@@ -91,7 +114,7 @@
 	"window_browser close":"Ctrl+W",
 	"window_browser info":"Ctrl+Shift+I",
 	"window_browser add tag":"Ctrl+Shift+A",
-	"window_browser remove tag":"Ctrl+Shift+D",
+	"window_browser remove tag":"Ctrl+Alt+Shift+A",
 	"window_browser suspend":"Ctrl+J",
 	"window_browser delete":"Ctrl+Del",
 	"window_browser add note":"Ctrl+E",
@@ -108,7 +131,12 @@
 	"window_browser manage note types":"<nop>",
 	"window_browser save current filter":"<nop>",
 	"window_browser remove current filter":"<nop>",
+	"window_browser sidebar search": "Alt+1",
+	"window_browser sidebar select": "Alt+2",
+	"window_browser forget card": "Ctrl+Alt+N",
 	"window_browser _filters":{
+		"_concat":{},
+		"_orConcat":{}
 	},
 	"Ω enable main": "y",
 	"Ω enable editor": "y",
@@ -117,6 +145,8 @@
 	"Ω enable window_browser": "y",
 	"Ω enable conflict warning": "y",
 	"Ω custom paste text": "",
+	"Ω custom paste extra texts": {
+	},
 	"Ω custom paste end style": "n"
 }
 
